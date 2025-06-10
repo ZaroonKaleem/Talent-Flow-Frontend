@@ -1,54 +1,73 @@
-import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
-import { RouterLink, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+    RouterLink,
+    NavigationEnd,
+    Router,
+    RouterModule,
+} from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ToggleService } from './toggle.service';
 import { NgClass, isPlatformBrowser } from '@angular/common';
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
 import { filter } from 'rxjs/operators';
+import { SharedStateService } from '../../shared/shared-state.service';
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [RouterLink, MatButtonModule, RouterModule ,MatMenuModule, NgClass],
+    imports: [
+        RouterLink,
+        MatButtonModule,
+        RouterModule,
+        MatMenuModule,
+        NgClass,
+    ],
     templateUrl: './header.component.html',
-    styleUrl: './header.component.scss'
+    styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
-
-    // isSidebarToggled
-    // isSidebarToggled = false;
-
-    // isToggled
+export class HeaderComponent implements OnInit{
     isToggled = false;
+  currentTab: string = '';
 
     constructor(
         private toggleService: ToggleService,
         public themeService: CustomizerSettingsService,
         @Inject(PLATFORM_ID) private platformId: Object,
-        private router: Router
+        private router: Router,
+        private sharedState: SharedStateService
     ) {
-        // this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
-        //     this.isSidebarToggled = isSidebarToggled;
-        // });
-        // this.themeService.isToggled$.subscribe(isToggled => {
-        //     this.isToggled = isToggled;
-        // });
-        // Subscribe to router events to toggle the sidebar on navigation
-        this.router.events.pipe(
-            filter(event => event instanceof NavigationEnd)
-        ).subscribe(() => {
-            // Check if the sidebar is currently toggled and if so, toggle it
-            // if (this.isSidebarToggled) {
-                // this.toggleService.toggle(); // Close the sidebar if it's open
-            // }
-        });
+        this.router.events
+            .pipe(filter((event) => event instanceof NavigationEnd))
+            .subscribe(() => {});
     }
 
     // Burger Menu Toggle
     toggle() {
         this.toggleService.toggle();
     }
+
+ ngOnInit() {
+    // Initialize based on current route
+    this.detectActiveTab();
+  }
+
+  onNavClick(tab: string) {
+    this.sharedState.setActiveTab(tab);
+    this.currentTab = tab;
+  }
+
+  private detectActiveTab() {
+    const path = window.location.pathname;
+    if (path.includes('/employee-dashboard')) {
+      this.currentTab = 'employee';
+    } else if (path.includes('/organization-dashboard')) {
+      this.currentTab = 'organization';
+    } else if (path.includes('/dashboard')) {
+      this.currentTab = 'dashboard';
+    }
+    this.sharedState.setActiveTab(this.currentTab);
+  }
 
     // Settings Button Toggle
     settingsButtonToggle() {
@@ -64,7 +83,11 @@ export class HeaderComponent {
     isSticky: boolean = false;
     @HostListener('window:scroll', ['$event'])
     checkScroll() {
-        const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const scrollPosition =
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0;
         if (scrollPosition >= 50) {
             this.isSticky = true;
         } else {
@@ -77,10 +100,22 @@ export class HeaderComponent {
     ngAfterViewInit() {
         if (isPlatformBrowser(this.platformId)) {
             // Only add event listeners if the platform is the browser
-            document.addEventListener('fullscreenchange', this.onFullscreenChange.bind(this));
-            document.addEventListener('webkitfullscreenchange', this.onFullscreenChange.bind(this));
-            document.addEventListener('mozfullscreenchange', this.onFullscreenChange.bind(this));
-            document.addEventListener('MSFullscreenChange', this.onFullscreenChange.bind(this));
+            document.addEventListener(
+                'fullscreenchange',
+                this.onFullscreenChange.bind(this)
+            );
+            document.addEventListener(
+                'webkitfullscreenchange',
+                this.onFullscreenChange.bind(this)
+            );
+            document.addEventListener(
+                'mozfullscreenchange',
+                this.onFullscreenChange.bind(this)
+            );
+            document.addEventListener(
+                'MSFullscreenChange',
+                this.onFullscreenChange.bind(this)
+            );
         }
     }
     toggleFullscreen() {
@@ -99,11 +134,14 @@ export class HeaderComponent {
             };
             if (element.requestFullscreen) {
                 element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { // Firefox
+            } else if (element.mozRequestFullScreen) {
+                // Firefox
                 element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+            } else if (element.webkitRequestFullscreen) {
+                // Chrome, Safari, and Opera
                 element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { // IE/Edge
+            } else if (element.msRequestFullscreen) {
+                // IE/Edge
                 element.msRequestFullscreen();
             }
         }
@@ -117,11 +155,14 @@ export class HeaderComponent {
             };
             if (document.exitFullscreen) {
                 document.exitFullscreen();
-            } else if (doc.mozCancelFullScreen) { // Firefox
+            } else if (doc.mozCancelFullScreen) {
+                // Firefox
                 doc.mozCancelFullScreen();
-            } else if (doc.webkitExitFullscreen) { // Chrome, Safari, and Opera
+            } else if (doc.webkitExitFullscreen) {
+                // Chrome, Safari, and Opera
                 doc.webkitExitFullscreen();
-            } else if (doc.msExitFullscreen) { // IE/Edge
+            } else if (doc.msExitFullscreen) {
+                // IE/Edge
                 doc.msExitFullscreen();
             }
         }
@@ -133,8 +174,12 @@ export class HeaderComponent {
                 mozFullScreenElement?: Element;
                 msFullscreenElement?: Element;
             };
-            this.isFullscreen = !!(document.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+            this.isFullscreen = !!(
+                document.fullscreenElement ||
+                doc.webkitFullscreenElement ||
+                doc.mozFullScreenElement ||
+                doc.msFullscreenElement
+            );
         }
     }
-
 }
