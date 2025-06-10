@@ -217,6 +217,8 @@ import { EmployeeDelegationRequestComponent } from './Components/employee-dashbo
 import { EmployeeAppendDepartmentComponent } from './Components/employee-dashboard/employee-append-department/employee-append-department.component';
 import { EditEmployeeComponent } from './Components/employee-dashboard/edit-employee/edit-employee.component';
 import { AddEmployeeComponent } from './Components/employee-dashboard/add-employee/add-employee.component';
+import { OrganizationDashboardComponent } from './Components/organization-dashboard/organization-dashboard.component';
+import { OrganizationSystemLogsComponent } from './Components/organization-dashboard/organization-system-logs/organization-system-logs.component';
 
 export const routes: Routes = [
     // {
@@ -248,6 +250,22 @@ export const routes: Routes = [
         component: EmployeeDashboardComponent,
         children: [
             {path:'', component: EmployeeListComponent},
+            {path:'employee-profile-requests', component: EmployeeProfileRequestComponent},
+            {path:'employee-transfer-requests', component: EmployeeTransferRequestComponent},
+            {path:'employee-info-request', component: EmployeeInfoRequestComponent},
+            {path:'employee-registeration-request', component: EmployeeRegisterationRequestComponent},
+            {path:'employee-approval-requests', component: EmployeeApprovalRequestComponent},
+            {path:'employee-delegation-requests', component: EmployeeDelegationRequestComponent},
+            {path:'employee-append-deaprtment', component: EmployeeAppendDepartmentComponent},
+            {path:'employee/add', component: AddEmployeeComponent},
+            {path:'employees/edit/:id', component: EditEmployeeComponent }
+        ]
+    },
+    {
+        path:'organization-dashboard',
+        component: OrganizationDashboardComponent,
+        children: [
+            {path:'', component: OrganizationSystemLogsComponent},
             {path:'employee-profile-requests', component: EmployeeProfileRequestComponent},
             {path:'employee-transfer-requests', component: EmployeeTransferRequestComponent},
             {path:'employee-info-request', component: EmployeeInfoRequestComponent},
