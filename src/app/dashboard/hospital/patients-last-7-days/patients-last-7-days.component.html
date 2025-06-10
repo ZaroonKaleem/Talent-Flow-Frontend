@@ -1,0 +1,21 @@
+<mat-card
+    class="patients-last-7-days-card mb-25 border-radius d-block border-0 shadow-none"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <span class="d-block text-body">
+            Patients last 7 days
+        </span>
+        <h3 class="mb-0 fw-medium d-flex align-items-center">
+            768
+            <span class="info-badge down fw-medium d-inline-block position-relative">
+                <i class="ri-arrow-down-fill"></i>
+                3%
+            </span>
+        </h3>
+        <div class="chart">
+            <div id="patients_last_7_days_chart"></div>
+        </div>
+    </mat-card-content>
+</mat-card>

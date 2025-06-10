@@ -1,0 +1,144 @@
+.custom-clear-btn {
+  border: 3px solid;
+  border-color: #1f4567 !important;
+  color: #1f4567 !important;
+  background-color: transparent !important;
+}
+
+/* employee-approvals.component.scss */
+.approvals-container {
+    padding: 16px;
+    background-color: white;
+    box-sizing: border-box;
+    width: 100%;
+    
+    .filters-section {
+        margin-bottom: 24px;
+        
+        h2 {
+            margin-bottom: 16px;
+            color: #1F4567;
+            font-size: 1.5rem;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+            
+            mat-form-field {
+                width: 100%;
+            }
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            
+            button {
+                min-width: 150px;
+            }
+        }
+    }
+    
+    .table-card {
+        margin-top: 24px;
+        border-radius: 8px;
+        box-shadow: none;
+        border: 1px solid #e0e0e0;
+        
+        .approvals-table {
+            width: 100%;
+            border-collapse: collapse;
+            
+            th, td {
+                padding: 12px 16px;
+                text-align: left;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            th {
+                background-color: #f5f5f5;
+                font-weight: 500;
+            }
+            
+            tr:hover {
+                background-color: #f9f9f9;
+            }
+            
+            .status-badge {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 12px;
+                
+                &.pending {
+                    background-color: #fff3e0;
+                    color: #e65100;
+                }
+                
+                &.approved {
+                    background-color: #e8f5e9;
+                    color: #2e7d32;
+                }
+                
+                &.rejected {
+                    background-color: #ffebee;
+                    color: #c62828;
+                }
+            }
+        }
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .filter-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        
+        button {
+            width: 100% !important;
+        }
+    }
+    
+    .approvals-table {
+        display: block;
+        overflow-x: auto;
+        
+        thead, tbody, tr, th, td {
+            display: block;
+        }
+        
+        thead {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+        
+        tr {
+            margin-bottom: 16px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        td {
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+            
+            &:before {
+                position: absolute;
+                left: 16px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label);
+                font-weight: 500;
+            }
+        }
+    }
+}

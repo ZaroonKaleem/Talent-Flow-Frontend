@@ -1,0 +1,21 @@
+<mat-card
+    class="overall-visitors-card mb-25 border-radius d-block border-0 shadow-none"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <span class="d-block text-body">
+            Overall Visitors
+        </span>
+        <h3 class="mb-0 fw-medium d-flex align-items-center">
+            45,745
+            <span class="info-badge fw-medium d-inline-block position-relative">
+                <i class="ri-arrow-up-fill"></i>
+                7%
+            </span>
+        </h3>
+        <div class="chart">
+            <div id="overall_vistiors_chart"></div>
+        </div>
+    </mat-card-content>
+</mat-card>

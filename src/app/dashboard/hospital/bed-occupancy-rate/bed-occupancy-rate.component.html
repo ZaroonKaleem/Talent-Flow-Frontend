@@ -1,0 +1,105 @@
+<mat-card
+    class="bed-occupancy-rate-card mb-25 border-radius d-block bg-white shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Bed Occupancy Rate
+            </h5>
+            <p class="fw-normal text-body">
+                Currently occupied vs. available.
+            </p>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                Today
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row align-items-center">
+            <div class="col-sm-6">
+                <ul class="content m-0 p-0 list-unstyled">
+                    <li class="d-flex align-items-center">
+                        <div class="icon d-flex align-items-center justify-content-center border-radius text-secondary bg-secondary-100">
+                            <i class="material-symbols-outlined">
+                                airplay
+                            </i>
+                        </div>
+                        <div>
+                            <h3>
+                                1,275
+                            </h3>
+                            <span class="d-block text-body">
+                                Total Beds
+                            </span>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <div class="icon d-flex align-items-center justify-content-center border-radius text-purple bg-purple-100">
+                            <i class="material-symbols-outlined">
+                                bed
+                            </i>
+                        </div>
+                        <div>
+                            <h3>
+                                825
+                            </h3>
+                            <span class="d-block text-body">
+                                Occupied Beds
+                            </span>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <div class="icon d-flex align-items-center justify-content-center border-radius text-success bg-success-100">
+                            <i class="material-symbols-outlined">
+                                featured_seasonal_and_gifts
+                            </i>
+                        </div>
+                        <div>
+                            <h3>
+                                450
+                            </h3>
+                            <span class="d-block text-body">
+                                Available Beds
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-6">
+                <div class="chart text-center">
+                    <div id="bed_occupancy_rate_chart"></div>
+                    <p class="ml-auto mr-auto">
+                        The donut or pie chart representing the occupancy rate.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

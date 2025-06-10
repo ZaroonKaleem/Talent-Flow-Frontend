@@ -1,0 +1,154 @@
+<!-- employee-approvals.component.html -->
+<div class="approvals-container">
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h2>Employee Approvals</h2>
+        <form [formGroup]="filterForm">
+            <div class="filter-grid">
+                <!-- Row 1 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of employeeStationOptions" [value]="station.id">
+                            {{ station.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                            {{ dept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sub Department</mat-label>
+                    <mat-select formControlName="subDepartment">
+                        <mat-option *ngFor="let subDept of subDepartmentOptions" [value]="subDept.id">
+                            {{ subDept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 2 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroupOptions" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="employee">
+                        <mat-option *ngFor="let emp of employees" [value]="emp.id">
+                            {{ emp.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Code</mat-label>
+                    <input matInput formControlName="employeeCode">
+                </mat-form-field>
+
+                <!-- Row 3 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Name</mat-label>
+                    <input matInput formControlName="employeeName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Request Type</mat-label>
+                    <mat-select formControlName="requestType">
+                        <mat-option *ngFor="let type of requestTypes" [value]="type">
+                            {{ type }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Action</mat-label>
+                    <mat-select formControlName="action">
+                        <mat-option *ngFor="let action of actions" [value]="action">
+                            {{ action }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 4 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Flag</mat-label>
+                    <mat-select formControlName="flag">
+                        <mat-option value="red">Red</mat-option>
+                        <mat-option value="yellow">Yellow</mat-option>
+                        <mat-option value="green">Green</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button mat-flat-button color="primary" (click)="applyFilters()">
+                    Apply Filters
+                </button>
+                 <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+  Clear Filters
+</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Approvals Table -->
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="table-responsive">
+                <table class="approvals-table">
+                    <thead>
+                        <tr>
+                            <th><mat-checkbox (change)="selectAll($event)"></mat-checkbox></th>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Station</th>
+                            <th>Department</th>
+                            <th>Request Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let approval of approvals">
+                            <td><mat-checkbox [(ngModel)]="approval.selected" (change)="updateSelection()"></mat-checkbox></td>
+                            <td>{{ approval.employeeCode }}</td>
+                            <td>{{ approval.employeeName }}</td>
+                            <td>{{ approval.station }}</td>
+                            <td>{{ approval.department }}</td>
+                            <td>{{ approval.requestType }}</td>
+                            <td>
+                                <span class="status-badge" [ngClass]="approval.status.toLowerCase()">
+                                    {{ approval.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button mat-icon-button color="primary" (click)="viewDetails(approval)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="approveRequest(approval)">
+                                    <mat-icon>check_circle</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="rejectRequest(approval)">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

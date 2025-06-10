@@ -1,0 +1,229 @@
+<div class="employee-list-container">
+
+    <div class="filters-section">
+        <h2>Employee Profile Requests</h2>
+        <form [formGroup]="filterForm">
+            <div class="filter-grid">
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of employeeStationOptions" [value]="station.id">
+                            {{ station.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                            {{ dept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sub Department</mat-label>
+                    <mat-select formControlName="subDepartment">
+                        <mat-option *ngFor="let subDept of subDepartmentOptions" [value]="subDept.id">
+                            {{ subDept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroupOptions" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Designation</mat-label>
+                    <mat-select formControlName="designation">
+                        <mat-option *ngFor="let desg of designationOptions" [value]="desg.id">
+                            {{ desg.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Code</mat-label>
+                    <input matInput formControlName="employeeCode">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Name</mat-label>
+                    <input matInput formControlName="employeeName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username">
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Action</mat-label>
+                    <mat-select formControlName="action">
+                        <mat-option *ngFor="let action of actions" [value]="action">
+                            {{ action }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Documents Attached</mat-label>
+                    <mat-select formControlName="documentsAttached">
+                        <mat-option value="yes">Yes</mat-option>
+                        <mat-option value="no">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Roles Template</mat-label>
+                    <mat-select formControlName="rolesTemplate">
+                        <mat-option *ngFor="let role of roleTemplates" [value]="role.id">
+                            {{ role.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field appearance="outline">
+                    <mat-label>CNIC #</mat-label>
+                    <input matInput formControlName="cnic" placeholder="XXXXX-XXXXXXX-X">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Flag</mat-label>
+                    <mat-select formControlName="flag">
+                        <mat-option value="red">Red</mat-option>
+                        <mat-option value="yellow">Yellow</mat-option>
+                        <mat-option value="green">Green</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="action-buttons">
+                <button mat-flat-button color="primary" (click)="applyFilter()">
+                    Apply Filters
+                </button>
+                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+                    Clear Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="buttons-list">
+        <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewEmployee()">Add
+          New Employee</button>
+      </div>
+      <div class="table-responsive">
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th scope="col" class="fw-medium">Sr#</th>
+              <th scope="col" class="fw-medium">Employee</th>
+              <th scope="col" class="fw-medium">Detail</th>
+              <th scope="col" class="fw-medium">Role Template</th>
+              <th scope="col" class="fw-medium">Active</th>
+              <th scope="col" class="fw-medium">Added On</th>
+              <th scope="col" class="fw-medium">Modified On</th>
+              <th scope="col" class="fw-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of employees; let i = index">
+              <td data-label="Sr#">{{ i + 1 }}</td>
+              <td data-label="Employee">
+                <div class="employee-info">
+                  <div class="employee-name">{{ emp.name }} {{ emp.surname }}</div>
+                  <div class="employee-code">{{ emp.employeeCode }}</div>
+                  <div class="employee-email">{{ emp.emailAddress }}</div>
+                </div>
+              </td>
+              <td data-label="Detail">
+                <div class="employee-details">
+                  <div><strong>Station:</strong> {{ emp.employeeStationName || 'N/A' }}</div>
+                  <div><strong>Department:</strong> {{ emp.departmentName || 'N/A' }}</div>
+                  <div><strong>Sub Department:</strong> {{ emp.subDepartmentName || 'N/A' }}</div>
+                  <div><strong>Group:</strong> {{ emp.employeeGroupName || 'N/A' }}</div>
+                  <div><strong>Designation:</strong> {{ emp.designationName || 'N/A' }}</div>
+                  <div><strong>Division:</strong> {{ emp.divisionName || 'N/A' }}</div>
+                  <div><strong>Grade:</strong> {{ emp.gradeName || 'N/A' }}</div>
+                  <div><strong>Joining Date:</strong> {{ emp.joiningDate | date:'mediumDate' || 'N/A' }}</div>
+                  <div><strong>Status:</strong> {{ emp.employeeStatusName || 'N/A' }}</div>
+                </div>
+              </td>
+              <td data-label="Role Template">
+                {{ emp.roleTemplate || 'Default' }}
+              </td>
+              <td data-label="Active">
+                <i class="material-symbols-outlined" [class.active]="emp.isActive" [class.inactive]="!emp.isActive">
+                  {{ emp.isActive ? 'check_circle' : 'cancel' }}
+                </i>
+
+              </td>
+              <td data-label="Added On">
+                {{ emp.joiningDate | date:'mediumDate' || 'N/A' }}
+              </td>
+              <td data-label="Modified On">
+                {{ emp.modifiedDate | date:'mediumDate' || 'N/A' }}
+              </td>
+              <td data-label="Actions">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <i class="material-symbols-outlined">more_horiz</i>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="viewEmployee(emp.id)">
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">visibility</i>
+                      <span>View</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="editEmployee(emp.id)">
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">edit</i>
+                      <span>Edit</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="showAdditionalInfo(emp.id)">
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">info</i>
+                      <span>Additional Information</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="toggleEmployeeStatus(emp)">
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">
+                        {{ emp.isActive ? 'block' : 'check_circle' }}
+                      </i>
+                      <span>{{ emp.isActive ? 'Inactive' : 'Activate' }}</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="blacklistEmployee(emp.id)">
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">warning</i>
+                      <span>Blacklist</span>
+                    </div>
+                  </button>
+                </mat-menu>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,132 @@
+<mat-card
+    class="crypto-exchange-card mb-25 border-radius d-block border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+    [class.component-dark-theme]="themeService.isDark()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Exchange
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button type="button" mat-button>
+                <i class="material-symbols-outlined">
+                    refresh
+                </i>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="item">
+            <div class="title d-flex justify-content-between align-items-center">
+                <span class="d-block text-body text-uppercase">
+                    Selling
+                </span>
+                <span class="d-block text-body text-uppercase">
+                    Max 4,238
+                </span>
+            </div>
+            <div class="cryptocurrency-types">
+                <button mat-button [matMenuTriggerFor]="menu" class="d-block text-uppercase fw-medium">
+                    <img src="images/cryptocurrencies/big-ethereum.svg" alt="ethereum">
+                    Ethereum
+                    <span class="fw-normal text-body">(ETH)</span>
+                </button>
+                <mat-menu #menu="matMenu" class="cryptocurrency-types-menu">
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/ethereum.svg" alt="ethereum">
+                        Ethereum
+                        <span class="fw-normal text-body">(ETH)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/bitcoin.svg" alt="bitcoin">
+                        Bitcoin
+                        <span class="fw-normal text-body">(BTC)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/solana.svg" alt="solana">
+                        Solana
+                        <span class="fw-normal text-body">(SOL)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/cardano.png" alt="cardano">
+                        Cardano
+                        <span class="fw-normal text-body">(ADA)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/binance.svg" alt="binance">
+                        Binance
+                        <span class="fw-normal text-body">(BNB)</span>
+                    </button>
+                </mat-menu>
+            </div>
+            <div class="form-group position-relative">
+                <mat-form-field>
+                    <mat-label>
+                        ETH
+                    </mat-label>
+                    <input matInput value="1">
+                </mat-form-field>
+                <span class="d-inline-block value text-body">
+                    $1750
+                </span>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title d-flex justify-content-between align-items-center">
+                <span class="d-block text-body text-uppercase">
+                    Buying
+                </span>
+            </div>
+            <div class="cryptocurrency-types">
+                <button mat-button [matMenuTriggerFor]="menu2" class="d-block text-uppercase fw-medium">
+                    <img src="images/cryptocurrencies/big-solana.svg" alt="solana">
+                    Solana
+                    <span class="fw-normal text-body">(SOL)</span>
+                </button>
+                <mat-menu #menu2="matMenu" class="cryptocurrency-types-menu">
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/ethereum.svg" alt="ethereum">
+                        Ethereum
+                        <span class="fw-normal text-body">(ETH)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/bitcoin.svg" alt="bitcoin">
+                        Bitcoin
+                        <span class="fw-normal text-body">(BTC)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/solana.svg" alt="solana">
+                        Solana
+                        <span class="fw-normal text-body">(SOL)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/cardano.png" alt="cardano">
+                        Cardano
+                        <span class="fw-normal text-body">(ADA)</span>
+                    </button>
+                    <button mat-menu-item>
+                        <img src="images/cryptocurrencies/binance.svg" alt="binance">
+                        Binance
+                        <span class="fw-normal text-body">(BNB)</span>
+                    </button>
+                </mat-menu>
+            </div>
+            <div class="form-group position-relative">
+                <mat-form-field>
+                    <mat-label>
+                        SOL
+                    </mat-label>
+                    <input matInput value="75">
+                </mat-form-field>
+                <span class="d-inline-block value text-body">
+                    $35
+                </span>
+            </div>
+        </div>
+        <button type="button" class="exchange-btn" mat-button>
+            Exchange
+        </button>
+    </mat-card-content>
+</mat-card>

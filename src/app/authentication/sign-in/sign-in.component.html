@@ -1,0 +1,40 @@
+<div class="login-container">
+  <!-- Background -->
+  <div class="shape"></div>
+
+  <!-- Overlay and Form -->
+  <div class="overlay">
+    <mat-card class="login-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter your email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+        </mat-form-field>
+
+        <!-- Remember Me Checkbox -->
+        <mat-checkbox class="remember-me">Remember Me for next time</mat-checkbox>
+
+        <!-- Login Button -->
+         <!-- <button mat-flat-button class="full-width login-button custom-login-button" [routerLink]="'/dashboard'">
+  Login
+</button> -->
+
+        <button mat-flat-button class="full-width login-button custom-login-button">Login</button>
+      </form>
+
+      <!-- Forgot Password & Logo -->
+      <div class="extras">
+        <a href="#" class="text-center text-black">Forgot Your Password?</a> <br> <br>
+        <img src="dsf/images/logo.png" alt="Company Logo" class="company-logo" />
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Footer Text in Background -->
+  <p class="footer-text">© 2025 TalentFlow. All Rights Reserved.</p>
+</div>

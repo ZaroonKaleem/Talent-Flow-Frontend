@@ -1,0 +1,171 @@
+<!-- employee-registration-request.component.html -->
+<div class="registration-container">
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h2>Employee Registration Request</h2>
+        <form [formGroup]="filterForm">
+            <div class="filter-grid">
+                <!-- Row 1 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of employeeStationOptions" [value]="station.id">
+                            {{ station.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                            {{ dept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sub Department</mat-label>
+                    <mat-select formControlName="subDepartment">
+                        <mat-option *ngFor="let subDept of subDepartmentOptions" [value]="subDept.id">
+                            {{ subDept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 2 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroupOptions" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="employee">
+                        <mat-option *ngFor="let emp of employees" [value]="emp.id">
+                            {{ emp.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>In-Active Employee</mat-label>
+                    <mat-select formControlName="inActiveEmployee">
+                        <mat-option *ngFor="let emp of inActiveEmployees" [value]="emp.id">
+                            {{ emp.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 3 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Reason Type</mat-label>
+                    <mat-select formControlName="reasonType">
+                        <mat-option *ngFor="let reason of reasonTypes" [value]="reason">
+                            {{ reason }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option *ngFor="let status of statuses" [value]="status">
+                            {{ status }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Request Type</mat-label>
+                    <mat-select formControlName="requestType">
+                        <mat-option *ngFor="let type of requestTypes" [value]="type">
+                            {{ type }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 4 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Flag</mat-label>
+                    <mat-select formControlName="flag">
+                        <mat-option value="red">Red</mat-option>
+                        <mat-option value="yellow">Yellow</mat-option>
+                        <mat-option value="green">Green</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Registration From Date</mat-label>
+                    <input matInput [matDatepicker]="fromDatePicker" formControlName="registrationFrom">
+                    <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fromDatePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Registration To Date</mat-label>
+                    <input matInput [matDatepicker]="toDatePicker" formControlName="registrationTo">
+                    <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #toDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button mat-flat-button color="primary" (click)="applyFilters()">
+                    Apply Filters
+                </button>
+                        <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+  Clear Filters
+</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Registration Request Table -->
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="table-responsive">
+                <table class="registration-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Station</th>
+                            <th>Department</th>
+                            <th>Request Type</th>
+                            <th>Registration Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of registrationRequests">
+                            <td>{{ request.employeeName }}</td>
+                            <td>{{ request.station }}</td>
+                            <td>{{ request.department }}</td>
+                            <td>{{ request.requestType }}</td>
+                            <td>{{ request.registrationDate | date }}</td>
+                            <td>
+                                <span class="status-badge" [ngClass]="request.status.toLowerCase()">
+                                    {{ request.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button mat-icon-button color="primary" (click)="viewDetails(request)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="editRequest(request)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

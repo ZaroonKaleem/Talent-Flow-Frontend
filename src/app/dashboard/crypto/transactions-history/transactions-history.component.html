@@ -1,0 +1,119 @@
+<mat-card
+    class="transaction-history-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Transaction History
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                Oct 01 - Oct 31, 2024
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Sep 01 - Sep 30, 2024
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Aug 01 - Aug 31, 2024
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Jul 01 - Jul 31, 2024
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- Coin Column -->
+                <ng-container matColumnDef="coin">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Coin
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="customer-info d-flex align-items-center">
+                            <div class="img">
+                                <img [src]="element.coin.img" alt="coin-image">
+                            </div>
+                            <span class="d-block fw-medium">
+                                {{element.coin.name}} <span class="text-body fw-normal">({{element.coin.abbreviation}})</span>
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Date Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Date
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.date}}
+                    </td>
+                </ng-container>
+
+                <!-- Amount Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Amount
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.amount}}
+                    </td>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.price}}
+                    </td>
+                </ng-container>
+
+                <!-- Type Column -->
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="trezo-badge shipped" *ngIf="element.type.buy">
+                            Buy
+                        </span>
+                        <span class="trezo-badge rejected" *ngIf="element.type.sell">
+                            Sell
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Total Value Column -->
+                <ng-container matColumnDef="total_value">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Total Value
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.total_value}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[7]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

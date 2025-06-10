@@ -1,0 +1,144 @@
+<mat-card
+    class="crypto-rankings-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Crypto Rankings
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                Oct 01 - Oct 31, 2024
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Sep 01 - Sep 30, 2024
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Aug 01 - Aug 31, 2024
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Jul 01 - Jul 31, 2024
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- Rank Column -->
+                <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Rank
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.rank}}
+                    </td>
+                </ng-container>
+
+                <!-- Cryptocurrency Column -->
+                <ng-container matColumnDef="cryptocurrency">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Cryptocurrency
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="customer-info d-flex align-items-center">
+                            <div class="img">
+                                <img [src]="element.cryptocurrency.img" alt="cryptocurrency-image">
+                            </div>
+                            <span class="d-block fw-medium">
+                                {{element.cryptocurrency.name}} <span class="text-body fw-normal">({{element.cryptocurrency.abbreviation}})</span>
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Market Cap Column -->
+                <ng-container matColumnDef="market_cap">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Market Cap
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.market_cap}}
+                    </td>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Price
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.price}}
+                    </td>
+                </ng-container>
+
+                <!-- 24h Change % Column -->
+                <ng-container matColumnDef="change_24h">
+                    <th mat-header-cell *matHeaderCellDef>
+                        24h Change %
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        <span class="change_24h up" *ngIf="element.change_24h.up">
+                            {{element.change_24h.number}}
+                        </span>
+                        <span class="change_24h down" *ngIf="element.change_24h.down">
+                            {{element.change_24h.number}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- 7d Change % Column -->
+                <ng-container matColumnDef="change_7d">
+                    <th mat-header-cell *matHeaderCellDef>
+                        7d Change %
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        <span class="change_7d up" *ngIf="element.change_7d.up">
+                            {{element.change_7d.number}}
+                        </span>
+                        <span class="change_7d down" *ngIf="element.change_7d.down">
+                            {{element.change_7d.number}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Value 24h Column -->
+                <ng-container matColumnDef="value_24h">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Value 24h
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.value_24h}}
+                    </td>
+                </ng-container>
+
+                <!-- Circulating Supply Column -->
+                <ng-container matColumnDef="circulating_supply">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Circulating Supply
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="fw-medium">
+                        {{element.circulating_supply}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[6]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,660 @@
+<h2>Add New Employee</h2>
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form">
+  <mat-tab-group>
+    <!-- General Information Tab -->
+    <mat-tab label="General Information">
+      <ng-template mat-tab-label>
+        <i class="material-symbols-outlined">person</i>
+        General Information
+      </ng-template>
+      <div class="tab-content">
+        <div class="form-container">
+          <div class="form-fields">
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Prefix</mat-label>
+                <mat-select formControlName="prefix">
+                  <mat-option *ngFor="let prefix of prefixes" [value]="prefix.value">
+                    {{prefix.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Employee Code</mat-label>
+                <input matInput formControlName="employeeCode">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Punch Code</mat-label>
+                <input matInput formControlName="punchCode">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" required>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lastName" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Father Name</mat-label>
+                <input matInput formControlName="fatherName">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Mobile No</mat-label>
+                <input matInput formControlName="mobileNo" type="tel">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" required>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Employee Reports To</mat-label>
+                <mat-select formControlName="reportsTo">
+                  <mat-option *ngFor="let manager of managers" [value]="manager.id">
+                    {{manager.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Allow Manual Attendance</mat-label>
+                <mat-select formControlName="allowManualAttendance">
+                  <mat-option value="yes">Yes</mat-option>
+                  <mat-option value="no">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill">
+                <mat-label>Configure Scheduled Report</mat-label>
+                <mat-select formControlName="scheduledReport">
+                  <mat-option value="yes">Yes</mat-option>
+                  <mat-option value="no">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-checkbox formControlName="allowLogin">Allow Employee Login</mat-checkbox>
+            </div>
+
+            <div *ngIf="employeeForm.get('allowLogin')?.value" class="login-fields">
+              <div class="form-row">
+                <mat-form-field appearance="fill">
+                  <mat-label>Role Templates</mat-label>
+                  <mat-select formControlName="roleTemplate">
+                    <mat-option *ngFor="let role of roleTemplates" [value]="role.id">
+                      {{role.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input matInput formControlName="username">
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input matInput formControlName="password" type="password">
+                </mat-form-field>
+
+                <mat-checkbox formControlName="sendCredentials">Send credentials by email</mat-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <div class="photo-section">
+            <div class="photo-container">
+              <img [src]="photoPreview || 'assets/images/default-profile.png'" alt="Employee Photo" class="employee-photo">
+              <div class="photo-actions">
+                <button type="button" mat-stroked-button (click)="fileInput.click()">
+                  <i class="material-symbols-outlined">upload</i> Upload Photo
+                </button>
+                <input #fileInput type="file" accept="image/*" (change)="onPhotoUpload($event)" style="display: none;">
+                <button type="button" mat-stroked-button (click)="clearPhoto()">
+                  <i class="material-symbols-outlined">delete</i> Clear Photo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Additional Information Tab -->
+<mat-tab label="Additional Information">
+  <ng-template mat-tab-label>
+    <i class="material-symbols-outlined">info</i>
+    Additional Information
+  </ng-template>
+  <div class="tab-content">
+    <div class="form-container">
+      <div class="form-fields">
+        <!-- Personal Information Section -->
+        <h3 class="section-header">Personal Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Marital Status</mat-label>
+            <mat-select formControlName="maritalStatus">
+              <mat-option value="single">Single</mat-option>
+              <mat-option value="married">Married</mat-option>
+              <mat-option value="divorced">Divorced</mat-option>
+              <mat-option value="widowed">Widowed</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth">
+            <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Place of Birth</mat-label>
+            <input matInput formControlName="placeOfBirth">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Family Code</mat-label>
+            <input matInput formControlName="familyCode">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Religion</mat-label>
+            <mat-select formControlName="religion">
+              <mat-option *ngFor="let religion of religions" [value]="religion.id">
+                {{religion.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Contact Information Section -->
+        <h3 class="section-header">Contact Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Address</mat-label>
+            <textarea matInput formControlName="address" rows="2"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="state">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Zip Code</mat-label>
+            <input matInput formControlName="zipCode" type="number">
+          </mat-form-field>
+        </div>
+
+        <!-- Emergency Contact Section -->
+        <h3 class="section-header">Emergency Contact Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Emergency Contact Name</mat-label>
+            <input matInput formControlName="emergencyContactName">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Relationship</mat-label>
+            <mat-select formControlName="emergencyRelationship">
+              <mat-option value="father">Father</mat-option>
+              <mat-option value="mother">Mother</mat-option>
+              <mat-option value="spouse">Spouse</mat-option>
+              <mat-option value="sibling">Sibling</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="emergencyPhone" type="tel">
+          </mat-form-field>
+        </div>
+
+        <!-- Government Registration Section -->
+        <h3 class="section-header">Government Registration</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>CNIC No</mat-label>
+            <input matInput formControlName="cnicNo" placeholder="XXXXX-XXXXXXX-X">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>CNIC Issue Date</mat-label>
+            <input matInput [matDatepicker]="cnicIssuePicker" formControlName="cnicIssueDate">
+            <mat-datepicker-toggle matSuffix [for]="cnicIssuePicker"></mat-datepicker-toggle>
+            <mat-datepicker #cnicIssuePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>CNIC Expiry Date</mat-label>
+            <input matInput [matDatepicker]="cnicExpiryPicker" formControlName="cnicExpiryDate">
+            <mat-datepicker-toggle matSuffix [for]="cnicExpiryPicker"></mat-datepicker-toggle>
+            <mat-datepicker #cnicExpiryPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>EOBI Registration No</mat-label>
+            <input matInput formControlName="eobiRegistrationNo">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>EOBI Entry Date</mat-label>
+            <input matInput [matDatepicker]="eobiEntryPicker" formControlName="eobiEntryDate">
+            <mat-datepicker-toggle matSuffix [for]="eobiEntryPicker"></mat-datepicker-toggle>
+            <mat-datepicker #eobiEntryPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Social Security No</mat-label>
+            <input matInput formControlName="socialSecurityNo">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Passport No</mat-label>
+            <input matInput formControlName="passportNo">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Visa No</mat-label>
+            <input matInput formControlName="visaNo">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Visa Expiry Date</mat-label>
+            <input matInput [matDatepicker]="visaExpiryPicker" formControlName="visaExpiryDate">
+            <mat-datepicker-toggle matSuffix [for]="visaExpiryPicker"></mat-datepicker-toggle>
+            <mat-datepicker #visaExpiryPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Academic Information Section -->
+        <h3 class="section-header">Academic Information</h3>
+        <div *ngFor="let education of educations; let i = index" class="education-item">
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Degree</mat-label>
+              <input matInput [(ngModel)]="education.degree" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Institution</mat-label>
+              <input matInput [(ngModel)]="education.institution" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Year Completed</mat-label>
+              <input matInput type="number" [(ngModel)]="education.year" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Major/Subject</mat-label>
+              <input matInput [(ngModel)]="education.major" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeEducation(i)">
+              <i class="material-symbols-outlined">delete</i>
+            </button>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="addEducation()" class="add-button">
+          <i class="material-symbols-outlined">add</i> Add Education
+        </button>
+
+        <!-- Work History Section -->
+        <h3 class="section-header">Work History</h3>
+        <div *ngFor="let job of workHistory; let i = index" class="work-item">
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Company</mat-label>
+              <input matInput [(ngModel)]="job.company" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Position</mat-label>
+              <input matInput [(ngModel)]="job.position" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>From</mat-label>
+              <input matInput type="date" [(ngModel)]="job.from" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>To</mat-label>
+              <input matInput type="date" [(ngModel)]="job.to" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeWorkHistory(i)">
+              <i class="material-symbols-outlined">delete</i>
+            </button>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="addWorkHistory()" class="add-button">
+            <i class="material-symbols-outlined">add</i> Add Work History
+
+        </button>
+
+        <!-- Notes Section -->
+        <h3 class="section-header">Notes</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Additional Notes</mat-label>
+            <textarea matInput formControlName="notes" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-tab>
+
+    <!-- Company Information Tab -->
+<mat-tab label="Company Information">
+  <ng-template mat-tab-label>
+    <i class="material-symbols-outlined">business</i>
+    Company Information
+  </ng-template>
+  <div class="tab-content">
+    <div class="form-container">
+      <div class="form-fields">
+        <!-- Company Location Section -->
+        <h3 class="section-header">Company Location</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="country">
+              <mat-option *ngFor="let country of countries" [value]="country.id">
+                {{country.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Province</mat-label>
+            <mat-select formControlName="province">
+              <mat-option *ngFor="let province of provinces" [value]="province.id">
+                {{province.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>City</mat-label>
+            <mat-select formControlName="city">
+              <mat-option *ngFor="let city of cities" [value]="city.id">
+                {{city.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Area</mat-label>
+            <mat-select formControlName="area">
+              <mat-option *ngFor="let area of areas" [value]="area.id">
+                {{area.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Department Information Section -->
+        <h3 class="section-header">Department Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Station</mat-label>
+            <mat-select formControlName="station">
+              <mat-option *ngFor="let station of stations" [value]="station.id">
+                {{station.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Department</mat-label>
+            <mat-select formControlName="department">
+              <mat-option *ngFor="let dept of departments" [value]="dept.id">
+                {{dept.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Sub-Department</mat-label>
+            <mat-select formControlName="subDepartment">
+              <mat-option *ngFor="let subDept of subDepartments" [value]="subDept.id">
+                {{subDept.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Designation</mat-label>
+            <mat-select formControlName="designation">
+              <mat-option *ngFor="let desig of designations" [value]="desig.id">
+                {{desig.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Organizational Information Section -->
+        <h3 class="section-header">Organizational Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Division</mat-label>
+            <mat-select formControlName="division">
+              <mat-option *ngFor="let div of divisions" [value]="div.id">
+                {{div.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Grade</mat-label>
+            <mat-select formControlName="grade">
+              <mat-option *ngFor="let grd of grades" [value]="grd.id">
+                {{grd.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Employee Status</mat-label>
+            <mat-select formControlName="employeeStatus">
+              <mat-option *ngFor="let status of employeeStatuses" [value]="status.id">
+                {{status.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Employee Group</mat-label>
+            <mat-select formControlName="employeeGroup">
+              <mat-option *ngFor="let group of employeeGroups" [value]="group.id">
+                {{group.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Financial Information Section -->
+        <h3 class="section-header">Financial Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Region</mat-label>
+            <mat-select formControlName="region">
+              <mat-option *ngFor="let reg of regions" [value]="reg.id">
+                {{reg.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Cost Center</mat-label>
+            <mat-select formControlName="costCenter">
+              <mat-option *ngFor="let center of costCenters" [value]="center.id">
+                {{center.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>GL Class</mat-label>
+            <mat-select formControlName="glClass">
+              <mat-option *ngFor="let gl of glClasses" [value]="gl.id">
+                {{gl.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Appointment Information Section -->
+        <h3 class="section-header">Appointment Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Joining Date</mat-label>
+            <input matInput [matDatepicker]="joiningDatePicker" formControlName="joiningDate">
+            <mat-datepicker-toggle matSuffix [for]="joiningDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #joiningDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Confirmation Date</mat-label>
+            <input matInput [matDatepicker]="confirmationDatePicker" formControlName="confirmationDate">
+            <mat-datepicker-toggle matSuffix [for]="confirmationDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #confirmationDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Expected Confirmation Date</mat-label>
+            <input matInput [matDatepicker]="expectedConfirmationDatePicker" formControlName="expectedConfirmationDate">
+            <mat-datepicker-toggle matSuffix [for]="expectedConfirmationDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #expectedConfirmationDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-tab>
+
+    <!-- Employee Documents Tab -->
+    <mat-tab label="Employee Documents">
+  <ng-template mat-tab-label>
+    <i class="material-symbols-outlined">description</i>
+    Employee Documents
+  </ng-template>
+  <div class="tab-content">
+    <div class="documents-container">
+      <h3 class="section-header">Upload Employee Documents</h3>
+      
+      <div class="document-upload-section">
+        <div class="document-type-selector">
+          <mat-form-field appearance="fill">
+            <mat-label>Document Type</mat-label>
+            <mat-select [(ngModel)]="selectedDocumentType" [ngModelOptions]="{standalone: true}">
+              <mat-option *ngFor="let docType of documentTypes" [value]="docType.id">
+                {{docType.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="file-upload-wrapper">
+          <div class="file-upload-box" (click)="fileInput.click()">
+            <i class="material-symbols-outlined">upload</i>
+            <p>Click to browse or drag and drop files</p>
+            <input #fileInput type="file" (change)="onDocumentUpload($event)" multiple style="display: none;">
+          </div>
+          <small class="file-upload-hint">Supported formats: PDF, JPG, PNG (Max 5MB each)</small>
+        </div>
+      </div>
+
+      <div class="uploaded-documents" *ngIf="documents.length > 0">
+        <h4>Uploaded Documents</h4>
+        <mat-list>
+          <mat-list-item *ngFor="let doc of documents; let i = index" class="document-item">
+            <i class="material-symbols-outlined doc-icon">description</i>
+            <div class="doc-info">
+              <span class="doc-name">{{doc.name}}</span>
+              <span class="doc-type">{{getDocumentTypeName(doc.type)}}</span>
+              <span class="doc-size">{{formatFileSize(doc.size)}}</span>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeDocument(i)">
+              <i class="material-symbols-outlined">delete</i>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+</mat-tab>
+
+  </mat-tab-group>
+
+  <div class="submit-section">
+    <button mat-flat-button color="primary" type="submit">Next</button>
+    <button mat-stroked-button class="stroked-button" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

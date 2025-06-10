@@ -1,0 +1,106 @@
+<mat-card
+    class="hospital-earnings-card mb-25 border-radius d-block border-0 shadow-none"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Hospital Earnings
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                This Week
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row align-items-center">
+            <div class="col-lg-5">
+                <div class="image text-center">
+                    <img src="images/hospital.png" alt="hospital-image">
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="box bg-white border-radius">
+                                <h3 class="fw-medium">
+                                    $120,000
+                                </h3>
+                                <div class="d-flex align-items-center">
+                                    <span class="d-block text-body">
+                                        Total Profit
+                                    </span>
+                                    <span class="info-badge text-danger fw-medium position-relative">
+                                        <i class="ri-arrow-down-fill"></i>
+                                        5%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="box bg-white border-radius">
+                                <h3 class="fw-medium">
+                                    $80,000
+                                </h3>
+                                <div class="d-flex align-items-center">
+                                    <span class="d-block text-body">
+                                        Total Costs
+                                    </span>
+                                    <span class="info-badge text-success fw-medium position-relative">
+                                        <i class="ri-arrow-up-fill"></i>
+                                        3%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="item bg-white border-radius position-relative">
+                                <h3 class="fw-medium">
+                                    $900,000
+                                    <span class="text-success position-relative">
+                                        <i class="ri-arrow-up-fill"></i>
+                                        12%
+                                    </span>
+                                </h3>
+                                <span class="d-block text-body">
+                                    Total Earnings
+                                </span>
+                                <div class="chart">
+                                    <div id="hospital_total_earnings_chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

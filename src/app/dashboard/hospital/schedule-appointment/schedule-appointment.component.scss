@@ -1,0 +1,94 @@
+::ng-deep {
+    .schedule-appointment-card {
+        --purpleColor: #7C24CC;
+    
+        .mat-mdc-card-content {
+            text-align: center;
+            padding-top: 11px !important;
+            
+            h3 {
+                font-size: 24px;
+                margin-bottom: 9px;
+            }
+            p {
+                max-width: 275px;
+                line-height: 1.6;
+                margin-bottom: 22px;
+            }
+            .mat-mdc-button {
+                margin-top: 22px;
+                padding: 8px 17px;
+                color: var(--whiteColor);
+                background-color: var(--primaryColor);
+                font: {
+                    size: 16px;
+                    weight: 500;
+                };
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .schedule-appointment-card {
+            .mat-mdc-card-content {
+                padding-top: 0 !important;
+                
+                h3 {
+                    font-size: 20px;
+                }
+                p {
+                    max-width: 100%;
+                    margin-bottom: 17px;
+                }
+                .mat-mdc-button {
+                    margin-top: 20px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    ::ng-deep {
+        .schedule-appointment-card {
+            .mat-mdc-card-content {
+                h3 {
+                    font-size: 22px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+
+    ::ng-deep {
+        .schedule-appointment-card {
+            .mat-mdc-card-content {
+                h3 {
+                    font-size: 21px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

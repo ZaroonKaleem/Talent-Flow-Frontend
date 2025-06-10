@@ -1,0 +1,140 @@
+<!-- employee-append-department.component.html -->
+<div class="append-container">
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h2>Employee Append Department</h2>
+        <form [formGroup]="appendForm">
+            <div class="filter-grid">
+                <!-- Row 1 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of employeeStationOptions" [value]="station.id">
+                            {{ station.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                            {{ dept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sub Department</mat-label>
+                    <mat-select formControlName="subDepartment">
+                        <mat-option *ngFor="let subDept of subDepartmentOptions" [value]="subDept.id">
+                            {{ subDept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 2 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroupOptions" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="employee">
+                        <mat-option *ngFor="let emp of employees" [value]="emp.id">
+                            {{ emp.name }} ({{ emp.code }})
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Code</mat-label>
+                    <input matInput formControlName="employeeCode">
+                </mat-form-field>
+
+                <!-- Row 3 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Duration (Days)</mat-label>
+                    <input matInput type="number" formControlName="duration" min="1">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="fromDatePicker" formControlName="fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fromDatePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="toDatePicker" formControlName="toDate" [min]="appendForm.get('fromDate')?.value">
+                    <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #toDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button mat-flat-button color="primary" (click)="applyFilters()">
+                    Apply Filters
+                </button>
+                               <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+  Clear Filters
+</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Append Requests Table -->
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="table-responsive">
+                <table class="append-table">
+                    <thead>
+                        <tr>
+                            <th><mat-checkbox (change)="selectAll($event)"></mat-checkbox></th>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Station</th>
+                            <th>Department</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of appendRequests">
+                            <td><mat-checkbox [(ngModel)]="request.selected" (change)="updateSelection()"></mat-checkbox></td>
+                            <td>{{ request.employeeCode }}</td>
+                            <td>{{ request.employeeName }}</td>
+                            <td>{{ request.station }}</td>
+                            <td>{{ request.department }}</td>
+                            <td>{{ request.duration }} days</td>
+                            <td>
+                                <span class="status-badge" [ngClass]="request.status.toLowerCase()">
+                                    {{ request.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button mat-icon-button color="primary" (click)="viewDetails(request)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="approveRequest(request)">
+                                    <mat-icon>check_circle</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="rejectRequest(request)">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

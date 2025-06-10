@@ -1,0 +1,25 @@
+.employee-form {
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+
+    mat-form-field {
+      flex: 1 1 calc(50% - 0.5rem);
+      min-width: 250px;
+    }
+  }
+
+  .submit-section {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

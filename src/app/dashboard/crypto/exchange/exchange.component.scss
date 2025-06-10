@@ -1,0 +1,373 @@
+::ng-deep {
+    .crypto-exchange-card {
+        background: #F3E8FF;
+    
+        .mat-mdc-card-header {
+            border-bottom: 1px solid #D5D9E2;
+            padding: {
+                left: 25px;
+                right: 25px;
+                bottom: 8px;
+            };
+            margin: {
+                left: -25px;
+                right: -25px;
+            };
+            .mat-mdc-button {
+                padding: 0;
+                line-height: 1;
+                color: #5F6368;
+            }
+        }
+        .mat-mdc-card-content {
+            padding-bottom: 15px !important;
+
+            .item {
+                margin-bottom: 25px;
+
+                .title {
+                    margin-bottom: 12px;
+                }
+                .cryptocurrency-types {
+                    .mdc-button {
+                        padding: 0;
+                        width: 100%;
+                        font-size: 16px;
+                        color: var(--blackColor);
+
+                        .mdc-button__label {
+                            display: flex;
+                            align-items: center;
+
+                            img {
+                                margin-right: 10px;
+                            }
+                            span {
+                                margin-left: 5px;
+                            }
+                        }
+                        &::before {
+                            transform: translateY(-50%);
+                            position: absolute;
+                            content: "\ea4e";
+                            right: -4px;
+                            top: 50%;
+                            font: {
+                                size: 22px;
+                                family: remixicon;
+                            };
+                        }
+                    }
+                }
+                .form-group {
+                    --mat-form-field-container-height: 50px;
+                    --mat-form-field-filled-with-label-container-padding-top: 22px;
+                    --mat-form-field-filled-with-label-container-padding-bottom: 4px;
+                    margin: {
+                        top: 15px;
+                        bottom: 0;
+                    };
+                    .mat-mdc-text-field-wrapper {
+                        .mat-mdc-form-field-flex {
+                            .mat-mdc-floating-label {
+                                margin-top: 3px;
+                            }
+                        }
+                    }
+                    .mat-mdc-form-field {
+                        .mdc-text-field {
+                            border-width: 0;
+                            padding: {
+                                left: 20px;
+                                right: 20px;
+                            };
+                        }
+                        .mdc-text-field__input {
+                            font-weight: 700;
+                        }
+                        .mdc-text-field--filled {
+                            &:not(.mdc-text-field--disabled) {
+                                background-color: var(--whiteColor);
+                            }
+                        }
+                    }
+                    .value {
+                        top: 50%;
+                        right: 20px;
+                        position: absolute;
+                        transform: translateY(-50%);
+                    }
+                }
+            }
+            .exchange-btn {
+                &.mdc-button {
+                    background-color: var(--primaryColor);
+                    color: var(--whiteColor);
+                    display: block;
+                    width: 100%;
+                    font: {
+                        size: 16px;
+                        weight: 500;
+                    };
+                }
+            }
+        }
+        &.component-dark-theme {
+            background: #0A0E19;
+    
+            .mat-mdc-card-header {
+                border-color: var(--borderColor);
+                
+                .mat-mdc-button {
+                    color: var(--whiteColor);
+                }
+            }
+            .mat-mdc-card-content {
+                .item {
+                    .cryptocurrency-types {
+                        .mdc-button {
+                            color: var(--whiteColor);
+                        }
+                    }
+                    .form-group {
+                        .mat-mdc-form-field {
+                            .mdc-text-field--filled {
+                                &:not(.mdc-text-field--disabled) {
+                                    background-color: #0C1427;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.component-rtl-enabled {
+            .mat-mdc-card-content {
+                .item {
+                    .cryptocurrency-types {
+                        .mdc-button {
+                            .mdc-button__label {
+                                img {
+                                    margin: {
+                                        right: 0;
+                                        left: 10px;
+                                    };
+                                }
+                                span {
+                                    margin: {
+                                        left: 0;
+                                        right: 5px;
+                                    };
+                                }
+                            }
+                            &::before {
+                                right: auto;
+                                left: -4px;
+                            }
+                        }
+                    }
+                    .form-group {
+                        .value {
+                            left: 20px;
+                            right: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .cryptocurrency-types-menu {
+        &.mat-mdc-menu-panel {
+            width: 290px;
+            height: auto;
+            max-width: 290px;
+            margin-top: 10px;
+            overflow: hidden;
+            border-radius: 7px;
+            box-shadow: 0px 4px 45px 0px rgba(0, 0, 0, 0.1) !important;
+            
+            .mat-mdc-menu-content {
+                padding: 12px 0;
+            }
+            .mat-mdc-menu-item {
+                display: block;
+                min-height: auto;
+                text-align: start;
+                padding: 10px 22px;
+                color: var(--blackColor);
+                text-transform: uppercase;
+
+                .mat-mdc-menu-item-text {
+                    display: flex;
+                    font-weight: 600;
+                    align-items: center;
+
+                    img {
+                        width: 22px;
+                        margin-right: 8px;
+                    }
+                    span {
+                        margin-left: 3px;
+                    }
+                }
+            }
+        }
+    }
+    .dark-theme {
+        .cryptocurrency-types-menu {
+            &.mat-mdc-menu-panel {
+                .mat-mdc-menu-item {
+                    color: var(--whiteColor);
+                }
+            }
+        }
+    }
+    .rtl-enabled {
+        .cryptocurrency-types-menu {
+            &.mat-mdc-menu-panel {
+                .mat-mdc-menu-item {
+                    .mat-mdc-menu-item-text {
+                        img {
+                            margin: {
+                                right: 0;
+                                left: 8px;
+                            };
+                        }
+                        span {
+                            margin: {
+                                left: 0;
+                                right: 3px;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .crypto-exchange-card {
+            .mat-mdc-card-header {
+                padding: {
+                    left: 17px;
+                    right: 17px;
+                };
+                margin: {
+                    left: -17px;
+                    right: -17px;
+                };
+                .mat-mdc-button {
+                    i {
+                        font-size: 20px;
+                    }
+                }
+            }
+            .mat-mdc-card-content {
+                padding-bottom: 0 !important;
+    
+                .item {
+                    margin-bottom: 17px;
+    
+                    .title {
+                        margin-bottom: 10px;
+                    }
+                    .cryptocurrency-types {
+                        .mdc-button {
+                            font-size: 14px;
+                        }
+                    }
+                    .form-group {
+                        .mat-mdc-form-field {
+                            .mdc-text-field {
+                                padding: {
+                                    left: 15px;
+                                    right: 15px;
+                                };
+                            }
+                        }
+                        .value {
+                            right: 15px;
+                        }
+                    }
+                }
+                .exchange-btn {
+                    &.mdc-button {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+        .cryptocurrency-types-menu {
+            &.mat-mdc-menu-panel {
+                width: 258px;
+                max-width: 258px;
+                
+                .mat-mdc-menu-content {
+                    padding: 7px 0;
+                }
+                .mat-mdc-menu-item {
+                    padding: 9px 16px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    ::ng-deep {
+        .crypto-exchange-card {
+            .mat-mdc-card-header {
+                padding: {
+                    left: 20px;
+                    right: 20px;
+                };
+                margin: {
+                    left: -20px;
+                    right: -20px;
+                };
+            }
+        }
+    }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    ::ng-deep {
+        .cryptocurrency-types-menu {
+            &.mat-mdc-menu-panel {
+                width: 220px;
+                max-width: 220px;
+            }
+        }
+    }
+
+}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+
+    ::ng-deep {
+        .cryptocurrency-types-menu {
+            &.mat-mdc-menu-panel {
+                width: 220px;
+                max-width: 220px;
+            }
+        }
+    }
+
+}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

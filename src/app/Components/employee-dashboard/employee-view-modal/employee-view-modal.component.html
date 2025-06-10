@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Employee Details</h2>
+<mat-dialog-content class="view-employee-modal">
+  <section>
+    <h3>Personal Information</h3>
+    <p><strong>Name:</strong> {{ data?.name }} {{ data?.surname }}</p>
+    <p><strong>Email:</strong> {{ data?.emailAddress }}</p>
+    <p><strong>Mobile:</strong> {{ data?.mobileNo }}</p>
+    <p><strong>CNIC:</strong> {{ data?.cnic }}</p>
+    <p><strong>Passport:</strong> {{ data?.passport }}</p>
+    <p><strong>Date of Birth:</strong> {{ data?.dateOfBirth | date }}</p>
+    <p><strong>Gender:</strong> {{ data?.genderName }}</p>
+    <p><strong>Marital Status:</strong> {{ data?.maritalStatusName }}</p>
+  </section>
+
+  <section>
+    <h3>Job Details</h3>
+    <p><strong>Employee Code:</strong> {{ data?.employeeCode }}</p>
+    <p><strong>Position:</strong> {{ data?.employeePositionName }}</p>
+    <p><strong>Designation:</strong> {{ data?.designationName }}</p>
+    <p><strong>Joining Date:</strong> {{ data?.joiningDate | date }}</p>
+    <p><strong>Confirmation Date:</strong> {{ data?.confirmationDate | date }}</p>
+    <p><strong>Status:</strong> {{ data?.employeeStatusName }}</p>
+  </section>
+
+  <section>
+    <h3>Bank & Location</h3>
+    <p><strong>Bank:</strong> {{ data?.employeeBankName }}</p>
+    <p><strong>Account Title:</strong> {{ data?.accountTitle }}</p>
+    <p><strong>Account #:</strong> {{ data?.accountNumber }}</p>
+    <p><strong>Station:</strong> {{ data?.employeeStationName }}</p>
+    <p><strong>Department:</strong> {{ data?.departmentName }}</p>
+    <p><strong>Division:</strong> {{ data?.divisionName }}</p>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

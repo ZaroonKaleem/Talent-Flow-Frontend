@@ -1,0 +1,15 @@
+.buttons-list {
+    margin-bottom: 5px;
+
+    .mat-mdc-button {
+        border: 1px solid var(--borderColor);
+        transition: var(--transition);
+        margin: {
+            right: 15px;
+            bottom: 15px;
+        };
+        &:hover {
+            border-color: var(--primaryColor);
+        }
+    }
+}
