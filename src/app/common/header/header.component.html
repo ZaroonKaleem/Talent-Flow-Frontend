@@ -1,19 +1,12 @@
-<div
-    [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
+<div [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
     [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
-    class="header-area bg-white border-bottom-radius transition"    
-    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-    [class.right-sidebar]="themeService.isRightSidebar()"
-    [class.hide-sidebar]="themeService.isHideSidebar()"
-    [class.card-borderd]="themeService.isCardBordered()"
-    [class.dark-header]="themeService.isHeaderDark()"
->
+    class="header-area bg-white border-bottom-radius transition"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()" [class.right-sidebar]="themeService.isRightSidebar()"
+    [class.hide-sidebar]="themeService.isHideSidebar()" [class.card-borderd]="themeService.isCardBordered()"
+    [class.dark-header]="themeService.isHeaderDark()">
     <div class="d-md-flex align-items-center justify-content-between">
         <div class="header-left-side d-flex align-items-center">
-            <div
-                class="burger-menu transition position-relative lh-1"
-                (click)="toggle()"
-            >
+            <div class="burger-menu transition position-relative lh-1" (click)="toggle()">
                 <i class="material-symbols-outlined">
                     menu
                 </i>
@@ -26,149 +19,148 @@
                     </i>
                 </button>
             </form> -->
-<div class="header-links">
-    <a href="/dashboard" class="nav-link">
-        <i class="material-symbols-outlined">dashboard</i>
-        <span>Dashboard</span>
-    </a>
-    <a href="/organization" class="nav-link">
-        <i class="material-symbols-outlined">corporate_fare</i>
-        <span>Organization</span>
-    </a>
-    <a href="/recruitment" class="nav-link">
-        <i class="material-symbols-outlined">work</i>
-        <span>Recruitment</span>
-    </a>
-    <a routerLink="/employee-dashboard" 
-   routerLinkActive="active" 
-   [routerLinkActiveOptions]="{exact: false}"
-   class="nav-link">
-    <i class="material-symbols-outlined">groups</i>
-    <span>Employees</span>
-</a>
-    <a href="/attendance" class="nav-link">
-        <i class="material-symbols-outlined">schedule</i>
-        <span>Attendance</span>
-    </a>
-    <a href="/leave" class="nav-link">
-        <i class="material-symbols-outlined">event_available</i>
-        <span>Leave</span>
-    </a>
-    <a href="/payroll" class="nav-link">
-        <i class="material-symbols-outlined">payments</i>
-        <span>Payroll</span>
-    </a>
-    <a href="/reports" class="nav-link">
-        <i class="material-symbols-outlined">summarize</i>
-        <span>Reports</span>
-    </a>
-<div class="connected-apps-menu">
-            <button type="button" mat-button [matMenuTriggerFor]="messagesMenu" class="menu-btn nav-link">
-                <i class="material-symbols-outlined">more_horiz</i>
-            </button>
-           <mat-menu class="apps-menu-dropdown" #messagesMenu="matMenu" xPosition="before">
-    <ul class="p-0 mt-0 mb-0 list-unstyled text-center">
-        <!-- Row 1 -->
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">speed</i>
-                <span class="d-block">Performance</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">mail</i>
-                <span class="d-block">Letters</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">payments</i>
-                <span class="d-block">Expense</span>
-            </a>
-        </li>
+            <div class="header-links">
+                <a href="/dashboard" class="nav-link">
+                    <i class="material-symbols-outlined">dashboard</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/organization-dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}"
+                    class="nav-link">
+                    <i class="material-symbols-outlined">corporate_fare</i>
+                    <span>Organization</span>
+                </a>
+                <a href="/recruitment" class="nav-link">
+                    <i class="material-symbols-outlined">work</i>
+                    <span>Recruitment</span>
+                </a>
+                <a routerLink="/employee-dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}"
+                    class="nav-link">
+                    <i class="material-symbols-outlined">groups</i>
+                    <span>Employees</span>
+                </a>
+                <a href="/attendance" class="nav-link">
+                    <i class="material-symbols-outlined">schedule</i>
+                    <span>Attendance</span>
+                </a>
+                <a href="/leave" class="nav-link">
+                    <i class="material-symbols-outlined">event_available</i>
+                    <span>Leave</span>
+                </a>
+                <a href="/payroll" class="nav-link">
+                    <i class="material-symbols-outlined">payments</i>
+                    <span>Payroll</span>
+                </a>
+                <a href="/reports" class="nav-link">
+                    <i class="material-symbols-outlined">summarize</i>
+                    <span>Reports</span>
+                </a>
+                <div class="connected-apps-menu">
+                    <button type="button" mat-button [matMenuTriggerFor]="messagesMenu" class="menu-btn nav-link">
+                        <i class="material-symbols-outlined">more_horiz</i>
+                    </button>
+                    <mat-menu class="apps-menu-dropdown" #messagesMenu="matMenu" xPosition="before">
+                        <ul class="p-0 mt-0 mb-0 list-unstyled text-center">
+                            <!-- Row 1 -->
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">speed</i>
+                                    <span class="d-block">Performance</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">mail</i>
+                                    <span class="d-block">Letters</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">payments</i>
+                                    <span class="d-block">Expense</span>
+                                </a>
+                            </li>
 
-        <!-- Row 2 -->
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">summarize</i>
-                <span class="d-block">Scheduled Report</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">notifications_active</i>
-                <span class="d-block">Scheduled Alerts</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">person_remove</i>
-                <span class="d-block">Employee Separation</span>
-            </a>
-        </li>
+                            <!-- Row 2 -->
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">summarize</i>
+                                    <span class="d-block">Scheduled Report</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">notifications_active</i>
+                                    <span class="d-block">Scheduled Alerts</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">person_remove</i>
+                                    <span class="d-block">Employee Separation</span>
+                                </a>
+                            </li>
 
-        <!-- Row 3 -->
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">help</i>
-                <span class="d-block">Help Desk</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">link</i>
-                <span class="d-block">Integrations</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">construction</i>
-                <span class="d-block">Piece Work</span>
-            </a>
-        </li>
+                            <!-- Row 3 -->
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">help</i>
+                                    <span class="d-block">Help Desk</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">link</i>
+                                    <span class="d-block">Integrations</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">construction</i>
+                                    <span class="d-block">Piece Work</span>
+                                </a>
+                            </li>
 
-        <!-- Row 4 -->
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">account_balance_wallet</i>
-                <span class="d-block">Man Power Budgeting</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">flight</i>
-                <span class="d-block">Employee Travelling</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">desk</i>
-                <span class="d-block">Desk Management</span>
-            </a>
-        </li>
+                            <!-- Row 4 -->
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">account_balance_wallet</i>
+                                    <span class="d-block">Man Power Budgeting</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">flight</i>
+                                    <span class="d-block">Employee Travelling</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">desk</i>
+                                    <span class="d-block">Desk Management</span>
+                                </a>
+                            </li>
 
-        <!-- Row 5 -->
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">person_add</i>
-                <span class="d-block">Employee Onboarding</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="d-block">
-                <i class="material-symbols-outlined">school</i>
-                <span class="d-block">Training Management</span>
-            </a>
-        </li>
-    </ul>
-</mat-menu>
-        </div>
-</div>
-        
+                            <!-- Row 5 -->
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">person_add</i>
+                                    <span class="d-block">Employee Onboarding</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-block">
+                                    <i class="material-symbols-outlined">school</i>
+                                    <span class="d-block">Training Management</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </mat-menu>
+                </div>
+            </div>
+
         </div>
         <ul class="header-right-side d-flex align-items-center m-0 p-0 list-unstyled">
-            
+
             <!-- DARK MODE TOGGLER -->
             <!-- <li>
                 <button
@@ -259,7 +251,8 @@
                     </div>
                     <ul class="menu-body p-0 mt-0 list-unstyled">
                         <li class="position-relative">
-                            <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                            <div
+                                class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
                                 <i class="material-symbols-outlined">
                                     sms
                                 </i>
@@ -270,10 +263,12 @@
                             <span class="time d-block">
                                 2 hrs ago
                             </span>
-                            <a routerLink="/dashboard/notifications" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                            <a routerLink="/dashboard/notifications"
+                                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
                         </li>
                         <li class="position-relative">
-                            <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                            <div
+                                class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
                                 <i class="material-symbols-outlined">
                                     person
                                 </i>
@@ -284,11 +279,13 @@
                             <span class="time d-block">
                                 3 hrs ago
                             </span>
-                            <a routerLink="/dashboard/notifications" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                            <a routerLink="/dashboard/notifications"
+                                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
                             <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
                         </li>
                         <li class="position-relative">
-                            <div class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
+                            <div
+                                class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
                                 <i class="material-symbols-outlined">
                                     mark_email_unread
                                 </i>
@@ -299,11 +296,13 @@
                             <span class="time d-block">
                                 1 day ago
                             </span>
-                            <a routerLink="/dashboard/notifications" class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                            <a routerLink="/dashboard/notifications"
+                                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
                         </li>
                     </ul>
                     <div class="menu-footer text-center">
-                        <a routerLink="/dashboard/notifications" class="d-inline-block fw-medium position-relative text-primary">
+                        <a routerLink="/dashboard/notifications"
+                            class="d-inline-block fw-medium position-relative text-primary">
                             See All Notifications
                         </a>
                     </div>
