@@ -4,7 +4,7 @@
     <h5 class="fw-bold mb-3">Constant</h5>
     <ul class="list-group">
       <li *ngFor="let item of menuItems" class="list-group-item border-0 ps-0">
-        <a [routerLink]="item.route" class="text-decoration-none text-dark">
+        <a [routerLink]="item.path" class="text-decoration-none text-dark">
           {{ item.name }}
         </a>
       </li>

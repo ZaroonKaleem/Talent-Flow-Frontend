@@ -18,7 +18,7 @@
                 </a>
                 <a [routerLink]="'/organization-dashboard'" (click)="onNavClick('organization')"
                     [class.active]="currentTab === 'organization'" routerLinkActive="active"
-                    [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+                    [routerLinkActiveOptions]="{exact: false}" class="nav-link">
                     <i class="material-symbols-outlined">corporate_fare</i>
                     <span>Organization</span>
                 </a>
