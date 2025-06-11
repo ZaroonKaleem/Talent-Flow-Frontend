@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Manage Vendor</h4>
+    <button class="btn btn-primary">
+      + Add New Vendor
+    </button>
+  </div>
+
+  <table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>S#</th>
+        <th>Name</th>
+        <th>Added On</th>
+        <th>Modified On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of pagedItems; let i = index">
+        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td>{{ group.name }}</td>
+        <td>
+          {{ group.addedOn }}<br />
+          <small>By <span class="text-primary">{{ group.addedBy }}</span></small>
+        </td>
+        <td>
+          <div *ngIf="group.modifiedOn; else notModified">
+            {{ group.modifiedOn }}<br />
+            <small>By <span class="text-primary">{{ group.modifiedBy }}</span></small>
+          </div>
+          <ng-template #notModified>
+            --
+          </ng-template>
+        </td>
+        <td>
+          <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"></button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Edit</a></li>
+            <li><a class="dropdown-item" href="#">Delete</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <p>Records {{ employeeGroups.length > 0 ? (currentPage - 1) * pageSize + 1 : 0 }} - 
+       {{ Math.min(currentPage * pageSize, employeeGroups.length) }} of {{ employeeGroups.length }}</p>
+    
+    <ngb-pagination 
+      [collectionSize]="employeeGroups.length" 
+      [(page)]="currentPage"
+      [pageSize]="pageSize"
+      [maxSize]="5"
+      [rotate]="true"
+      (pageChange)="pageChanged()"
+      aria-label="Default pagination">
+    </ngb-pagination>
+  </div>
+</div>
