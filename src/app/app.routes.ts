@@ -219,6 +219,8 @@ import { EditEmployeeComponent } from './Components/employee-dashboard/edit-empl
 import { AddEmployeeComponent } from './Components/employee-dashboard/add-employee/add-employee.component';
 import { OrganizationDashboardComponent } from './Components/organization-dashboard/organization-dashboard.component';
 import { OrganizationSystemLogsComponent } from './Components/organization-dashboard/organization-system-logs/organization-system-logs.component';
+import { OraganizationConstantComponent } from './Components/organization-dashboard/organization-constant/organization-constant.component';
+import { EmployeeGroupComponent } from './Components/organization-dashboard/employee-group/employee-group.component';
 
 export const routes: Routes = [
     // {
@@ -265,7 +267,11 @@ export const routes: Routes = [
         path:'organization-dashboard',
         component: OrganizationDashboardComponent,
         children: [
-            {path:'', component: OrganizationSystemLogsComponent},
+            {path:'', component: OraganizationConstantComponent,
+                children: [
+                    {path: '',component: EmployeeGroupComponent}
+                ]
+            },
             {path:'employee-profile-requests', component: EmployeeProfileRequestComponent},
             {path:'employee-transfer-requests', component: EmployeeTransferRequestComponent},
             {path:'employee-info-request', component: EmployeeInfoRequestComponent},

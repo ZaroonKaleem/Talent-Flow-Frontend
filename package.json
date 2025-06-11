@@ -32,6 +32,7 @@
         "@ngrx/store": "^18.1.1",
         "@ngrx/store-devtools": "^18.1.1",
         "apexcharts": "^3.53.0",
+        "bootstrap": "^5.3.6",
         "express": "^4.21.0",
         "gramli-angular-notifier": "^16.0.2",
         "jspdf": "^2.5.2",
