@@ -48,17 +48,25 @@ export class HeaderComponent implements OnInit{
     }
 
  ngOnInit() {
-    // Initialize based on current route
-    this.detectActiveTab();
+ this.detectActiveTab();
+    
+    // Subscribe to future changes
+    this.sharedState.activeTab$.subscribe(tab => {
+      this.currentTab = tab;
+    });
   }
 
-  onNavClick(tab: string) {
-    this.sharedState.setActiveTab(tab);
+onNavClick(tab: string) {
+  this.sharedState.setActiveTab(tab);
+  // Add slight delay to ensure router navigation completes
+  setTimeout(() => {
     this.currentTab = tab;
-  }
+  }, 10);
+}
 
-  private detectActiveTab() {
-    const path = window.location.pathname;
+
+ private detectActiveTab() {
+    const path = this.router.url;
     if (path.includes('/employee-dashboard')) {
       this.currentTab = 'employee';
     } else if (path.includes('/organization-dashboard')) {
@@ -68,6 +76,7 @@ export class HeaderComponent implements OnInit{
     }
     this.sharedState.setActiveTab(this.currentTab);
   }
+
 
     // Settings Button Toggle
     settingsButtonToggle() {
