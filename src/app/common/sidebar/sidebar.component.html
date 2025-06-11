@@ -19,132 +19,165 @@
             <div class="sidebar-menu">
                 <mat-accordion>
                     <!-- LINKS FOR EMPLOYEE START -->
-  <ng-container *ngIf="currentTab === 'employee'">
-                    <a routerLink="/employee-dashboard" class="sidebar-menu-link" routerLinkActive="active"
-                        [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            groups
-                        </i>
-                        <span class="title">
-                            Employee List
-                        </span>
-                    </a>
+                    <ng-container *ngIf="currentTab === 'employee'">
+                        <a routerLink="/employee-dashboard" class="sidebar-menu-link" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                groups
+                            </i>
+                            <span class="title">
+                                Employee List
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-profile-requests" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            person_search
-                        </i>
-                        <span class="title">
-                            Employee Profile Request
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-profile-requests" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                person_search
+                            </i>
+                            <span class="title">
+                                Employee Profile Request
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-transfer-requests" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            move_item
-                        </i>
-                        <span class="title">
-                            Employee Transfer
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-transfer-requests" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                move_item
+                            </i>
+                            <span class="title">
+                                Employee Transfer
+                            </span>
+                        </a>
 
-                    <a routerLink="" class="sidebar-menu-link" routerLinkActive="active"
-                        [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            masks
-                        </i>
-                        <span class="title">
-                            Employee Role
-                        </span>
-                    </a>
+                        <a routerLink="" class="sidebar-menu-link" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                masks
+                            </i>
+                            <span class="title">
+                                Employee Role
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-info-request" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            contact_page
-                        </i>
-                        <span class="title">
-                            Employee Info Request
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-info-request" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                contact_page
+                            </i>
+                            <span class="title">
+                                Employee Info Request
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-registeration-request" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            handshake
-                        </i>
-                        <span class="title">
-                            Employee Resignation
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-registeration-request" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                handshake
+                            </i>
+                            <span class="title">
+                                Employee Resignation
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-approval-requests" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            approval
-                        </i>
-                        <span class="title">
-                            Employee Approvals
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-approval-requests" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                approval
+                            </i>
+                            <span class="title">
+                                Employee Approvals
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-delegation-requests" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            person_pin_circle
-                        </i>
-                        <span class="title">
-                            Delegation Request
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-delegation-requests" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                person_pin_circle
+                            </i>
+                            <span class="title">
+                                Delegation Request
+                            </span>
+                        </a>
 
-                    <a routerLink="/employee-dashboard/employee-append-deaprtment" class="sidebar-menu-link"
-                        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            group_add
-                        </i>
-                        <span class="title">
-                            Append Employee Dept
-                        </span>
-                    </a>
+                        <a routerLink="/employee-dashboard/employee-append-deaprtment" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                group_add
+                            </i>
+                            <span class="title">
+                                Append Employee Dept
+                            </span>
+                        </a>
 
-                    <a routerLink="/dashboard/apps" class="sidebar-menu-link" routerLinkActive="active"
-                        [routerLinkActiveOptions]="{exact: true}">
-                        <i class="material-symbols-outlined">
-                            manage_accounts
-                        </i>
-                        <span class="title">
-                            Employee Settings
-                        </span>
-                    </a>
-</ng-container>
+                        <a routerLink="/dashboard/apps" class="sidebar-menu-link" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                manage_accounts
+                            </i>
+                            <span class="title">
+                                Employee Settings
+                            </span>
+                        </a>
+                    </ng-container>
                     <!-- LINKS FOR EMPLOYEE END -->
- <ng-container *ngIf="currentTab === 'organization'">
+                   <ng-container *ngIf="currentTab === 'organization'">
     <!-- Organization Links -->
-    <a routerLink="/organization-dashboard" class="sidebar-menu-link" routerLinkActive="active">
-      <i class="material-symbols-outlined">corporate_fare</i>
-      <span class="title">Organization Structure</span>
+    <a routerLink="/system-logs" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">history</i>
+        <span class="title">System Logs</span>
     </a>
-    
-    <a routerLink="/organization-dashboard/departments" class="sidebar-menu-link" routerLinkActive="active">
-      <i class="material-symbols-outlined">account_tree</i>
-      <span class="title">Departments</span>
-    </a>
-    
-    <a routerLink="/organization-dashboard/positions" class="sidebar-menu-link" routerLinkActive="active">
-      <i class="material-symbols-outlined">work</i>
-      <span class="title">Positions</span>
-    </a>
-    
-    <a routerLink="/organization-dashboard/locations" class="sidebar-menu-link" routerLinkActive="active">
-      <i class="material-symbols-outlined">location_on</i>
-      <span class="title">Locations</span>
-    </a>
-  </ng-container>
 
+    <a routerLink="/departments" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">groups</i>
+        <span class="title">Department</span>
+    </a>
 
+    <a routerLink="/announcements" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">campaign</i>
+        <span class="title">Announcement</span>
+    </a>
+
+    <a routerLink="/holidays" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">beach_access</i>
+        <span class="title">Gazetted Holidays</span>
+    </a>
+
+    <a routerLink="/geo-restrictions" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">location_on</i>
+        <span class="title">Geo-Location Restriction</span>
+    </a>
+
+    <a routerLink="/projects" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">assignment</i>
+        <span class="title">Project</span>
+    </a>
+
+    <a routerLink="/tasks" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">task</i>
+        <span class="title">Task</span>
+    </a>
+
+    <a routerLink="/month-close" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">calendar_month</i>
+        <span class="title">Month Close</span>
+    </a>
+
+    <a routerLink="/day-close" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">today</i>
+        <span class="title">Day Close</span>
+    </a>
+
+    <a routerLink="/constants" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">tune</i>
+        <span class="title">Constant</span>
+    </a>
+
+    <a routerLink="/organization-settings" class="sidebar-menu-link" routerLinkActive="active">
+        <i class="material-symbols-outlined">settings</i>
+        <span class="title">Organization Settings</span>
+    </a>
+</ng-container>
                 </mat-accordion>
             </div>
         </div>

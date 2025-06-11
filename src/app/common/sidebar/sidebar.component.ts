@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NavigationEnd, Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgClass } from '@angular/common';
 import { ToggleService } from '../header/toggle.service';
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
 import { SharedStateService } from '../../shared/shared-state.service';
@@ -34,7 +34,9 @@ export class SidebarComponent implements OnInit,OnDestroy {
         private toggleService: ToggleService,
         public themeService: CustomizerSettingsService,
         private sharedState: SharedStateService,
-        private router: Router
+        private router: Router,
+        @Inject(PLATFORM_ID) private platformId: Object
+
     ) {
         this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
             this.isSidebarToggled = isSidebarToggled;
@@ -45,21 +47,26 @@ export class SidebarComponent implements OnInit,OnDestroy {
     }
 
      ngOnInit() {
-    // Subscribe to tab changes from shared service
+     this.currentTab = this.detectTabFromRoute();
+    this.sharedState.setActiveTab(this.currentTab);
+
+    // Subscribe to future changes
     this.tabSubscription = this.sharedState.activeTab$.subscribe(tab => {
-      this.currentTab = tab || this.detectTabFromRoute();
+      this.currentTab = tab;
     });
 
-    // Also watch router changes
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.currentTab = this.detectTabFromRoute();
+        const newTab = this.detectTabFromRoute();
+        if (newTab !== this.currentTab) {
+          this.sharedState.setActiveTab(newTab);
+        }
       });
   }
 
   private detectTabFromRoute(): string {
-    const path = window.location.pathname;
+    const path = this.router.url;
     if (path.includes('/employee-dashboard')) return 'employee';
     if (path.includes('/organization-dashboard')) return 'organization';
     if (path.includes('/dashboard')) return 'dashboard';
