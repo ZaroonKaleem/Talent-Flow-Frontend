@@ -1,0 +1,17 @@
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="bg-light border-end p-3" style="min-width: 250px; height: 100vh; overflow-y: auto;">
+    <h5 class="fw-bold mb-3">Constant</h5>
+    <ul class="list-group">
+      <li *ngFor="let item of menuItems" class="list-group-item border-0 ps-0">
+        <a [routerLink]="item.route" class="text-decoration-none text-dark">
+          {{ item.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>

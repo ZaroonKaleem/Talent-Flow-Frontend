@@ -10,18 +10,15 @@
                 <i class="material-symbols-outlined">
                     menu
                 </i>
-            </div> 
+            </div>
             <div class="header-links">
                 <a href="/dashboard" class="nav-link">
                     <i class="material-symbols-outlined">dashboard</i>
                     <span>Dashboard</span>
                 </a>
-                <a href="/organization-dashboard" 
-                (click)="onNavClick('organization')" 
-                [class.active]="currentTab === 'organization'"  
-                routerLinkActive="active" 
-                [routerLinkActiveOptions]="{exact: false}"
-                    class="nav-link">
+                <a [routerLink]="'/organization-dashboard'" (click)="onNavClick('organization')"
+                    [class.active]="currentTab === 'organization'" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" class="nav-link">
                     <i class="material-symbols-outlined">corporate_fare</i>
                     <span>Organization</span>
                 </a>
@@ -29,12 +26,9 @@
                     <i class="material-symbols-outlined">work</i>
                     <span>Recruitment</span>
                 </a>
-                <a routerLink="/employee-dashboard" 
-                (click)="onNavClick('employee')" 
-                routerLinkActive="active" 
-                [routerLinkActiveOptions]="{exact: false}"
-                [class.active]="currentTab === 'employee'"
-                class="nav-link">
+                <a routerLink="/employee-dashboard" (click)="onNavClick('employee')" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: false}" [ngClass]="{'active': currentTab === 'employee'}"
+                    class="nav-link">
                     <i class="material-symbols-outlined">groups</i>
                     <span>Employees</span>
                 </a>
