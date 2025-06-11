@@ -221,22 +221,22 @@ import { OrganizationDashboardComponent } from './Components/organization-dashbo
 import { OrganizationSystemLogsComponent } from './Components/organization-dashboard/organization-system-logs/organization-system-logs.component';
 import { OraganizationConstantComponent } from './Components/organization-dashboard/organization-constant/organization-constant.component';
 import { EmployeeGroupComponent } from './Components/organization-dashboard/employee-group/employee-group.component';
-// import { DesignationComponent } from './Components/organization-dashboard/designation/designation.component';
-// import { EmployeeStatusComponent } from './Components/organization-dashboard/employee-status/employee-status.component';
-// import { AllowanceTitleComponent } from './Components/organization-dashboard/allowance-title/allowance-title.component';
-// import { DeductionTitleComponent } from './Components/organization-dashboard/deduction-title/deduction-title.component';
-// import { EmployeeStationComponent } from './Components/organization-dashboard/employee-station/employee-station.component';
-// import { EmployeeBankComponent } from './Components/organization-dashboard/employee-bank/employee-bank.component';
-// import { JobTitleComponent } from './Components/organization-dashboard/job-title/job-title.component';
-// import { AssetTypeComponent } from './Components/organization-dashboard/asset-type/asset-type.component';
-// import { JobFieldComponent } from './Components/organization-dashboard/job-field/job-field.component';
-// import { EmployeePrefixComponent } from './Components/organization-dashboard/employee-prefix/employee-prefix.component';
-// import { EmployerBankComponent } from './Components/organization-dashboard/employer-bank/employer-bank.component';
-// import { BankBranchComponent } from './Components/organization-dashboard/bank-branch/bank-branch.component';
-// import { ClientCustomerComponent } from './Components/organization-dashboard/client-customer/client-customer.component';
-// import { ManageCountryComponent } from './Components/organization-dashboard/manage-country/manage-country.component';
-// import { ManageProvinceComponent } from './Components/organization-dashboard/manage-province/manage-province.component';
-// import { SubDepartmentComponent } from './Components/organization-dashboard/sub-department/sub-department.component';
+import { DesignationComponent } from './Components/organization-dashboard/designation/designation.component';
+import { EmployeeStatusComponent } from './Components/organization-dashboard/employee-status/employee-status.component';
+import { AllowanceTitleComponent } from './Components/organization-dashboard/allowance-title/allowance-title.component';
+import { DeductionTitleComponent } from './Components/organization-dashboard/deduction-title/deduction-title.component';
+import { EmployeeStationComponent } from './Components/organization-dashboard/employee-station/employee-station.component';
+import { EmployeeBankComponent } from './Components/organization-dashboard/employee-bank/employee-bank.component';
+import { JobTitleComponent } from './Components/organization-dashboard/job-title/job-title.component';
+import { AssetTypeComponent } from './Components/organization-dashboard/asset-type/asset-type.component';
+import { JobFieldComponent } from './Components/organization-dashboard/job-field/job-field.component';
+import { EmployeePrefixComponent } from './Components/organization-dashboard/employee-prefix/employee-prefix.component';
+import { EmployerBankComponent } from './Components/organization-dashboard/employer-bank/employer-bank.component';
+import { BankBranchComponent } from './Components/organization-dashboard/bank-branch/bank-branch.component';
+import { ClientCustomerComponent } from './Components/organization-dashboard/client-customer/client-customer.component';
+import { ManageCountryComponent } from './Components/organization-dashboard/manage-country/manage-country.component';
+import { ManageProvinceComponent } from './Components/organization-dashboard/manage-province/manage-province.component';
+import { SubDepartmentComponent } from './Components/organization-dashboard/sub-department/sub-department.component';
 import { MinimumWageComponent } from './Components/organization-dashboard/minimum-wage/minimum-wage.component';
 import { ManageGenderComponent } from './Components/organization-dashboard/manage-gender/manage-gender.component';
 import { ManageUniversityComponent } from './Components/organization-dashboard/manage-university/manage-university.component';
@@ -307,22 +307,22 @@ export const routes: Routes = [
                 path: '', component: OraganizationConstantComponent,
                 children: [
                     { path: '', component: EmployeeGroupComponent },
-                    // { path: 'designation', component: DesignationComponent },
-                    // { path: 'employee-status', component: EmployeeStatusComponent },
-                    // { path: 'allowance-title', component: AllowanceTitleComponent },
-                    // { path: 'deduction-title', component: DeductionTitleComponent },
-                    // { path: 'employee-station', component: EmployeeStationComponent },
-                    // { path: 'employee-bank', component: EmployeeBankComponent },
-                    // { path: 'job-title', component: JobTitleComponent },
-                    // { path: 'asset-type', component: AssetTypeComponent },
-                    // { path: 'job-field', component: JobFieldComponent },
-                    // { path: 'employee-prefix', component: EmployeePrefixComponent },
-                    // { path: 'employer-bank', component: EmployerBankComponent },
-                    // { path: 'bank-branch', component: BankBranchComponent },
-                    // { path: 'client-customer', component: ClientCustomerComponent },
-                    // { path: 'manage-country', component: ManageCountryComponent },
-                    // { path: 'manage-province', component: ManageProvinceComponent },
-                    // { path: 'sub-department', component: SubDepartmentComponent },
+                    { path: 'designation', component: DesignationComponent },
+                    { path: 'employee-status', component: EmployeeStatusComponent },
+                    { path: 'allowance-title', component: AllowanceTitleComponent },
+                    { path: 'deduction-title', component: DeductionTitleComponent },
+                    { path: 'employee-station', component: EmployeeStationComponent },
+                    { path: 'employee-bank', component: EmployeeBankComponent },
+                    { path: 'job-title', component: JobTitleComponent },
+                    { path: 'asset-type', component: AssetTypeComponent },
+                    { path: 'job-field', component: JobFieldComponent },
+                    { path: 'employee-prefix', component: EmployeePrefixComponent },
+                    { path: 'employer-bank', component: EmployerBankComponent },
+                    { path: 'bank-branch', component: BankBranchComponent },
+                    { path: 'client-customer', component: ClientCustomerComponent },
+                    { path: 'manage-country', component: ManageCountryComponent },
+                    { path: 'manage-province', component: ManageProvinceComponent },
+                    { path: 'sub-department', component: SubDepartmentComponent },
                     { path: 'manage-minimum-wage', component: MinimumWageComponent },
                     { path: 'manage-gender', component: ManageGenderComponent },
                     { path: 'manage-university', component: ManageUniversityComponent },

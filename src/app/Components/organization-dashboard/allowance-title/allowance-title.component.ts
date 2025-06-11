@@ -1,0 +1,20 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+@Component({
+  selector: 'app-allowance-title',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './allowance-title.component.html',
+  styleUrl: './allowance-title.component.scss'
+})
+export class AllowanceTitleComponent {
+  designations = [
+    { id: 1, name: 'Mechanical Technician', isAmount: 0, addedOn: '3/6/2024 1:59:52 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:31:44 PM', modifiedBy: 'Mr-Blacky' },
+    { id: 2, name: 'Sale Coordinator', isAmount: 1, addedOn: '3/6/2024 2:00:12 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:32:17 PM', modifiedBy: 'Mr-Blacky' },
+    { id: 3, name: 'Account Officer', isAmount: 0, addedOn: '3/6/2024 2:00:29 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:32:56 PM', modifiedBy: 'Mr-Blacky' },
+    // Add rest of data...
+  ];
+  editDesignation(item: any): void {
+    // You can route to another page or open a modal here
+  }
+}

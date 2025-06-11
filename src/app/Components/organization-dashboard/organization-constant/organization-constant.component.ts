@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { EmployeeGroupComponent } from '../employee-group/employee-group.component';
-
+import { DesignationComponent } from '../designation/designation.component';
 @Component({
   selector: 'app-constant',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [ RouterModule, CommonModule],
   templateUrl: './organization-constant.component.html',
   styleUrls: ['./organization-constant.component.scss']
 })

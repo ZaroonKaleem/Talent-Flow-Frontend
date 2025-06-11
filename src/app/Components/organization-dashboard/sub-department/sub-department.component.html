@@ -1,0 +1,49 @@
+<div class="sub-department-container">
+    <div class="header d-flex justify-content-between align-items-center mb-3">
+        <h4>Sub Department</h4>
+        <div>
+            <button class="btn btn-primary">➕ Add New SubDepartment</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="sub-department-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Sub Department Name</th>
+                    <th>Department Name</th>
+                    <th>SubDepartment Code</th>
+                    <th>Added On</th>
+                    <th>Modified On</th>
+                    <th>Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dept of subDepartments">
+                    <td>{{ dept.id }}</td>
+                    <td>{{ dept.department }} -> {{ dept.name }}</td>
+                    <td>{{ dept.head }}</td>
+                    <td>{{ dept.code }}</td>
+                    <td>{{ dept.addedOn }} By {{ dept.addedBy }}</td>
+                    <td>{{ dept.modifiedOn }}</td>
+                    <td>
+                        <span *ngIf="dept.active" class="active-icon">✔</span>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                [id]="'dropdownMenuButton' + dept" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu" [attr.aria-labelledby]="'dropdownMenuButton' + dept">
+                                <li><a class="dropdown-item" href="#" (click)="editSubDepartment">Edit</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
