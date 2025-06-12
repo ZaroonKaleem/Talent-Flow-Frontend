@@ -1,0 +1,73 @@
+// .d-flex {
+//   // Sidebar
+//   .sidebar {
+//     min-width: 250px;
+//     height: 100vh;
+//     overflow-y: auto;
+//     // background-color: #f8f9fa;
+//     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+//     padding: 1rem;
+//         flex-shrink: 0; /* Prevents the sidebar from shrinking */
+
+
+//     &-title {
+//       color: #495057;
+//     //   padding: 0.5rem 0.75rem;
+//       margin-bottom: 1rem;
+//       border-radius: 0.25rem;
+//       font-weight: 600;
+//             text-overflow: ellipsis; /* Adds ... if text is too long */
+
+//     }
+
+//     .list-group {
+//       .list-group-item {
+//         padding-left: 0;
+//         border: none;
+//         margin-bottom: 0.25rem;
+//         border-radius: 0.25rem;
+//         transition: background-color 0.2s ease;
+//                 white-space: nowrap; /* Prevents link text from wrapping */
+//         text-overflow: ellipsis; /* Adds ... if text is too long */
+//         overflow: hidden;
+
+
+//         .menu-link {
+//           display: block;
+//           padding: 0.5rem 0.75rem;
+//           color: #495057;
+//           text-decoration: none;
+//           border-radius: 0.25rem;
+//           transition: all 0.2s ease;
+
+//           &.active-link {
+//             background-color: var(--primaryColor);
+//             color: white !important;
+//             // font-weight: 500;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   // Main Content
+//   .main-content {
+//     flex-grow: 1;
+//     padding: 1rem;
+//     background-color: white;
+//   }
+// }
+
+::ng-deep {
+  a[mat-list-item].active-link {
+    background-color: var(--primaryColor) !important;
+    
+    .mdc-list-item__primary-text {
+      color: white !important;
+    }
+    
+    .mat-mdc-list-item-unscoped-content {
+      color: white !important;
+    }
+  }
+}

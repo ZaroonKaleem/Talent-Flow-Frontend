@@ -1,0 +1,246 @@
+<div class="delegation-container">
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h2>Project Management</h2>
+        <form [formGroup]="filterForm">
+            <div class="filter-grid">
+                <!-- Row 1 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of stations" [value]="station.id">
+                            {{ station.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option *ngFor="let dept of departments" [value]="dept.id">
+                            {{ dept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sub Department</mat-label>
+                    <mat-select formControlName="subDepartment">
+                        <mat-option *ngFor="let subDept of subDepartments" [value]="subDept.id">
+                            {{ subDept.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 2 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroups" [value]="group.id">
+                            {{ group.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="employee">
+                        <mat-option *ngFor="let emp of employees" [value]="emp.id">
+                            {{ emp.name }} ({{ emp.code }})
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Customer</mat-label>
+                    <mat-select formControlName="customer">
+                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                            {{ customer.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 3 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Project Name</mat-label>
+                    <input matInput formControlName="projectName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Year</mat-label>
+                    <mat-select formControlName="year">
+                        <mat-option *ngFor="let year of years" [value]="year">
+                            {{ year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Month</mat-label>
+                    <mat-select formControlName="month">
+                        <mat-option *ngFor="let month of months" [value]="month.id">
+                            {{ month.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 4 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option *ngFor="let status of statuses" [value]="status">
+                            {{ status }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Active</mat-label>
+                    <mat-select formControlName="active">
+                        <mat-option value="true">Active</mat-option>
+                        <mat-option value="false">Inactive</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Project Manager</mat-label>
+                    <mat-select formControlName="projectManager">
+                        <mat-option *ngFor="let manager of projectManagers" [value]="manager.id">
+                            {{ manager.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 5 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Project Coordinator</mat-label>
+                    <mat-select formControlName="projectCoordinator">
+                        <mat-option *ngFor="let coordinator of projectCoordinators" [value]="coordinator.id">
+                            {{ coordinator.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Project Mode</mat-label>
+                    <mat-select formControlName="projectMode">
+                        <mat-option *ngFor="let mode of projectModes" [value]="mode">
+                            {{ mode }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Flag</mat-label>
+                    <mat-select formControlName="flag">
+                        <mat-option *ngFor="let flag of flags" [value]="flag">
+                            {{ flag }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button mat-flat-button color="primary" (click)="applyFilters()">
+                    Apply Filters
+                </button>
+                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+                    Clear Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="buttons-list">
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewProject()">
+                    Add New Project
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="fw-medium">Sr#</th>
+                            <th scope="col" class="fw-medium">Project</th>
+                            <th scope="col" class="fw-medium">Customer</th>
+                            <th scope="col" class="fw-medium">TimePeriod</th>
+                            <th scope="col" class="fw-medium">Budget</th>
+                            <th scope="col" class="fw-medium">Employee Count</th>
+                            <th scope="col" class="fw-medium">Manager</th>
+                            <th scope="col" class="fw-medium">Coordinator</th>
+                            <th scope="col" class="fw-medium">Project Mode</th>
+                            <th scope="col" class="fw-medium">Added On</th>
+                            <th scope="col" class="fw-medium">Modified On</th>
+                            <th scope="col" class="fw-medium">Active</th>
+                            <th scope="col" class="fw-medium">Details</th>
+                            <th scope="col" class="fw-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let project of dataSource.data; let i = index">
+                            <td data-label="Sr#">{{ i + 1 }}</td>
+                            <td data-label="Project">{{ project.name }}</td>
+                            <td data-label="Customer">{{ project.customer }}</td>
+                            <td data-label="TimePeriod">
+                                {{ project.startDate | date:'mediumDate' }} - {{ project.endDate | date:'mediumDate' }}
+                            </td>
+                            <td data-label="Budget">{{ project.budget | currency }}</td>
+                            <td data-label="Employee Count">{{ project.employeeCount }}</td>
+                            <td data-label="Manager">{{ project.manager }}</td>
+                            <td data-label="Coordinator">{{ project.coordinator }}</td>
+                            <td data-label="Project Mode">{{ project.mode }}</td>
+                            <td data-label="Added On">{{ project.addedOn | date:'mediumDate' }}</td>
+                            <td data-label="Modified On">{{ project.modifiedOn | date:'mediumDate' }}</td>
+                            <td data-label="Active">
+                                <mat-icon [class.active]="project.active" [class.inactive]="!project.active">
+                                    {{ project.active ? 'check_circle' : 'cancel' }}
+                                </mat-icon>
+                            </td>
+                            <td data-label="Details">
+                                <button mat-icon-button (click)="showDetails(project)">
+                                    <i class="material-symbols-outlined">info</i>
+                                </button>
+                            </td>
+                            <td data-label="Actions">
+                                <button mat-icon-button [matMenuTriggerFor]="menu">
+                                    <i class="material-symbols-outlined">more_horiz</i>
+                                </button>
+
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="viewProject(project.id)">
+                                        <div class="menu-item-content">
+                                            <i class="material-symbols-outlined">visibility</i>
+                                            <span>View</span>
+                                        </div>
+                                    </button>
+                                    <button mat-menu-item (click)="editProject(project.id)">
+                                        <div class="menu-item-content">
+                                            <i class="material-symbols-outlined">edit</i>
+                                            <span>Edit</span>
+                                        </div>
+                                    </button>
+                                    <button mat-menu-item (click)="toggleProjectStatus(project)">
+                                        <div class="menu-item-content">
+                                            <i class="material-symbols-outlined">
+                                                {{ project.active ? 'block' : 'check_circle' }}
+                                            </i>
+                                            <span>{{ project.active ? 'Deactivate' : 'Activate' }}</span>
+                                        </div>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <mat-paginator [length]="totalCount" 
+                          [pageSize]="pageSize" 
+                          [pageSizeOptions]="[5, 10, 25]"
+                          (page)="onPageChange($event)">
+            </mat-paginator>
+        </mat-card-content>
+    </mat-card>
+</div>

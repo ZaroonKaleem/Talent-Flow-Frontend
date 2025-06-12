@@ -1,26 +1,22 @@
 <div class="delegation-container">
     <!-- Filters Section -->
     <div class="filters-section">
-        <h2>Departments</h2>
+        <h2>Task Management</h2>
         <form [formGroup]="filterForm">
             <div class="filter-grid">
                 <!-- Row 1 -->
                 <mat-form-field appearance="outline">
-                    <mat-label>Department Name</mat-label>
-                    <mat-select formControlName="departmentName">
-                        <mat-option *ngFor="let dept of departments" [value]="dept.id">
-                            {{ dept.name }}
+                    <mat-label>Project</mat-label>
+                    <mat-select formControlName="project">
+                        <mat-option *ngFor="let project of projects" [value]="project.id">
+                            {{ project.name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Department Head</mat-label>
-                    <mat-select formControlName="departmentHead">
-                        <mat-option *ngFor="let head of departmentHeads" [value]="head.id">
-                            {{ head.name }}
-                        </mat-option>
-                    </mat-select>
+                    <mat-label>Task Name</mat-label>
+                    <input matInput formControlName="taskName">
                 </mat-form-field>
 
                 <!-- Row 2 -->
@@ -29,6 +25,24 @@
                     <mat-select formControlName="status">
                         <mat-option *ngFor="let status of statuses" [value]="status">
                             {{ status }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Active</mat-label>
+                    <mat-select formControlName="active">
+                        <mat-option value="true">Active</mat-option>
+                        <mat-option value="false">Inactive</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Row 3 -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Task Mode</mat-label>
+                    <mat-select formControlName="taskMode">
+                        <mat-option *ngFor="let mode of taskModes" [value]="mode">
+                            {{ mode }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -58,11 +72,8 @@
     <mat-card class="table-card">
         <mat-card-content>
             <div class="buttons-list">
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="downloadPDF()">
-                    Upload Excel
-                </button>
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDepartment()">
-                    Add New Department
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewTask()">
+                    Add New Task
                 </button>
             </div>
             <div class="table-responsive">
@@ -70,27 +81,35 @@
                     <thead>
                         <tr>
                             <th scope="col" class="fw-medium">Sr#</th>
-                            <th scope="col" class="fw-medium">Department Name</th>
-                            <th scope="col" class="fw-medium">Department Head</th>
-                            <th scope="col" class="fw-medium">Department Code</th>
+                            <th scope="col" class="fw-medium">Task</th>
+                            <th scope="col" class="fw-medium">Project</th>
+                            <th scope="col" class="fw-medium">Team Leader</th>
+                            <th scope="col" class="fw-medium">Task Mode</th>
                             <th scope="col" class="fw-medium">Added On</th>
                             <th scope="col" class="fw-medium">Modified On</th>
                             <th scope="col" class="fw-medium">Active</th>
+                            <th scope="col" class="fw-medium">Details</th>
                             <th scope="col" class="fw-medium">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let dept of dataSource.data; let i = index">
+                        <tr *ngFor="let task of dataSource.data; let i = index">
                             <td data-label="Sr#">{{ i + 1 }}</td>
-                            <td data-label="Department Name">{{ dept.departmentName }}</td>
-                            <td data-label="Department Head">{{ dept.departmentHead }}</td>
-                            <td data-label="Department Code">{{ dept.departmentCode }}</td>
-                            <td data-label="Added On">{{ dept.addedOn | date:'mediumDate' }}</td>
-                            <td data-label="Modified On">{{ dept.modifiedOn | date:'mediumDate' }}</td>
+                            <td data-label="Task">{{ task.name }}</td>
+                            <td data-label="Project">{{ task.project }}</td>
+                            <td data-label="Team Leader">{{ task.teamLeader }}</td>
+                            <td data-label="Task Mode">{{ task.mode }}</td>
+                            <td data-label="Added On">{{ task.addedOn | date:'mediumDate' }}</td>
+                            <td data-label="Modified On">{{ task.modifiedOn | date:'mediumDate' }}</td>
                             <td data-label="Active">
-                                <i class="material-symbols-outlined" [class.active]="dept.isActive" [class.inactive]="!dept.isActive">
-                                    {{ dept.isActive ? 'check_circle' : 'cancel' }}
-                                </i>
+                                <mat-icon [class.active]="task.active" [class.inactive]="!task.active">
+                                    {{ task.active ? 'check_circle' : 'cancel' }}
+                                </mat-icon>
+                            </td>
+                            <td data-label="Details">
+                                <button mat-icon-button (click)="showDetails(task)">
+                                    <i class="material-symbols-outlined">info</i>
+                                </button>
                             </td>
                             <td data-label="Actions">
                                 <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -98,24 +117,24 @@
                                 </button>
 
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="viewDepartment(dept.id)">
+                                    <button mat-menu-item (click)="viewTask(task.id)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">visibility</i>
                                             <span>View</span>
                                         </div>
                                     </button>
-                                    <button mat-menu-item (click)="editDepartment(dept.id)">
+                                    <button mat-menu-item (click)="editTask(task.id)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">edit</i>
                                             <span>Edit</span>
                                         </div>
                                     </button>
-                                    <button mat-menu-item (click)="toggleDepartmentStatus(dept)">
+                                    <button mat-menu-item (click)="toggleTaskStatus(task)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">
-                                                {{ dept.isActive ? 'block' : 'check_circle' }}
+                                                {{ task.active ? 'block' : 'check_circle' }}
                                             </i>
-                                            <span>{{ dept.isActive ? 'Deactivate' : 'Activate' }}</span>
+                                            <span>{{ task.active ? 'Deactivate' : 'Activate' }}</span>
                                         </div>
                                     </button>
                                 </mat-menu>

@@ -218,46 +218,55 @@ import { EmployeeAppendDepartmentComponent } from './Components/employee-dashboa
 import { EditEmployeeComponent } from './Components/employee-dashboard/edit-employee/edit-employee.component';
 import { AddEmployeeComponent } from './Components/employee-dashboard/add-employee/add-employee.component';
 import { OrganizationDashboardComponent } from './Components/organization-dashboard/organization-dashboard.component';
-import { OrganizationSystemLogsComponent } from './Components/organization-dashboard/organization-system-logs/organization-system-logs.component';
+import { OrganizationSystemLogsComponent } from './Components/organization-dashboard/organization-constant/organization-system-logs/organization-system-logs.component';
 import { OraganizationConstantComponent } from './Components/organization-dashboard/organization-constant/organization-constant.component';
-import { EmployeeGroupComponent } from './Components/organization-dashboard/employee-group/employee-group.component';
-import { DesignationComponent } from './Components/organization-dashboard/designation/designation.component';
-import { EmployeeStatusComponent } from './Components/organization-dashboard/employee-status/employee-status.component';
-import { AllowanceTitleComponent } from './Components/organization-dashboard/allowance-title/allowance-title.component';
-import { DeductionTitleComponent } from './Components/organization-dashboard/deduction-title/deduction-title.component';
-import { EmployeeStationComponent } from './Components/organization-dashboard/employee-station/employee-station.component';
-import { EmployeeBankComponent } from './Components/organization-dashboard/employee-bank/employee-bank.component';
-import { JobTitleComponent } from './Components/organization-dashboard/job-title/job-title.component';
-import { AssetTypeComponent } from './Components/organization-dashboard/asset-type/asset-type.component';
-import { JobFieldComponent } from './Components/organization-dashboard/job-field/job-field.component';
-import { EmployeePrefixComponent } from './Components/organization-dashboard/employee-prefix/employee-prefix.component';
-import { EmployerBankComponent } from './Components/organization-dashboard/employer-bank/employer-bank.component';
-import { BankBranchComponent } from './Components/organization-dashboard/bank-branch/bank-branch.component';
-import { ClientCustomerComponent } from './Components/organization-dashboard/client-customer/client-customer.component';
-import { ManageCountryComponent } from './Components/organization-dashboard/manage-country/manage-country.component';
-import { ManageProvinceComponent } from './Components/organization-dashboard/manage-province/manage-province.component';
-import { SubDepartmentComponent } from './Components/organization-dashboard/sub-department/sub-department.component';
-import { MinimumWageComponent } from './Components/organization-dashboard/minimum-wage/minimum-wage.component';
-import { ManageGenderComponent } from './Components/organization-dashboard/manage-gender/manage-gender.component';
-import { ManageUniversityComponent } from './Components/organization-dashboard/manage-university/manage-university.component';
-import { ManageRoomComponent } from './Components/organization-dashboard/manage-room/manage-room.component';
-import { ManageFloorComponent } from './Components/organization-dashboard/manage-floor/manage-floor.component';
-import { ManageGradeComponent } from './Components/organization-dashboard/manage-grade/manage-grade.component';
-import { ManageDivisionComponent } from './Components/organization-dashboard/manage-division/manage-division.component';
-import { ManageResignTypeComponent } from './Components/organization-dashboard/manage-resign-type/manage-resign-type.component';
-import { ManageExpenseUnitComponent } from './Components/organization-dashboard/manage-expense-unit/manage-expense-unit.component';
-import { ManageExitTypeComponent } from './Components/organization-dashboard/manage-exit-type/manage-exit-type.component';
-import { ManageMaritalStatusComponent } from './Components/organization-dashboard/manage-marital-status/manage-marital-status.component';
-import { ManageDocumentTypeComponent } from './Components/organization-dashboard/manage-document-type/manage-document-type.component';
-import { ManageGlClassComponent } from './Components/organization-dashboard/manage-gl-class/manage-gl-class.component';
-import { ManageCostCenterComponent } from './Components/organization-dashboard/manage-cost-center/manage-cost-center.component';
-import { ManageRegionComponent } from './Components/organization-dashboard/manage-region/manage-region.component';
-import { ManageVendorComponent } from './Components/organization-dashboard/manage-vendor/manage-vendor.component';
-import { ManageAreaComponent } from './Components/organization-dashboard/manage-area/manage-area.component';
-import { ManageCityComponent } from './Components/organization-dashboard/manage-city/manage-city.component';
+import { EmployeeGroupComponent } from './Components/organization-dashboard/organization-constant/employee-group/employee-group.component';
+import { DesignationComponent } from './Components/organization-dashboard/organization-constant/designation/designation.component';
+import { EmployeeStatusComponent } from './Components/organization-dashboard/organization-constant/employee-status/employee-status.component';
+import { AllowanceTitleComponent } from './Components/organization-dashboard/organization-constant/allowance-title/allowance-title.component';
+import { DeductionTitleComponent } from './Components/organization-dashboard/organization-constant/deduction-title/deduction-title.component';
+import { EmployeeStationComponent } from './Components/organization-dashboard/organization-constant/employee-station/employee-station.component';
+import { EmployeeBankComponent } from './Components/organization-dashboard/organization-constant/employee-bank/employee-bank.component';
+import { JobTitleComponent } from './Components/organization-dashboard/organization-constant/job-title/job-title.component';
+import { AssetTypeComponent } from './Components/organization-dashboard/organization-constant/asset-type/asset-type.component';
+import { JobFieldComponent } from './Components/organization-dashboard/organization-constant/job-field/job-field.component';
+import { EmployeePrefixComponent } from './Components/organization-dashboard/organization-constant/employee-prefix/employee-prefix.component';
+import { EmployerBankComponent } from './Components/organization-dashboard/organization-constant/employer-bank/employer-bank.component';
+import { BankBranchComponent } from './Components/organization-dashboard/organization-constant/bank-branch/bank-branch.component';
+import { ClientCustomerComponent } from './Components/organization-dashboard/organization-constant/client-customer/client-customer.component';
+import { ManageCountryComponent } from './Components/organization-dashboard/organization-constant/manage-country/manage-country.component';
+import { ManageProvinceComponent } from './Components/organization-dashboard/organization-constant/manage-province/manage-province.component';
+import { SubDepartmentComponent } from './Components/organization-dashboard/organization-constant/sub-department/sub-department.component';
+import { MinimumWageComponent } from './Components/organization-dashboard/organization-constant/minimum-wage/minimum-wage.component';
+import { ManageGenderComponent } from './Components/organization-dashboard/organization-constant/manage-gender/manage-gender.component';
+import { ManageUniversityComponent } from './Components/organization-dashboard/organization-constant/manage-university/manage-university.component';
+import { ManageRoomComponent } from './Components/organization-dashboard/organization-constant/manage-room/manage-room.component';
+import { ManageFloorComponent } from './Components/organization-dashboard/organization-constant/manage-floor/manage-floor.component';
+import { ManageGradeComponent } from './Components/organization-dashboard/organization-constant/manage-grade/manage-grade.component';
+import { ManageDivisionComponent } from './Components/organization-dashboard/organization-constant/manage-division/manage-division.component';
+import { ManageResignTypeComponent } from './Components/organization-dashboard/organization-constant/manage-resign-type/manage-resign-type.component';
+import { ManageExpenseUnitComponent } from './Components/organization-dashboard/organization-constant/manage-expense-unit/manage-expense-unit.component';
+import { ManageExitTypeComponent } from './Components/organization-dashboard/organization-constant/manage-exit-type/manage-exit-type.component';
+import { ManageMaritalStatusComponent } from './Components/organization-dashboard/organization-constant/manage-marital-status/manage-marital-status.component';
+import { ManageDocumentTypeComponent } from './Components/organization-dashboard/organization-constant/manage-document-type/manage-document-type.component';
+import { ManageGlClassComponent } from './Components/organization-dashboard/organization-constant/manage-gl-class/manage-gl-class.component';
+import { ManageCostCenterComponent } from './Components/organization-dashboard/organization-constant/manage-cost-center/manage-cost-center.component';
+import { ManageRegionComponent } from './Components/organization-dashboard/organization-constant/manage-region/manage-region.component';
+import { ManageVendorComponent } from './Components/organization-dashboard/organization-constant/manage-vendor/manage-vendor.component';
+import { ManageAreaComponent } from './Components/organization-dashboard/organization-constant/manage-area/manage-area.component';
+import { ManageCityComponent } from './Components/organization-dashboard/organization-constant/manage-city/manage-city.component';
 
 
 import path from 'path';
+import { SystemLogsComponent } from './Components/organization-dashboard/system-logs/system-logs.component';
+import { DataLogsComponent } from './Components/organization-dashboard/system-logs/data-logs/data-logs.component';
+import { UserLastLoginComponent } from './Components/organization-dashboard/system-logs/user-last-login/user-last-login.component';
+import { OrganizationDepartmentComponent } from './Components/organization-dashboard/organization-department/organization-department.component';
+import { OrganizationAnnouncementComponent } from './Components/organization-dashboard/organization-announcement/organization-announcement.component';
+import { OrganizationGazettedHolidaysComponent } from './Components/organization-dashboard/organization-gazetted-holidays/organization-gazetted-holidays.component';
+import { OrganizationGeoLocationComponent } from './Components/organization-dashboard/organization-geo-location/organization-geo-location.component';
+import { OrganizationProjectComponent } from './Components/organization-dashboard/organization-project/organization-project.component';
+import { OrganizationTaskComponent } from './Components/organization-dashboard/organization-task/organization-task.component';
 export const routes: Routes = [
     // {
     //     path: '',
@@ -304,9 +313,10 @@ export const routes: Routes = [
         component: OrganizationDashboardComponent,
         children: [
             {
-                path: '', component: OraganizationConstantComponent,
+                path: 'constants', component: OraganizationConstantComponent,
                 children: [
-                    { path: '', component: EmployeeGroupComponent },
+                    {path:'', component:EmployeeGroupComponent},
+                    { path: 'employee-group', component: EmployeeGroupComponent },
                     { path: 'designation', component: DesignationComponent },
                     { path: 'employee-status', component: EmployeeStatusComponent },
                     { path: 'allowance-title', component: AllowanceTitleComponent },
@@ -343,6 +353,20 @@ export const routes: Routes = [
                     { path: 'manage-city', component: ManageCityComponent }
                 ]
             },
+            {
+                path: 'system-logs', component: SystemLogsComponent,
+                children: [
+                    {path:'data-logs', component:DataLogsComponent},
+                    {path:'user-last-login', component:UserLastLoginComponent},
+                ]
+            },
+            { path: 'announcements', component: OrganizationAnnouncementComponent },
+            { path: 'organization-department', component: OrganizationDepartmentComponent },
+            { path: 'gazetted-holidays', component: OrganizationGazettedHolidaysComponent },
+            { path: 'geo-location', component:OrganizationGeoLocationComponent},
+            { path: 'projects', component:OrganizationProjectComponent},
+            { path:'tasks', component: OrganizationTaskComponent},
+
             { path: 'employee-profile-requests', component: EmployeeProfileRequestComponent },
             { path: 'employee-transfer-requests', component: EmployeeTransferRequestComponent },
             { path: 'employee-info-request', component: EmployeeInfoRequestComponent },

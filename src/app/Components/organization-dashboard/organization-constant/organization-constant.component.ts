@@ -1,18 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { EmployeeGroupComponent } from '../employee-group/employee-group.component';
-import { DesignationComponent } from '../designation/designation.component';
+import { EmployeeGroupComponent } from './employee-group/employee-group.component';
+import { DesignationComponent } from './designation/designation.component';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 @Component({
   selector: 'app-constant',
   standalone: true,
-  imports: [ RouterModule, CommonModule],
+  imports: [ 
+    RouterModule, 
+    CommonModule,
+    MatListModule,
+    MatDividerModule
+  ],
   templateUrl: './organization-constant.component.html',
   styleUrls: ['./organization-constant.component.scss']
 })
 export class OraganizationConstantComponent {
   menuItems = [
-    { name: 'Manage Employee Group', path: '', component: EmployeeGroupComponent },
+    { name: 'Manage Employee Group', path: 'employee-group' },
     { name: 'Manage Designation', path: 'designation' },
     { name: 'Manage Employee Status', path: 'employee-status' },
     { name: 'Manage Allowance Title', path: 'allowance-title' },

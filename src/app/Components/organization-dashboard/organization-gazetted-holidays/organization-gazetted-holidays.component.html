@@ -1,34 +1,43 @@
 <div class="delegation-container">
     <!-- Filters Section -->
     <div class="filters-section">
-        <h2>Departments</h2>
+        <h2>Gazetted Holidays</h2>
         <form [formGroup]="filterForm">
             <div class="filter-grid">
                 <!-- Row 1 -->
                 <mat-form-field appearance="outline">
-                    <mat-label>Department Name</mat-label>
-                    <mat-select formControlName="departmentName">
-                        <mat-option *ngFor="let dept of departments" [value]="dept.id">
-                            {{ dept.name }}
+                    <mat-label>Station</mat-label>
+                    <mat-select formControlName="station">
+                        <mat-option *ngFor="let station of stations" [value]="station.id">
+                            {{ station.name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Department Head</mat-label>
-                    <mat-select formControlName="departmentHead">
-                        <mat-option *ngFor="let head of departmentHeads" [value]="head.id">
-                            {{ head.name }}
+                    <mat-label>Employee Group</mat-label>
+                    <mat-select formControlName="employeeGroup">
+                        <mat-option *ngFor="let group of employeeGroups" [value]="group.id">
+                            {{ group.name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <!-- Row 2 -->
                 <mat-form-field appearance="outline">
-                    <mat-label>Status</mat-label>
-                    <mat-select formControlName="status">
-                        <mat-option *ngFor="let status of statuses" [value]="status">
-                            {{ status }}
+                    <mat-label>Year</mat-label>
+                    <mat-select formControlName="year">
+                        <mat-option *ngFor="let year of years" [value]="year.id">
+                            {{ year.year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Month</mat-label>
+                    <mat-select formControlName="month">
+                        <mat-option *ngFor="let month of months" [value]="month.id">
+                            {{ month.name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -58,11 +67,8 @@
     <mat-card class="table-card">
         <mat-card-content>
             <div class="buttons-list">
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="downloadPDF()">
-                    Upload Excel
-                </button>
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDepartment()">
-                    Add New Department
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewHoliday()">
+                    Add New Holiday
                 </button>
             </div>
             <div class="table-responsive">
@@ -70,27 +76,25 @@
                     <thead>
                         <tr>
                             <th scope="col" class="fw-medium">Sr#</th>
-                            <th scope="col" class="fw-medium">Department Name</th>
-                            <th scope="col" class="fw-medium">Department Head</th>
-                            <th scope="col" class="fw-medium">Department Code</th>
+                            <th scope="col" class="fw-medium">Title</th>
+                            <th scope="col" class="fw-medium">Date</th>
                             <th scope="col" class="fw-medium">Added On</th>
                             <th scope="col" class="fw-medium">Modified On</th>
-                            <th scope="col" class="fw-medium">Active</th>
+                            <th scope="col" class="fw-medium">Details</th>
                             <th scope="col" class="fw-medium">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let dept of dataSource.data; let i = index">
+                        <tr *ngFor="let holiday of dataSource.data; let i = index">
                             <td data-label="Sr#">{{ i + 1 }}</td>
-                            <td data-label="Department Name">{{ dept.departmentName }}</td>
-                            <td data-label="Department Head">{{ dept.departmentHead }}</td>
-                            <td data-label="Department Code">{{ dept.departmentCode }}</td>
-                            <td data-label="Added On">{{ dept.addedOn | date:'mediumDate' }}</td>
-                            <td data-label="Modified On">{{ dept.modifiedOn | date:'mediumDate' }}</td>
-                            <td data-label="Active">
-                                <i class="material-symbols-outlined" [class.active]="dept.isActive" [class.inactive]="!dept.isActive">
-                                    {{ dept.isActive ? 'check_circle' : 'cancel' }}
-                                </i>
+                            <td data-label="Title">{{ holiday.title }}</td>
+                            <td data-label="Date">{{ holiday.date | date:'mediumDate' }}</td>
+                            <td data-label="Added On">{{ holiday.addedOn | date:'mediumDate' }}</td>
+                            <td data-label="Modified On">{{ holiday.modifiedOn | date:'mediumDate' }}</td>
+                            <td data-label="Details">
+                                <button mat-icon-button (click)="showDetails(holiday)">
+                                    <i class="material-symbols-outlined">info</i>
+                                </button>
                             </td>
                             <td data-label="Actions">
                                 <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -98,24 +102,24 @@
                                 </button>
 
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="viewDepartment(dept.id)">
+                                    <button mat-menu-item (click)="viewHoliday(holiday.id)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">visibility</i>
                                             <span>View</span>
                                         </div>
                                     </button>
-                                    <button mat-menu-item (click)="editDepartment(dept.id)">
+                                    <button mat-menu-item (click)="editHoliday(holiday.id)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">edit</i>
                                             <span>Edit</span>
                                         </div>
                                     </button>
-                                    <button mat-menu-item (click)="toggleDepartmentStatus(dept)">
+                                    <button mat-menu-item (click)="toggleHolidayStatus(holiday)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">
-                                                {{ dept.isActive ? 'block' : 'check_circle' }}
+                                                {{ holiday.isActive ? 'block' : 'check_circle' }}
                                             </i>
-                                            <span>{{ dept.isActive ? 'Deactivate' : 'Activate' }}</span>
+                                            <span>{{ holiday.isActive ? 'Deactivate' : 'Activate' }}</span>
                                         </div>
                                     </button>
                                 </mat-menu>

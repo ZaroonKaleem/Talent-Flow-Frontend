@@ -1,17 +1,38 @@
-<div class="d-flex">
-  <!-- Sidebar -->
-  <div class="bg-light border-end p-3" style="min-width: 250px; height: 100vh; overflow-y: auto;">
-    <h5 class="fw-bold mb-3">Constant</h5>
+<!-- <div class="d-flex">
+  <div class="border-end p-3 sidebar" style="min-width: 250px; height: 100vh; overflow-y: auto;">
+    <h5 class="fw-bold mb-3 sidebar-title">Constant</h5>
     <ul class="list-group">
-      <li *ngFor="let item of menuItems" class="list-group-item border-0 ps-0">
-        <a [routerLink]="item.path" class="text-decoration-none text-dark">
+      <li *ngFor="let item of menuItems" class="list-group-item border-0 ps-0 menu-item">
+        <a [routerLink]="item.path" 
+           class="text-decoration-none menu-link" 
+           routerLinkActive="active-link">
           {{ item.name }}
         </a>
       </li>
     </ul>
   </div>
+  <div class="flex-grow-1 p-3 main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div> -->
+
+<div class="mat-app-background" style="display: flex; height: 100vh;">
+  <!-- Sidebar -->
+  <mat-nav-list style="min-width: 250px; height: 100vh; overflow-y: auto;">
+    <mat-list-item>
+      <h5 class="mat-subheading">Constant</h5>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <a mat-list-item 
+       *ngFor="let item of menuItems" 
+       [routerLink]="item.path"
+       routerLinkActive="active-link">
+      {{ item.name }}
+    </a>
+  </mat-nav-list>
+
   <!-- Main Content -->
-  <div class="flex-grow-1 p-3">
+  <div style="flex: 1; padding: 16px; overflow: auto;">
     <router-outlet></router-outlet>
   </div>
 </div>

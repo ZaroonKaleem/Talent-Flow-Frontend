@@ -1,0 +1,51 @@
+/* In your component's CSS file */
+.sidebar-nav-list {
+  min-width: 250px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  margin-bottom: 16px; /* Space below header */
+}
+
+.sidebar-title {
+  color: white;
+  margin: 0;
+}
+
+.menu-item {
+  margin: 8px 0; /* Space between menu items */
+}
+
+.active-link {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.main-content {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+}
+
+::ng-deep {
+  a[mat-list-item].active-link {
+    background-color: var(--primaryColor) !important;
+    
+    .mdc-list-item__primary-text {
+      color: white !important;
+    }
+    
+    .mat-mdc-list-item-unscoped-content {
+      color: white !important;
+    }
+  }
+}
+
+.mat-subheading {
+    border: none;
+    border-radius: none;
+    padding: 1rem;
+    background-color: var(--primaryColor);
+    color: white !important;
+}
