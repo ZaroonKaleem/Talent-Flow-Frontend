@@ -121,95 +121,73 @@
                         </a>
                     </ng-container>
                     <!-- LINKS FOR EMPLOYEE END -->
-                   <ng-container *ngIf="currentTab === 'organization'">
-    <!-- Organization Links -->
-   <a 
-   routerLink="/organization-dashboard/system-logs" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}"
-   >
-        <i class="material-symbols-outlined">history</i>
-        <span class="title">System Logs</span>
-    </a>
+                    <ng-container *ngIf="currentTab === 'organization'">
+                        <!-- Organization Links -->
+                        <a routerLink="/organization-dashboard/system-logs" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">history</i>
+                            <span class="title">System Logs</span>
+                        </a>
 
-    <a 
-    routerLink="/organization-dashboard/organization-department" 
-    class="sidebar-menu-link" 
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{exact: false}"
-   
-    >
-        <i class="material-symbols-outlined">groups</i>
-        <span class="title">Department</span>
-    </a>
+                        <a routerLink="/organization-dashboard/organization-department" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">groups</i>
+                            <span class="title">Department</span>
+                        </a>
 
-    <a
-     routerLink="/organization-dashboard/announcements" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">campaign</i>
-        <span class="title">Announcement</span>
-    </a>
+                        <a routerLink="/organization-dashboard/announcements" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">campaign</i>
+                            <span class="title">Announcement</span>
+                        </a>
 
-    <a 
-     routerLink="/organization-dashboard/gazetted-holidays" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">beach_access</i>
-        <span class="title">Gazetted Holidays</span>
-    </a>
+                        <a routerLink="/organization-dashboard/gazetted-holidays" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">beach_access</i>
+                            <span class="title">Gazetted Holidays</span>
+                        </a>
 
-    <a 
-      routerLink="/organization-dashboard/geo-location" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">location_on</i>
-        <span class="title">Geo-Location Restriction</span>
-    </a>
+                        <a routerLink="/organization-dashboard/geo-location" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">location_on</i>
+                            <span class="title">Geo-Location Restriction</span>
+                        </a>
 
-    <a 
-  routerLink="/organization-dashboard/projects" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">assignment</i>
-        <span class="title">Project</span>
-    </a>
+                        <a routerLink="/organization-dashboard/projects" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">assignment</i>
+                            <span class="title">Project</span>
+                        </a>
 
-    <a 
- routerLink="/organization-dashboard/tasks" 
-   class="sidebar-menu-link" 
-   routerLinkActive="active"
-   [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">task</i>
-        <span class="title">Task</span>
-    </a>
+                        <a routerLink="/organization-dashboard/tasks" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">task</i>
+                            <span class="title">Task</span>
+                        </a>
 
-    <a routerLink="/month-close" class="sidebar-menu-link" routerLinkActive="active">
-        <i class="material-symbols-outlined">calendar_month</i>
-        <span class="title">Month Close</span>
-    </a>
+                        <a routerLink="/organization-dashboard/month-close" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">calendar_month</i>
+                            <span class="title">Month Close</span>
+                        </a>
 
-    <a routerLink="/day-close" class="sidebar-menu-link" routerLinkActive="active">
-        <i class="material-symbols-outlined">today</i>
-        <span class="title">Day Close</span>
-    </a>
+                        <a routerLink="/organization-dashboard/day-close" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">today</i>
+                            <span class="title">Day Close</span>
+                        </a>
 
-    <a routerLink="/organization-dashboard/constants" class="sidebar-menu-link" routerLinkActive="active"
-                            [routerLinkActiveOptions]="{exact: false}">
-        <i class="material-symbols-outlined">tune</i>
-        <span class="title">Constant</span>
-    </a>
+                        <a routerLink="/organization-dashboard/constants" class="sidebar-menu-link"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+                            <i class="material-symbols-outlined">tune</i>
+                            <span class="title">Constant</span>
+                        </a>
 
-    <a routerLink="/organization-settings" class="sidebar-menu-link" routerLinkActive="active">
-        <i class="material-symbols-outlined">settings</i>
-        <span class="title">Organization Settings</span>
-    </a>
-</ng-container>
+                        <a routerLink="/organization-dashboard/organization-settings" class="sidebar-menu-link" routerLinkActive="active">
+                            <i class="material-symbols-outlined">settings</i>
+                            <span class="title">Organization Settings</span>
+                        </a>
+                    </ng-container>
                 </mat-accordion>
             </div>
         </div>

@@ -1,0 +1,85 @@
+.system-config-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 24px auto;
+
+  h1 {
+    color: #3f51b5;
+    margin-bottom: 24px;
+  }
+
+  mat-expansion-panel {
+    margin-bottom: 16px;
+    box-shadow: none !important;
+    border: 1px solid #e0e0e0;
+
+    mat-expansion-panel-header {
+      height: 64px;
+      padding: 0 16px;
+
+      mat-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+
+        mat-icon {
+          color: #3f51b5;
+        }
+      }
+    }
+  }
+
+  .config-item {
+    margin: 16px 0;
+    padding: 0 8px;
+
+    .config-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .config-title {
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+
+    .config-description {
+      color: #666;
+      font-size: 14px;
+      margin-left: 8px;
+
+      .status-indicator {
+        color: #3f51b5;
+        font-weight: 500;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .config-options {
+    margin: 16px 8px;
+
+    mat-chip-option {
+      margin: 4px;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  mat-divider {
+    margin: 16px 0;
+  }
+}

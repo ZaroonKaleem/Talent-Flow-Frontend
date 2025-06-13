@@ -1,0 +1,65 @@
+<!-- <mat-card class="system-config-container">
+  <h1>System Configuration</h1>
+  
+  <mat-accordion>
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>schedule</mat-icon>
+          <span>Attendance Settings</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="config-item">
+        <div class="config-header">
+          <span class="config-title">Status</span>
+          <mat-slide-toggle [(ngModel)]="attendanceStatus" (change)="onAttendanceStatusChange()"></mat-slide-toggle>
+        </div>
+        <div class="config-description">
+          <p>Calculates Break of Employees</p>
+          <p class="status-indicator">Current Status: {{ attendanceStatus ? 'ON' : 'OFF' }}</p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="config-item">
+        <div class="config-header">
+          <span class="config-title">Exclude Break Time From Working Hours</span>
+          <mat-slide-toggle [(ngModel)]="excludeBreakTime" (change)="onBreakTimeChange()"></mat-slide-toggle>
+        </div>
+        <div class="config-description">
+          <p>When Avail Break then ask for Reason</p>
+          <p class="status-indicator">Current Status: {{ excludeBreakTime ? 'ON' : 'OFF' }}</p>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>beach_access</mat-icon>
+          <span>Leave Settings</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="config-options">
+        <mat-chip-listbox multiple>
+          <mat-chip-option *ngFor="let option of leaveOptions" [selected]="option.enabled"
+                          (selectionChange)="onLeaveOptionChange(option)">
+            {{ option.name }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="saveConfigurations()">
+      <mat-icon>save</mat-icon>
+      Save Configurations
+    </button>
+  </div>
+</mat-card> -->

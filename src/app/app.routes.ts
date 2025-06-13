@@ -267,6 +267,15 @@ import { OrganizationGazettedHolidaysComponent } from './Components/organization
 import { OrganizationGeoLocationComponent } from './Components/organization-dashboard/organization-geo-location/organization-geo-location.component';
 import { OrganizationProjectComponent } from './Components/organization-dashboard/organization-project/organization-project.component';
 import { OrganizationTaskComponent } from './Components/organization-dashboard/organization-task/organization-task.component';
+import { OrganizationDayCloseComponent } from './Components/organization-dashboard/organization-day-close/organization-day-close.component';
+import { OrganizationMonthCloseComponent } from './Components/organization-dashboard/organization-month-close/organization-month-close.component';
+import { OrganizationSettingsComponent } from './Components/organization-dashboard/organization-settings/organization-settings.component';
+import { SystemConfigurationComponent } from './Components/organization-dashboard/organization-settings/system-configuration/system-configuration.component';
+import { CustomFieldsComponent } from './Components/organization-dashboard/organization-settings/custom-fields/custom-fields.component';
+import { EmailSettingsComponent } from './Components/organization-dashboard/organization-settings/email-settings/email-settings.component';
+import { CompanySettingsComponent } from './Components/organization-dashboard/organization-settings/company-settings/company-settings.component';
+import { BiometricDeviceSettingsComponent } from './Components/organization-dashboard/organization-settings/biometric-device-settings/biometric-device-settings.component';
+import { CardTemplateComponent } from './Components/organization-dashboard/organization-settings/card-template/card-template.component';
 export const routes: Routes = [
     // {
     //     path: '',
@@ -360,22 +369,25 @@ export const routes: Routes = [
                     {path:'user-last-login', component:UserLastLoginComponent},
                 ]
             },
+             {
+                path: 'organization-settings', component: OrganizationSettingsComponent,
+                children: [
+                    {path:'system-configuration', component:SystemConfigurationComponent},
+                    {path:'custom-fields', component:CustomFieldsComponent},
+                    {path:'email-settings', component:EmailSettingsComponent},
+                    {path:'company-settings', component:CompanySettingsComponent},
+                    {path:'biometric-device-settings', component:BiometricDeviceSettingsComponent},
+                    {path:'card-template', component:CardTemplateComponent},
+                ]
+            },
             { path: 'announcements', component: OrganizationAnnouncementComponent },
             { path: 'organization-department', component: OrganizationDepartmentComponent },
             { path: 'gazetted-holidays', component: OrganizationGazettedHolidaysComponent },
             { path: 'geo-location', component:OrganizationGeoLocationComponent},
             { path: 'projects', component:OrganizationProjectComponent},
-            { path:'tasks', component: OrganizationTaskComponent},
-
-            { path: 'employee-profile-requests', component: EmployeeProfileRequestComponent },
-            { path: 'employee-transfer-requests', component: EmployeeTransferRequestComponent },
-            { path: 'employee-info-request', component: EmployeeInfoRequestComponent },
-            { path: 'employee-registeration-request', component: EmployeeRegisterationRequestComponent },
-            { path: 'employee-approval-requests', component: EmployeeApprovalRequestComponent },
-            { path: 'employee-delegation-requests', component: EmployeeDelegationRequestComponent },
-            { path: 'employee-append-deaprtment', component: EmployeeAppendDepartmentComponent },
-            { path: 'employee/add', component: AddEmployeeComponent },
-            { path: 'employees/edit/:id', component: EditEmployeeComponent }
+            { path: 'tasks', component: OrganizationTaskComponent},
+            { path: 'month-close', component: OrganizationMonthCloseComponent},
+            { path: 'day-close', component: OrganizationDayCloseComponent},
         ]
     },
     {
