@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '../../../../environments/environment.dev';
+import { EmployeeService } from '../../../Services/employee.service';
+import { LoaderService } from '../../../shared/loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Employee, EmployeeListResponse } from '../employee-list/employee-list.component';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { EmployeeResignationService } from '../../../Services/employee-resignation.service';
 
 @Component({
   selector: 'app-employee-registeration-request',
@@ -25,7 +34,10 @@ import { environment } from '../../../../environments/environment.dev';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginator,
+    MatMenu,
+    MatMenuModule
   ],
   templateUrl: './employee-registeration-request.component.html',
   styleUrl: './employee-registeration-request.component.scss'
@@ -76,17 +88,16 @@ provinceOptions: any[] = [];
 subDepartmentOptions: any[] = [];
 taskOptions: any[] = [];
 vendorOptions: any[] = [];
+    dataSource!: MatTableDataSource<Employee>;
+
 
   // Dropdown options
   stations = ['Head Office', 'Regional Office', 'Branch 1', 'Branch 2'];
   departments = ['HR', 'Finance', 'IT', 'Operations'];
   subDepartments = ['Recruitment', 'Payroll', 'Development', 'Support'];
   employeeGroups = ['Group A', 'Group B', 'Group C'];
-  employees = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Robert Johnson' }
-  ];
+     employees: Employee[] = [];
+
   inActiveEmployees = [
     { id: 4, name: 'Michael Brown' },
     { id: 5, name: 'Sarah Williams' }
@@ -94,6 +105,13 @@ vendorOptions: any[] = [];
   reasonTypes = ['New Hire', 'Rehire', 'Contract Renewal', 'Transfer'];
   statuses = ['Pending', 'Approved', 'Rejected', 'Completed'];
   requestTypes = ['Initial Registration', 'Update Information', 'Termination'];
+
+      totalCount: number = 0;
+      pageSize: number = 10;
+      pageIndex: number = 0;
+  
+      @ViewChild(MatSort) sort!: MatSort;
+      @ViewChild(MatPaginator) paginator!: MatPaginator;
   
     fetchDropdownData() {
       const accessToken = localStorage.getItem('accessToken');
@@ -200,11 +218,17 @@ vendorOptions: any[] = [];
     }
   ];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient,
+    private loaderService: LoaderService,
+    private snackBar: MatSnackBar,
+    private employeeResignationService: EmployeeResignationService) {}
 
   ngOnInit(): void {
     this.initForm();
     this.fetchDropdownData(); 
+    this.loadEmployees();
   }
 
   initForm() {
@@ -229,9 +253,6 @@ vendorOptions: any[] = [];
     // Implement your filter logic here
   }
 
-  clearFilters() {
-    this.filterForm.reset();
-  }
 
   viewDetails(request: any) {
     console.log('View details:', request);
@@ -242,4 +263,125 @@ vendorOptions: any[] = [];
     console.log('Edit request:', request);
     // Implement edit logic
   }
+
+loadEmployees(): void {
+  this.loaderService.show();
+  const params = {
+    SkipCount: this.pageIndex * this.pageSize,
+    MaxResultCount: this.pageSize
+  };
+
+  this.employeeResignationService.getAllResignations(params).subscribe({
+    next: (response: any) => {
+      const resignationResult = response.result;
+      this.employees = resignationResult.items;
+      this.totalCount = resignationResult.totalCount;
+      this.dataSource = new MatTableDataSource(this.employees);
+      
+      if (this.paginator) {
+        this.paginator.length = this.totalCount;
+        this.dataSource.paginator = this.paginator;
+      }
+      
+      if (this.sort) {
+        this.dataSource.sort = this.sort;
+      }
+
+      this.loaderService.hide();
+    },
+    error: (error) => {
+      console.error('Error loading employee resignations', error);
+      this.loaderService.hide();
+      this.snackBar.open('Error loading employee resignations', 'Close', { duration: 3000 });
+    }
+  });
+}
+  
+  applyFilter(): void {
+      this.loaderService.show();
+      this.pageIndex = 0;
+  
+      const formValues = this.filterForm.value;
+      const params: any = {
+          SkipCount: this.pageIndex * this.pageSize,
+          MaxResultCount: this.pageSize
+      };
+  
+      // Map form controls to API parameters
+      if (formValues.station) params.EmployeeStationId = formValues.station;
+      if (formValues.department) params.DepartmentId = formValues.department;
+      if (formValues.subDepartment) params.SubDepartmentId = formValues.subDepartment;
+      if (formValues.employeeGroup) params.EmployeeGroupId = formValues.employeeGroup;
+      if (formValues.designation) params.DesignationId = formValues.designation;
+      if (formValues.division) params.DivisionId = formValues.division;
+      if (formValues.employeeCode) params.EmployeeCode = formValues.employeeCode;
+      if (formValues.employeeName) params.Name = formValues.employeeName;
+      if (formValues.username) params.UserName = formValues.username;
+      if (formValues.employeeStatus) params.EmployeeStatusId = formValues.employeeStatus;
+      if (formValues.cnic) params.Cnic = formValues.cnic;
+  
+      if (formValues.documentsAttached !== null && formValues.documentsAttached !== undefined) {
+          params.HasDocuments = formValues.documentsAttached === 'yes';
+      }
+  
+      if (formValues.listStatus === 'blacklist') {
+          params.IsBlacklisted = true;
+      } else if (formValues.listStatus === 'whitelist') {
+          params.IsWhitelisted = true;
+      }
+  
+      if (formValues.flag) {
+          params.Flag = formValues.flag;
+      }
+  
+      console.log('Sending params:', params);
+  
+      this.employeeResignationService.getAllResignations(params).subscribe({
+          next: (response: EmployeeListResponse) => {
+  this.employees = response.result.items;
+              this.totalCount = response.result.totalCount;
+              this.dataSource = new MatTableDataSource(this.employees);
+  
+              if (this.paginator) {
+                  this.paginator.firstPage();
+                  this.paginator.length = this.totalCount;
+              }
+  
+              this.loaderService.hide();
+  
+              if (response.result.items && response.result.items.length > 0) {
+      this.snackBar.open('Data fetched successfully', 'Close', { duration: 2000 });
+  } else {
+      this.snackBar.open('No data found matching this filter', 'Close', { duration: 3000 });
+  }
+  
+          },
+          error: (error) => {
+              console.error('Error filtering employees', error);
+              this.loaderService.hide();
+              this.snackBar.open('Error applying filters', 'Close', { duration: 3000 });
+          }
+      });
+  }
+  
+      clearFilters(): void {
+          this.filterForm.reset();
+          this.pageIndex = 0;
+          this.loadEmployees();
+          this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+      }
+
+   onPageChange(event: PageEvent): void {
+          this.pageIndex = event.pageIndex;
+          this.pageSize = event.pageSize;
+  
+          const hasActiveFilters = Object.values(this.filterForm.value)
+              .some(val => val !== null && val !== '' && val !== undefined);
+  
+          if (hasActiveFilters) {
+              this.applyFilter();
+          } else {
+              this.loadEmployees();
+          }
+      }
 }

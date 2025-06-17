@@ -1,20 +1,106 @@
-.designation-container {
-  padding: 20px;
+/* data-logs.component.scss */
+.heading {
+  background-color: #1f4261 !important; /* Your primary color */
+  color: white;  
+}
 
-  .header h4 {
-    margin: 0;
+/* Optional: Add hover effect */
+::ng-deep .mat-table .mat-header-cell:hover {
+  background-color: darken(#1f4261, 10%);
+}
+
+/* Optional: Remove header borders */
+::ng-deep .mat-table .mat-header-cell {
+  border-bottom: none;
+}
+
+.mat-container {
+  padding: 24px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.secondary-text {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.8em;
+}
+
+/* Log type chips styling */
+mat-chip {
+  &.info {
+    background-color: #2196F3;
+    color: white;
   }
-
-  .btn {
-    font-size: 14px;
-    padding: 6px 12px;
+  
+  &.success {
+    background-color: #4CAF50;
+    color: white;
   }
+  
+  &.warning {
+    background-color: #FFC107;
+    color: black;
+  }
+  
+  &.error {
+    background-color: #F44336;
+    color: white;
+  }
+}
 
-  table {
-    font-size: 14px;
+/* Table cell styling */
+.mat-cell, .mat-header-cell {
+  padding: 12px 16px;
+  vertical-align: middle;
 
-    th, td {
-      vertical-align: middle;
-    }
+  
+  &:not(:last-child) {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+// .mat-header-cell {
+//   font-weight: 600;
+//     background-color: #1f4261;
+//   color: white;
+// }
+
+/* data-logs.component.scss */
+/* Add this to your component's SCSS */
+.mat-header-cell {
+  background-color: #1f4261 !important; /* Your primary color */
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+/* If you want to target specific columns differently */
+.mat-column-sr {
+  background-color: #673ab7; /* Example: different color for Sr# column */
+}
+
+.mat-table{
+    background-color: #f3f7fc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .table-container {
+    width: 100%;
   }
 }

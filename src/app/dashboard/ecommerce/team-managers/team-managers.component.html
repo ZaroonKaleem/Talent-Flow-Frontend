@@ -1,0 +1,28 @@
+<mat-card class="entry-card">
+  <div class="entry-header">
+    <div class="tab active">
+      <i class="material-symbols-outlined icon">folder</i>
+      <span>MY REQUESTS</span>
+    </div>
+    <div class="tab">
+      <i class="material-symbols-outlined icon">visibility</i>
+      <span>MY APPROVALS</span>
+    </div>
+  </div>
+  <div class="entry-table-container">
+    <table mat-table [dataSource]="dataSource" class="entry-table">
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let row">{{ row.sno }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value</th>
+        <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</mat-card>

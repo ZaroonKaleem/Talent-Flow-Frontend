@@ -1,48 +1,69 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Employee Group</h4>
-    <button class="btn btn-primary">
-      + Add New Employee Group
-    </button>
+<div class="mat-container">
+  <div class="header-container">
+    <h4>Manage Employee Group</h4>
   </div>
 
-  <table class="table table-bordered">
-    <thead class="thead-light">
-      <tr>
-        <th>S#</th>
-        <th>Name</th>
-        <th>Added On</th>
-        <th>Modified On</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let group of employeeGroups; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ group.name }}</td>
-        <td>
-          {{ group.addedOn }}<br />
-          <small>By <span class="text-primary">{{ group.addedBy }}</span></small>
+  <div class="table-container" *ngIf="isTableReady">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mat-table">
+      <!-- Serial Number Column -->
+      <ng-container matColumnDef="sr">
+        <th class="heading" mat-header-cell *matHeaderCellDef mat-sort-header>Sr#</th>
+        <td mat-cell *matCellDef="let group; let i = index">
+          {{ (pageIndex * pageSize) + i + 1 }}
         </td>
-        <td>
-          <div *ngIf="group.modifiedOn; else notModified">
-            {{ group.modifiedOn }}<br />
-            <small>By <span class="text-primary">{{ group.modifiedBy }}</span></small>
-          </div>
-          <ng-template #notModified>
-            --
-          </ng-template>
-        </td>
-        <td>
-          <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"></button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Edit</a></li>
-            <li><a class="dropdown-item" href="#">Delete</a></li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      </ng-container>
 
-  <p>Records {{ employeeGroups.length > 0 ? '1 - ' + employeeGroups.length : '0' }} of {{ employeeGroups.length }}</p>
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th class="heading" mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let group">
+          {{ group.id }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th class="heading" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let group">
+          {{ group.name }}
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th class="heading" mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let group">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <i class="material-symbols-outlined">more_vert</i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="viewDetails(group)">
+              <i class="material-symbols-outlined">visibility</i>
+            </button>
+            <button mat-menu-item (click)="exportLog(group)">
+              <i class="material-symbols-outlined">download</i>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <div class="footer-container" *ngIf="isTableReady">
+    <div class="records-info">
+      Showing {{ totalCount > 0 ? (pageIndex * pageSize) + 1 : 0 }} - 
+      {{ Math.min((pageIndex + 1) * pageSize, totalCount) }} 
+      of {{ totalCount }} records
+    </div>
+    
+    <mat-paginator [length]="totalCount"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="[5, 10, 25, 100]"
+                  (page)="pageChanged($event)"
+                  aria-label="Select page">
+    </mat-paginator>
+  </div>
 </div>

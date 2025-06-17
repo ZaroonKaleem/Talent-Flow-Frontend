@@ -64,7 +64,7 @@
         </form>
     </div>
 
-    <mat-card class="table-card">
+    <!-- <mat-card class="table-card">
         <mat-card-content>
             <div class="buttons-list">
                 <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewAnnouncement()">
@@ -136,6 +136,76 @@
                           [pageSize]="pageSize" 
                           [pageSizeOptions]="[5, 10, 25]"
                           (page)="onPageChange($event)">
+            </mat-paginator>
+        </mat-card-content>
+    </mat-card> -->
+
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="buttons-list">
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary"
+                    (click)="addNewAnnouncement()">
+                    Add New Announcement
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="fw-medium">Sr#</th>
+                            <th scope="col" class="fw-medium">Name</th>
+                            <th scope="col" class="fw-medium">Type</th>
+                            <th scope="col" class="fw-medium">Start Date</th>
+                            <th scope="col" class="fw-medium">End Date</th>
+                            <th scope="col" class="fw-medium">Departments</th>
+                            <th scope="col" class="fw-medium">Status</th>
+                            <th scope="col" class="fw-medium">Details</th>
+                            <th scope="col" class="fw-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ann of dataSource.data; let i = index">
+                            <td data-label="Sr#">{{ (pageIndex * pageSize) + i + 1 }}</td>
+                            <td data-label="Name">{{ ann.name }}</td>
+                            <td data-label="Type">{{ ann.announcementTypeName }}</td>
+                            <td data-label="Start Date">{{ ann.displayStartDate | date:'mediumDate' }}</td>
+                            <td data-label="End Date">{{ ann.displayEndDate | date:'mediumDate' }}</td>
+                            <td data-label="Departments">{{ formatList(ann.departments) }}</td>
+                            <td data-label="Status">
+                                <mat-chip [color]="ann.isActive ? 'primary' : 'warn'">
+                                    {{ ann.isActive ? 'Active' : 'Inactive' }}
+                                </mat-chip>
+                            </td>
+                            <td data-label="Details">
+                                <button mat-icon-button (click)="showDetails(ann)">
+                                    <i class="material-symbols-outlined">info</i>
+                                </button>
+                            </td>
+                            <td data-label="Actions">
+                                <button mat-icon-button [matMenuTriggerFor]="menu">
+                                    <i class="material-symbols-outlined">more_horiz</i>
+                                </button>
+
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="editAnnouncement(ann.id)">
+                                        <div class="menu-item-content">
+                                            <!-- <i class="material-symbols-outlined">edit</i> -->
+                                            <span>Edit</span>
+                                        </div>
+                                    </button>
+                                    <button mat-menu-item (click)="deleteAnnouncement(ann.id)">
+                                        <div class="menu-item-content">
+                                            <span>Delete</span>
+                                        </div>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+                (page)="onPageChange($event)">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

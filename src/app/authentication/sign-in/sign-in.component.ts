@@ -115,7 +115,7 @@ onSubmit() {
         localStorage.setItem('expireInSeconds', result.expireInSeconds.toString());
         localStorage.setItem('userId', result.userId.toString());
 
-        this.router.navigate(['/employee-dashboard']);
+        this.router.navigate(['/dashboard']);
       } else {
         alert('Login failed. Please check your credentials.');
       }

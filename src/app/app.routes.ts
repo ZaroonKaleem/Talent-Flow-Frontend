@@ -276,6 +276,9 @@ import { EmailSettingsComponent } from './Components/organization-dashboard/orga
 import { CompanySettingsComponent } from './Components/organization-dashboard/organization-settings/company-settings/company-settings.component';
 import { BiometricDeviceSettingsComponent } from './Components/organization-dashboard/organization-settings/biometric-device-settings/biometric-device-settings.component';
 import { CardTemplateComponent } from './Components/organization-dashboard/organization-settings/card-template/card-template.component';
+import { ProfileCardComponent } from './dashboard/profile-card/profile-card.component';
+import { CreateAnnouncementComponent } from './Components/organization-dashboard/organization-announcement/create-announcement/create-announcement.component';
+import { CreateTaskComponent } from './Components/organization-dashboard/organization-task/create-task/create-task.component';
 export const routes: Routes = [
     // {
     //     path: '',
@@ -301,6 +304,7 @@ export const routes: Routes = [
             { path: 'logout', component: LogoutComponent }
         ]
     },
+
     {
         path: 'employee-dashboard',
         component: EmployeeDashboardComponent,
@@ -388,6 +392,8 @@ export const routes: Routes = [
             { path: 'tasks', component: OrganizationTaskComponent},
             { path: 'month-close', component: OrganizationMonthCloseComponent},
             { path: 'day-close', component: OrganizationDayCloseComponent},
+            { path: 'announcements/add-announcement', component: CreateAnnouncementComponent},
+            { path: 'task/add-task', component: CreateTaskComponent}
         ]
     },
     {

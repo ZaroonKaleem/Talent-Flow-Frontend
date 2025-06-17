@@ -5,12 +5,12 @@
     min-height: 100vh;
     padding: {
         top: 95px;
-        left: 285px;
+        left: 25px;
         right: 25px;
     };
-    &.active, &.hide-sidebar {
-        padding-left: 125px;
-    }
+    // &.active, &.hide-sidebar {
+        // padding-left: 125px;
+    // }
     &.right-sidebar {
         padding: {
             left: 25px;
@@ -59,7 +59,7 @@
     .main-content {
         padding: {
             top: 143px;
-            left: 15px;
+            // left: 15px;
             right: 15px;
         };
         &.active, &.hide-sidebar {
@@ -218,10 +218,10 @@
 
     // Main Content
     .main-content {
-        padding-left: 265px;
+        // padding-left: 265px;
         
         &.active, &.hide-sidebar {
-            padding-left: 125px;
+            // padding-left: 125px;
         }
         &.right-sidebar {
             padding-right: 265px;

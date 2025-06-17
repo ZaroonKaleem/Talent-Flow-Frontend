@@ -1,4 +1,4 @@
-<mat-card
+<!-- <mat-card
     class="total-orders-card mb-25 border-radius d-block bg-white border-0 shadow-none"
     [class.component-rtl-enabled]="themeService.isRTLEnabled()"
     [class.component-dark-theme]="themeService.isDark()"
@@ -44,4 +44,19 @@
             </li>
         </ul>
     </mat-card-content>
+</mat-card> -->
+
+
+<mat-card class="attendance-card">
+  <div class="attendance-header">
+    <i class="material-symbols-outlined">access_time</i>
+    <span class="title">ATTENDANCE</span>
+    <i class="material-symbols-outlined cursor-pointer" (click)="refresh()">refresh</i>
+  </div>
+
+  <div class="attendance-body">
+    <i class="material-symbols-outlined warning-icon" color="warn">warning</i>
+    <p class="message">You have not marked your Attendance Today!</p>
+    <button mat-flat-button color="primary" class="sign-in-btn" (click)="markAttendance()">Sign In</button>
+  </div>
 </mat-card>

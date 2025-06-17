@@ -1,0 +1,38 @@
+<mat-card class="entry-card">
+  <div class="entry-header">
+    <div class="tab active">
+      <i class="material-symbols-outlined icon">access_time</i>
+      <span>MISSING ENTRY</span>
+    </div>
+    <div class="tab">
+      <i class="material-symbols-outlined icon">calendar_month</i>
+      <span>ABSENT ENTRY</span>
+    </div>
+  </div>
+  <div class="entry-table-container">
+    <table mat-table [dataSource]="dataSource" class="entry-table">
+      <ng-container matColumnDef="sno">
+        <th mat-header-cell *matHeaderCellDef>SNo</th>
+        <td mat-cell *matCellDef="let row">{{ row.sno }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let row" class="status-text">{{ row.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="request">
+        <th mat-header-cell *matHeaderCellDef>Request</th>
+        <td mat-cell *matCellDef="let row" class="request-text">{{ row.request }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</mat-card>

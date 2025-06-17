@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,8 +13,29 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
+import { DepartmentService } from '../../../Services/department.service';
+
+interface Department {
+  id: number;
+  name: string;
+  code: string;
+  departmentHeadId: number | null;
+  departmentHeadName: string;
+  description: string;
+}
+
+interface DepartmentResponse {
+  result: {
+    items: Department[];
+    totalCount: number;
+  };
+  success: boolean;
+  error: any;
+  unAuthorizedRequest: boolean;
+  __abp: boolean;
+}
 
 @Component({
   selector: 'app-organization-department',
@@ -31,82 +52,30 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatCheckboxModule,
     MatPaginator,
-    MatMenu,
     MatMenuModule
   ],
   templateUrl: './organization-department.component.html',
   styleUrl: './organization-department.component.scss'
 })
-export class OrganizationDepartmentComponent {
+export class OrganizationDepartmentComponent implements OnInit {
   filterForm!: FormGroup;
+  dataSource: MatTableDataSource<Department> = new MatTableDataSource<any>([]);
+  totalCount: number = 0;
+  pageSize: number = 10;
+  pageIndex: number = 0;
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
 
   // Dropdown options
-  departments = [
-    { id: 1, name: 'Human Resources' },
-    { id: 2, name: 'Finance' },
-    { id: 3, name: 'Information Technology' },
-    { id: 4, name: 'Operations' }
-  ];
-
+  departments: { id: number, name: string }[] = [];
   departmentHeads = [
     { id: 1, name: 'John Smith' },
     { id: 2, name: 'Sarah Johnson' },
     { id: 3, name: 'Michael Brown' },
     { id: 4, name: 'Emily Davis' }
   ];
-
   statuses = ['Active', 'Inactive', 'Pending Approval'];
   flags = ['Red', 'Yellow', 'Green'];
-
-  // Static department data
-  departmentsData = [
-    {
-      id: 1,
-      departmentName: 'Human Resources',
-      departmentHead: 'John Smith',
-      departmentCode: 'HR001',
-      addedOn: new Date('2020-01-15'),
-      modifiedOn: new Date('2023-05-10'),
-      status: 'Active',
-      isActive: true
-    },
-    {
-      id: 2,
-      departmentName: 'Finance',
-      departmentHead: 'Sarah Johnson',
-      departmentCode: 'FIN002',
-      addedOn: new Date('2019-03-22'),
-      modifiedOn: new Date('2023-04-15'),
-      status: 'Active',
-      isActive: true
-    },
-    {
-      id: 3,
-      departmentName: 'Information Technology',
-      departmentHead: 'Michael Brown',
-      departmentCode: 'IT003',
-      addedOn: new Date('2021-07-10'),
-      modifiedOn: new Date('2023-06-01'),
-      status: 'Active',
-      isActive: true
-    },
-    {
-      id: 4,
-      departmentName: 'Operations',
-      departmentHead: 'Emily Davis',
-      departmentCode: 'OPS004',
-      addedOn: new Date('2022-02-18'),
-      modifiedOn: new Date('2023-03-12'),
-      status: 'Pending Approval',
-      isActive: false
-    }
-  ];
-
-  totalCount: number = this.departmentsData.length;
-  pageSize: number = 10;
-  pageIndex: number = 0;
-
-  dataSource: MatTableDataSource<any> = new MatTableDataSource(this.departmentsData);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -115,12 +84,13 @@ export class OrganizationDepartmentComponent {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private departmentService: DepartmentService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    this.dataSource = new MatTableDataSource(this.departmentsData);
+    this.fetchDepartments();
   }
 
   initForm() {
@@ -132,45 +102,83 @@ export class OrganizationDepartmentComponent {
     });
   }
 
+  fetchDepartments() {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const params = this.buildParams();
+
+    this.departmentService.getAll(params).subscribe({
+      next: (response: DepartmentResponse) => {
+        if (response.success) {
+          this.departments = response.result.items.map(dept => ({
+            id: dept.id,
+            name: dept.name
+          }));
+          this.dataSource.data = response.result.items;
+          this.totalCount = response.result.totalCount;
+          this.isLoading = false;
+          this.snackBar.open('Departments loaded successfully', 'Close', { duration: 2000 });
+        } else {
+          this.isLoading = false;
+          this.errorMessage = 'API returned an unsuccessful response.';
+          this.snackBar.open(this.errorMessage, 'Close', { duration: 3000 });
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to load departments. Please try again.';
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 3000 });
+        console.error('Error fetching departments:', error);
+      }
+    });
+  }
+
   applyFilters() {
-    const formValues = this.filterForm.value;
-    let filteredData = [...this.departmentsData];
-
-    if (formValues.departmentName) {
-      filteredData = filteredData.filter(dept => 
-        dept.departmentName === this.departments.find(d => d.id === formValues.departmentName)?.name
-      );
-    }
-
-    if (formValues.departmentHead) {
-      filteredData = filteredData.filter(dept => 
-        dept.departmentHead === this.departmentHeads.find(dh => dh.id === formValues.departmentHead)?.name
-      );
-    }
-
-    if (formValues.status) {
-      filteredData = filteredData.filter(dept => dept.status === formValues.status);
-    }
-
-    this.dataSource.data = filteredData;
-    this.totalCount = filteredData.length;
-    this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+    this.pageIndex = 0; // Reset to first page
+    this.fetchDepartments();
   }
 
   clearFilters() {
     this.filterForm.reset();
-    this.dataSource.data = this.departmentsData;
-    this.totalCount = this.departmentsData.length;
+    this.pageIndex = 0;
+    this.fetchDepartments();
     this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+  }
+
+  buildParams() {
+    const formValues = this.filterForm.value;
+    const params: any = {
+      SkipCount: this.pageIndex * this.pageSize,
+      MaxResultCount: this.pageSize
+    };
+
+    if (formValues.departmentName) {
+      params.Name = formValues.departmentName; // Use 'Name' to filter by department ID
+    }
+
+    if (formValues.departmentHead) {
+      params.DepartmentHeadId = formValues.departmentHead;
+    }
+
+    if (formValues.status) {
+      params.Status = formValues.status;
+    }
+
+    if (formValues.flag) {
+      params.Flag = formValues.flag;
+    }
+
+    return params;
   }
 
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.fetchDepartments();
   }
 
   viewDepartment(id: number): void {
-    const department = this.departmentsData.find(d => d.id === id);
     this.snackBar.open(`Viewing department ${id}`, 'Close', { duration: 2000 });
   }
 
@@ -178,10 +186,9 @@ export class OrganizationDepartmentComponent {
     this.router.navigate(['/organization/departments/edit', id]);
   }
 
-  toggleDepartmentStatus(department: any) {
-    department.isActive = !department.isActive;
-    department.status = department.isActive ? 'Active' : 'Inactive';
-    this.snackBar.open(`Status changed to ${department.isActive ? 'Active' : 'Inactive'}`, 'Close', { duration: 2000 });
+  toggleDepartmentStatus(department: Department) {
+    // Placeholder for API call to toggle status
+    this.snackBar.open('Toggle status not implemented (API required)', 'Close', { duration: 2000 });
   }
 
   addNewDepartment() {

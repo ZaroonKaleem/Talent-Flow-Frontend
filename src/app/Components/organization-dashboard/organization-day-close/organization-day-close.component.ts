@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,6 +17,26 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DayCloseService } from '../../../Services/day-close.service';
+
+interface DayClose {
+  id: number;
+  employeeName: string;
+  employeeCode: string;
+  department: string;
+  subDepartment?: string;
+  station: string;
+  dayCloseDate: Date;
+  addedOn: Date;
+  payrollSetup: string;
+  employeeGroup: string;
+  flag: string;
+}
+
+interface DayCloseResponse {
+  result: DayClose[];
+  totalCount: number;
+}
 
 @Component({
   selector: 'app-organization-day-close',
@@ -33,7 +53,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatIconModule,
     MatCheckboxModule,
     MatPaginator,
-    MatMenu,
     MatMenuModule,
     MatDatepickerModule,
     MatNativeDateModule
@@ -41,8 +60,17 @@ import { MatNativeDateModule } from '@angular/material/core';
   templateUrl: './organization-day-close.component.html',
   styleUrl: './organization-day-close.component.scss'
 })
-export class OrganizationDayCloseComponent {
+export class OrganizationDayCloseComponent implements OnInit {
   filterForm!: FormGroup;
+  dataSource: MatTableDataSource<DayClose> = new MatTableDataSource<any>([]);
+  totalCount: number = 0;
+  pageSize: number = 10;
+  pageIndex: number = 0;
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   // Dropdown options
   stations = [
@@ -90,78 +118,17 @@ export class OrganizationDayCloseComponent {
 
   flags = ['Red', 'Yellow', 'Green'];
 
-  // Sample data
-  dayClosesData = [
-    {
-      id: 1,
-      employeeName: 'John Doe',
-      employeeCode: 'EMP001',
-      department: 'Information Technology',
-      station: 'Headquarters',
-      dayCloseDate: new Date('2023-06-15'),
-      addedOn: new Date('2023-06-15'),
-      payrollSetup: 'Monthly',
-      employeeGroup: 'Technical Staff',
-      flag: 'Green'
-    },
-    {
-      id: 2,
-      employeeName: 'Jane Smith',
-      employeeCode: 'EMP002',
-      department: 'Human Resources',
-      station: 'Regional Office East',
-      dayCloseDate: new Date('2023-06-15'),
-      addedOn: new Date('2023-06-15'),
-      payrollSetup: 'Monthly',
-      employeeGroup: 'Administrative Staff',
-      flag: 'Yellow'
-    },
-    {
-      id: 3,
-      employeeName: 'Robert Johnson',
-      employeeCode: 'EMP003',
-      department: 'Finance',
-      subDepartment: '',
-      station: 'Field Office North',
-      dayCloseDate: new Date('2023-06-14'),
-      addedOn: new Date('2023-06-14'),
-      payrollSetup: 'Bi-Weekly',
-      employeeGroup: 'Administrative Staff',
-      flag: 'Red'
-    },
-    {
-      id: 4,
-      employeeName: 'Emily Davis',
-      employeeCode: 'EMP004',
-      department: 'Operations',
-      station: 'Field Office South',
-      dayCloseDate: new Date('2023-06-14'),
-      addedOn: new Date('2023-06-14'),
-      payrollSetup: 'Weekly',
-      employeeGroup: 'Contractual Staff',
-      flag: 'Green'
-    }
-  ];
-
-  totalCount: number = this.dayClosesData.length;
-  pageSize: number = 10;
-  pageIndex: number = 0;
-
-  dataSource: MatTableDataSource<any> = new MatTableDataSource(this.dayClosesData);
-
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dayCloseService: DayCloseService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    this.dataSource = new MatTableDataSource(this.dayClosesData);
+    this.fetchDayCloses();
   }
 
   initForm() {
@@ -178,83 +145,93 @@ export class OrganizationDayCloseComponent {
     });
   }
 
+  fetchDayCloses() {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const params = this.buildParams();
+
+    this.dayCloseService.getAll(params).subscribe({
+      next: (response: DayCloseResponse) => {
+        this.dataSource.data = response.result;
+        this.totalCount = response.totalCount;
+        this.isLoading = false;
+        this.snackBar.open('Data loaded successfully', 'Close', { duration: 2000 });
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to load day close data. Please try again.';
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 3000 });
+        console.error('Error fetching day closes:', error);
+      }
+    });
+  }
+
   applyFilters() {
-    const formValues = this.filterForm.value;
-    let filteredData = [...this.dayClosesData];
-
-    if (formValues.station) {
-      filteredData = filteredData.filter(dc => 
-        dc.station === this.stations.find(s => s.id === formValues.station)?.name
-      );
-    }
-
-    if (formValues.department) {
-      filteredData = filteredData.filter(dc => 
-        dc.department === this.departments.find(d => d.id === formValues.department)?.name
-      );
-    }
-
-    if (formValues.subDepartment) {
-      filteredData = filteredData.filter(dc => 
-        dc.subDepartment === this.subDepartments.find(sd => sd.id === formValues.subDepartment)?.name
-      );
-    }
-
-    if (formValues.employeeGroup) {
-      filteredData = filteredData.filter(dc => 
-        dc.employeeGroup === this.employeeGroups.find(g => g.id === formValues.employeeGroup)?.name
-      );
-    }
-
-    if (formValues.payrollSetup) {
-      filteredData = filteredData.filter(dc => 
-        dc.payrollSetup === this.payrollSetups.find(p => p.id === formValues.payrollSetup)?.name
-      );
-    }
-
-    if (formValues.employee) {
-      filteredData = filteredData.filter(dc => 
-        dc.employeeName === this.employees.find(e => e.id === formValues.employee)?.name
-      );
-    }
-
-    if (formValues.flag) {
-      filteredData = filteredData.filter(dc => 
-        dc.flag === formValues.flag
-      );
-    }
-
-    if (formValues.dayCloseDateFrom) {
-      filteredData = filteredData.filter(dc => 
-        new Date(dc.dayCloseDate) >= new Date(formValues.dayCloseDateFrom)
-      );
-    }
-
-    if (formValues.dayCloseDateTo) {
-      filteredData = filteredData.filter(dc => 
-        new Date(dc.dayCloseDate) <= new Date(formValues.dayCloseDateTo)
-      );
-    }
-
-    this.dataSource.data = filteredData;
-    this.totalCount = filteredData.length;
-    this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+    this.pageIndex = 0; // Reset to first page
+    this.fetchDayCloses();
   }
 
   clearFilters() {
     this.filterForm.reset();
-    this.dataSource.data = this.dayClosesData;
-    this.totalCount = this.dayClosesData.length;
+    this.pageIndex = 0;
+    this.fetchDayCloses();
     this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+  }
+
+  buildParams() {
+    const formValues = this.filterForm.value;
+    const params: any = {
+      SkipCount: this.pageIndex * this.pageSize,
+      MaxResultCount: this.pageSize
+    };
+
+    if (formValues.station) {
+      params.StationId = formValues.station;
+    }
+
+    if (formValues.department) {
+      params.DepartmentId = formValues.department;
+    }
+
+    if (formValues.subDepartment) {
+      params.SubDepartmentId = formValues.subDepartment;
+    }
+
+    if (formValues.employeeGroup) {
+      params.EmployeeGroupId = formValues.employeeGroup;
+    }
+
+    if (formValues.payrollSetup) {
+      params.PayrollSetupId = formValues.payrollSetup;
+    }
+
+    if (formValues.employee) {
+      params.EmployeeId = formValues.employee;
+    }
+
+    if (formValues.flag) {
+      params.Flag = formValues.flag;
+    }
+
+    if (formValues.dayCloseDateFrom) {
+      params.DayCloseDateFrom = new Date(formValues.dayCloseDateFrom).toISOString();
+    }
+
+    if (formValues.dayCloseDateTo) {
+      params.DayCloseDateTo = new Date(formValues.dayCloseDateTo).toISOString();
+    }
+
+    return params;
   }
 
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.fetchDayCloses();
   }
 
   viewDayClose(id: number): void {
-    const dayClose = this.dayClosesData.find(dc => dc.id === id);
     this.snackBar.open(`Viewing day close ${id}`, 'Close', { duration: 2000 });
   }
 
@@ -262,8 +239,8 @@ export class OrganizationDayCloseComponent {
     this.router.navigate(['/organization/day-close/edit', id]);
   }
 
-  deleteDayClose(dayClose: any) {
-    // Implement delete functionality
+  deleteDayClose(dayClose: DayClose) {
+    // Implement delete functionality (API call needed)
     this.snackBar.open(`Day close ${dayClose.id} deleted`, 'Close', { duration: 2000 });
   }
 

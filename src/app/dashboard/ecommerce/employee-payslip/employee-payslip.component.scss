@@ -1,0 +1,46 @@
+.leave-card {
+  max-width: 400px;
+  height: 280px;
+  margin: auto;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.leave-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-weight: 600;
+  color: #32549c;
+  border-bottom: 1px solid #ccc;
+}
+
+.leave-table-container {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.leave-table {
+  width: 100%;
+  font-size: 14px;
+
+  th {
+    font-weight: bold;
+    color: #32549c;
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+  }
+
+  .balance-box {
+    background-color: #f1f7fb;
+    color: #32549c;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+  }
+}

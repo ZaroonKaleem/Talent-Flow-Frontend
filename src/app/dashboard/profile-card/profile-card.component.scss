@@ -1,0 +1,77 @@
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 500px;
+  height: 400px;
+  text-align: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.top-section {
+  padding: 20px;
+
+  .user-image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+  }
+
+  .info-text {
+    h3 {
+      margin: 0;
+      font-size: 18px;
+
+      .code {
+        font-weight: normal;
+        font-size: 14px;
+        margin-left: 4px;
+      }
+    }
+
+    .role {
+      margin: 4px 0;
+      color: #0066cc;
+      font-weight: 500;
+    }
+
+    .info-link {
+      color: #555;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+
+      mat-icon {
+        font-size: 18px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
+  padding: 15px 0;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    mat-icon {
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #0033cc;
+    }
+
+    p {
+      font-size: 13px;
+      color: #666;
+      margin: 0;
+    }
+  }
+}

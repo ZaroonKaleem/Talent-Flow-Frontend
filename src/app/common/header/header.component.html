@@ -12,11 +12,14 @@
                 </i>
             </div>
             <div class="header-links">
-                <a href="/dashboard" class="nav-link">
+                <a [routerLink]="'/dashboard'" 
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{exact: false}" 
+                [class.active]="currentTab === 'dashboard'" class="nav-link">
                     <i class="material-symbols-outlined">dashboard</i>
                     <span>Dashboard</span>
                 </a>
-                <a [routerLink]="'/organization-dashboard'" (click)="onNavClick('organization')"
+                <a [routerLink]="'/organization-dashboard/system-logs/data-logs'" (click)="onNavClick('organization')"
                     [class.active]="currentTab === 'organization'" routerLinkActive="active"
                     [routerLinkActiveOptions]="{exact: false}" class="nav-link">
                     <i class="material-symbols-outlined">corporate_fare</i>

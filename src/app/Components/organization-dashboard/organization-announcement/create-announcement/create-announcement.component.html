@@ -1,0 +1,152 @@
+<mat-card class="create-announcement-card mat-elevation-z8">
+  <mat-card-header>
+    <mat-card-title>Create New Announcement</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="announcementForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Announcement Title -->
+        <mat-form-field appearance="outline">
+          <mat-label>Announcement Title</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="announcementForm.get('name')?.hasError('required')">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Announcement Type -->
+        <mat-form-field appearance="outline">
+          <mat-label>Announcement Type</mat-label>
+          <mat-select formControlName="announcementTypeId" required>
+            <mat-option *ngFor="let type of announcementTypes" [value]="type.id">
+              {{ type.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="announcementForm.get('announcementTypeId')?.hasError('required')">
+            Type is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Date Pickers -->
+        <mat-form-field appearance="outline">
+          <mat-label>Display Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="displayStartDate" required>
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-error *ngIf="announcementForm.get('displayStartDate')?.hasError('required')">
+            Start date is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Display End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="displayEndDate" required>
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-error *ngIf="announcementForm.get('displayEndDate')?.hasError('required')">
+            End date is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Employee Status -->
+        <mat-form-field appearance="outline">
+          <mat-label>Employee Status</mat-label>
+          <mat-select formControlName="employeeStatusId">
+            <mat-option *ngFor="let status of employeeStatuses" [value]="status.id">
+              {{ status.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Gender -->
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="genderId">
+            <mat-option *ngFor="let gender of genders" [value]="gender.id">
+              {{ gender.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Multi-select Dropdowns -->
+        <mat-form-field appearance="outline">
+          <mat-label>Stations</mat-label>
+          <mat-select formControlName="employeeStationIds" multiple>
+            <mat-option *ngFor="let station of stations" [value]="station.id">
+              {{ station.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Departments</mat-label>
+          <mat-select formControlName="departmentIds" multiple>
+            <mat-option *ngFor="let dept of departments" [value]="dept.id">
+              {{ dept.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Employee Groups</mat-label>
+          <mat-select formControlName="employeeGroupIds" multiple>
+            <mat-option *ngFor="let group of employeeGroups" [value]="group.id">
+              {{ group.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Designations</mat-label>
+          <mat-select formControlName="designationIds" multiple>
+            <mat-option *ngFor="let designation of designations" [value]="designation.id">
+              {{ designation.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Exempted Employees</mat-label>
+          <mat-select formControlName="exemptedEmployeeIds" multiple>
+            <mat-option *ngFor="let employee of employees" [value]="employee.id">
+              {{ employee.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Attachment Options -->
+        <mat-form-field appearance="outline">
+          <mat-label>Attachment Option</mat-label>
+          <mat-select formControlName="attachmentOption">
+            <mat-option *ngFor="let option of attachmentOptions" [value]="option.id">
+              {{ option.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- File Upload -->
+        <div class="file-upload">
+          <button type="button" mat-stroked-button (click)="fileInput.click()">
+            <i class="material-symbols-outlined">attach_file</i> Choose File
+          </button>
+          <input hidden #fileInput type="file" (change)="onFileSelected($event)">
+          <span class="file-name">{{ selectedFile?.name || 'No file chosen' }}</span>
+        </div>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Details</mat-label>
+          <textarea matInput formControlName="description" rows="4"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-flat-button color="primary" type="submit" [disabled]="announcementForm.invalid || isSubmitting">
+          <span *ngIf="!isSubmitting">Create Announcement</span>
+          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

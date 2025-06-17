@@ -7,7 +7,9 @@
                 <!-- Row 1 -->
                 <mat-form-field appearance="outline">
                     <mat-label>Department Name</mat-label>
-                    <mat-select formControlName="departmentName">
+                    <mat-select formControlName="departmentName" [disabled]="isLoading || errorMessage !== null">
+                        <mat-option *ngIf="isLoading" [value]="null">Loading departments...</mat-option>
+                        <mat-option *ngIf="errorMessage && !isLoading" [value]="null">{{ errorMessage }}</mat-option>
                         <mat-option *ngFor="let dept of departments" [value]="dept.id">
                             {{ dept.name }}
                         </mat-option>
@@ -45,10 +47,10 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button mat-flat-button color="primary" (click)="applyFilters()">
+                <button mat-flat-button color="primary" (click)="applyFilters()" [disabled]="isLoading">
                     Apply Filters
                 </button>
-                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn" [disabled]="isLoading">
                     Clear Filters
                 </button>
             </div>
@@ -58,14 +60,28 @@
     <mat-card class="table-card">
         <mat-card-content>
             <div class="buttons-list">
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="downloadPDF()">
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="downloadPDF()" [disabled]="isLoading">
                     Upload Excel
                 </button>
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDepartment()">
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDepartment()" [disabled]="isLoading">
                     Add New Department
                 </button>
             </div>
-            <div class="table-responsive">
+
+            <!-- Loading Indicator -->
+            <!-- <div *ngIf="isLoading" class="loading-container">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading department data...</p>
+            </div> -->
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage && !isLoading" class="error-container">
+                <p class="error-message">{{ errorMessage }}</p>
+                <button mat-flat-button color="primary" (click)="fetchDepartments()">Retry</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive" *ngIf="!isLoading && !errorMessage">
                 <table class="employee-table">
                     <thead>
                         <tr>
@@ -73,25 +89,17 @@
                             <th scope="col" class="fw-medium">Department Name</th>
                             <th scope="col" class="fw-medium">Department Head</th>
                             <th scope="col" class="fw-medium">Department Code</th>
-                            <th scope="col" class="fw-medium">Added On</th>
-                            <th scope="col" class="fw-medium">Modified On</th>
-                            <th scope="col" class="fw-medium">Active</th>
+                            <th scope="col" class="fw-medium">Description</th>
                             <th scope="col" class="fw-medium">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let dept of dataSource.data; let i = index">
-                            <td data-label="Sr#">{{ i + 1 }}</td>
-                            <td data-label="Department Name">{{ dept.departmentName }}</td>
-                            <td data-label="Department Head">{{ dept.departmentHead }}</td>
-                            <td data-label="Department Code">{{ dept.departmentCode }}</td>
-                            <td data-label="Added On">{{ dept.addedOn | date:'mediumDate' }}</td>
-                            <td data-label="Modified On">{{ dept.modifiedOn | date:'mediumDate' }}</td>
-                            <td data-label="Active">
-                                <i class="material-symbols-outlined" [class.active]="dept.isActive" [class.inactive]="!dept.isActive">
-                                    {{ dept.isActive ? 'check_circle' : 'cancel' }}
-                                </i>
-                            </td>
+                            <td data-label="Sr#">{{ i + 1 + (pageIndex * pageSize) }}</td>
+                            <td data-label="Department Name">{{ dept.name }}</td>
+                            <td data-label="Department Head">{{ dept.departmentHeadName || 'N/A' }}</td>
+                            <td data-label="Department Code">{{ dept.code }}</td>
+                            <td data-label="Description">{{ dept.description || 'N/A' }}</td>
                             <td data-label="Actions">
                                 <button mat-icon-button [matMenuTriggerFor]="menu">
                                     <i class="material-symbols-outlined">more_horiz</i>
@@ -110,16 +118,11 @@
                                             <span>Edit</span>
                                         </div>
                                     </button>
-                                    <button mat-menu-item (click)="toggleDepartmentStatus(dept)">
-                                        <div class="menu-item-content">
-                                            <i class="material-symbols-outlined">
-                                                {{ dept.isActive ? 'block' : 'check_circle' }}
-                                            </i>
-                                            <span>{{ dept.isActive ? 'Deactivate' : 'Activate' }}</span>
-                                        </div>
-                                    </button>
                                 </mat-menu>
                             </td>
+                        </tr>
+                        <tr *ngIf="dataSource.data.length === 0">
+                            <td colspan="6" class="no-data">No department records found.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -127,7 +130,8 @@
             <mat-paginator [length]="totalCount" 
                           [pageSize]="pageSize" 
                           [pageSizeOptions]="[5, 10, 25]"
-                          (page)="onPageChange($event)">
+                          (page)="onPageChange($event)"
+                          [disabled]="isLoading">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

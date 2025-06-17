@@ -87,10 +87,10 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button mat-flat-button color="primary" (click)="applyFilters()">
+                <button mat-flat-button color="primary" (click)="applyFilters()" [disabled]="isLoading">
                     Apply Filters
                 </button>
-                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn" [disabled]="isLoading">
                     Clear Filters
                 </button>
             </div>
@@ -100,11 +100,25 @@
     <mat-card class="table-card">
         <mat-card-content>
             <div class="buttons-list">
-                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDayClose()">
+                <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="addNewDayClose()" [disabled]="isLoading">
                     Add New Day Close
                 </button>
             </div>
-            <div class="table-responsive">
+
+            <!-- Loading Indicator -->
+            <!-- <div *ngIf="isLoading" class="loading-container">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading day close data...</p>
+            </div> -->
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage && !isLoading" class="error-container">
+                <p class="error-message">{{ errorMessage }}</p>
+                <button mat-flat-button color="primary" (click)="fetchDayCloses()">Retry</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive" *ngIf="!isLoading && !errorMessage">
                 <table class="employee-table">
                     <thead>
                         <tr>
@@ -118,7 +132,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let dayClose of dataSource.data; let i = index">
-                            <td data-label="Sr#">{{ i + 1 }}</td>
+                            <td data-label="Sr#">{{ i + 1 + (pageIndex * pageSize) }}</td>
                             <td data-label="Employee">{{ dayClose.employeeName }}</td>
                             <td data-label="Employee Details">
                                 <div class="employee-details">
@@ -156,13 +170,17 @@
                                 </mat-menu>
                             </td>
                         </tr>
+                        <tr *ngIf="dataSource.data.length === 0">
+                            <td colspan="6" class="no-data">No day close records found.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <mat-paginator [length]="totalCount" 
                           [pageSize]="pageSize" 
                           [pageSizeOptions]="[5, 10, 25]"
-                          (page)="onPageChange($event)">
+                          (page)="onPageChange($event)"
+                          [disabled]="isLoading">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

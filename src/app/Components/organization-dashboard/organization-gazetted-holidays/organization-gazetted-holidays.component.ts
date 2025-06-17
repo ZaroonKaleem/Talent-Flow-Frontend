@@ -8,13 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { GazettedHolidaysService } from '../../../Services/gazetted-holidays.service';
 
 @Component({
   selector: 'app-organization-gazetted-holidays',
@@ -30,9 +31,8 @@ import { Router } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatCheckboxModule,
-    MatPaginator,
-    MatMenu,
-    MatMenuModule
+    MatMenuModule,
+    MatPaginator
   ],
   templateUrl: './organization-gazetted-holidays.component.html',
   styleUrl: './organization-gazetted-holidays.component.scss'
@@ -80,63 +80,12 @@ export class OrganizationGazettedHolidaysComponent {
 
   flags = ['Red', 'Yellow', 'Green'];
 
-  // Static holiday data
-  holidaysData = [
-    {
-      id: 1,
-      title: 'New Year',
-      date: new Date('2023-01-01'),
-      addedOn: new Date('2022-12-15'),
-      modifiedOn: new Date('2022-12-20'),
-      details: 'New Year celebration holiday',
-      isActive: true,
-      station: 'Headquarters',
-      employeeGroup: 'All Employees',
-      flag: 'Red'
-    },
-    {
-      id: 2,
-      title: 'Independence Day',
-      date: new Date('2023-08-14'),
-      addedOn: new Date('2023-07-01'),
-      modifiedOn: new Date('2023-07-05'),
-      details: 'National independence day holiday',
-      isActive: true,
-      station: 'All Stations',
-      employeeGroup: 'All Employees',
-      flag: 'Red'
-    },
-    {
-      id: 3,
-      title: 'Eid-ul-Fitr',
-      date: new Date('2023-04-22'),
-      addedOn: new Date('2023-04-10'),
-      modifiedOn: new Date('2023-04-12'),
-      details: 'Religious holiday for Eid celebrations',
-      isActive: true,
-      station: 'All Stations',
-      employeeGroup: 'All Employees',
-      flag: 'Red'
-    },
-    {
-      id: 4,
-      title: 'Technical Staff Day Off',
-      date: new Date('2023-05-15'),
-      addedOn: new Date('2023-04-20'),
-      modifiedOn: new Date('2023-04-25'),
-      details: 'Special day off for technical staff only',
-      isActive: true,
-      station: 'Regional Office East',
-      employeeGroup: 'Technical Staff',
-      flag: 'Green'
-    }
-  ];
-
-  totalCount: number = this.holidaysData.length;
+  holidays: any[] = [];
+  totalCount: number = 0;
   pageSize: number = 10;
   pageIndex: number = 0;
 
-  dataSource: MatTableDataSource<any> = new MatTableDataSource(this.holidaysData);
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -145,12 +94,13 @@ export class OrganizationGazettedHolidaysComponent {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private holidayService: GazettedHolidaysService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    this.dataSource = new MatTableDataSource(this.holidaysData);
+    this.loadHolidays(1, this.pageSize);
   }
 
   initForm() {
@@ -163,60 +113,86 @@ export class OrganizationGazettedHolidaysComponent {
     });
   }
 
+  loadHolidays(page: number, pageSize: number): void {
+    this.holidayService.getAllHolidays({
+      skipCount: (page - 1) * pageSize,
+      maxResultCount: pageSize
+    }).subscribe({
+      next: (result) => {
+        this.holidays = result.items;
+        this.dataSource.data = result.items;
+        this.totalCount = result.totalCount;
+      },
+      error: (err) => {
+        console.error('Error loading holidays', err);
+        this.snackBar.open('Failed to load holidays', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
   applyFilters() {
     const formValues = this.filterForm.value;
-    let filteredData = [...this.holidaysData];
+    let params: any = {
+      skipCount: this.pageIndex * this.pageSize,
+      maxResultCount: this.pageSize
+    };
 
     if (formValues.station) {
-      filteredData = filteredData.filter(holiday => 
-        holiday.station === this.stations.find(s => s.id === formValues.station)?.name
-      );
+      params.stationId = formValues.station;
     }
 
     if (formValues.employeeGroup) {
-      filteredData = filteredData.filter(holiday => 
-        holiday.employeeGroup === this.employeeGroups.find(g => g.id === formValues.employeeGroup)?.name
-      );
+      params.employeeGroupId = formValues.employeeGroup;
     }
 
     if (formValues.year) {
-      filteredData = filteredData.filter(holiday => 
-        holiday.date.getFullYear().toString() === this.years.find(y => y.id === formValues.year)?.year
-      );
+      params.year = this.years.find(y => y.id === formValues.year)?.year;
     }
 
     if (formValues.month) {
-      filteredData = filteredData.filter(holiday => 
-        (holiday.date.getMonth() + 1) === formValues.month
-      );
+      params.month = formValues.month;
     }
 
     if (formValues.flag) {
-      filteredData = filteredData.filter(holiday => 
-        holiday.flag === formValues.flag
-      );
+      params.flag = formValues.flag;
     }
 
-    this.dataSource.data = filteredData;
-    this.totalCount = filteredData.length;
-    this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+    this.holidayService.getAllHolidays(params).subscribe({
+      next: (result) => {
+        this.holidays = result.items;
+        this.dataSource.data = result.items;
+        this.totalCount = result.totalCount;
+        this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        console.error('Error applying filters', err);
+        this.snackBar.open('Failed to apply filters', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   clearFilters() {
     this.filterForm.reset();
-    this.dataSource.data = this.holidaysData;
-    this.totalCount = this.holidaysData.length;
+    this.loadHolidays(1, this.pageSize);
     this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
   }
 
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.loadHolidays(this.pageIndex + 1, this.pageSize);
   }
 
   viewHoliday(id: number): void {
-    const holiday = this.holidaysData.find(h => h.id === id);
-    this.snackBar.open(`Viewing holiday ${id}`, 'Close', { duration: 2000 });
+    this.holidayService.getHolidayById(id).subscribe({
+      next: (holiday) => {
+        this.snackBar.open(`Viewing holiday: ${holiday.name}`, 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        console.error('Error fetching holiday', err);
+        this.snackBar.open('Failed to load holiday details', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   editHoliday(id: number) {
@@ -224,8 +200,17 @@ export class OrganizationGazettedHolidaysComponent {
   }
 
   toggleHolidayStatus(holiday: any) {
-    holiday.isActive = !holiday.isActive;
-    this.snackBar.open(`Status changed to ${holiday.isActive ? 'Active' : 'Inactive'}`, 'Close', { duration: 2000 });
+    const updatedHoliday = { ...holiday, sendEmail: !holiday.sendEmail };
+    this.holidayService.updateHoliday(updatedHoliday).subscribe({
+      next: () => {
+        holiday.sendEmail = updatedHoliday.sendEmail;
+        this.snackBar.open(`Email notification ${holiday.sendEmail ? 'enabled' : 'disabled'}`, 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        console.error('Error updating holiday', err);
+        this.snackBar.open('Failed to update holiday status', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   addNewHoliday() {
@@ -233,6 +218,6 @@ export class OrganizationGazettedHolidaysComponent {
   }
 
   showDetails(holiday: any) {
-    this.snackBar.open(holiday.details, 'Close', { duration: 5000 });
+    this.snackBar.open(holiday.description, 'Close', { duration: 5000 });
   }
 }

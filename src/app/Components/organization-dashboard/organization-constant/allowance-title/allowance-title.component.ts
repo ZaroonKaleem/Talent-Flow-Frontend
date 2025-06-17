@@ -1,20 +1,110 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { EmployeeAllowanceService } from '../../../../Services/Constants Services/employee-allowance.service';
+
+interface Allowance {
+  id: number;
+  name: string;
+  isAmount: boolean;
+}
+
+interface ApiResponse {
+  result: {
+    totalCount: number;
+    items: Allowance[];
+  };
+  success: boolean;
+  error: any;
+  targetUrl: string | null;
+  unAuthorizedRequest: boolean;
+  __abp: boolean;
+}
+
 @Component({
   selector: 'app-allowance-title',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatChipsModule,
+    DatePipe
+  ],
   templateUrl: './allowance-title.component.html',
   styleUrl: './allowance-title.component.scss'
 })
-export class AllowanceTitleComponent {
-  designations = [
-    { id: 1, name: 'Mechanical Technician', isAmount: 0, addedOn: '3/6/2024 1:59:52 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:31:44 PM', modifiedBy: 'Mr-Blacky' },
-    { id: 2, name: 'Sale Coordinator', isAmount: 1, addedOn: '3/6/2024 2:00:12 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:32:17 PM', modifiedBy: 'Mr-Blacky' },
-    { id: 3, name: 'Account Officer', isAmount: 0, addedOn: '3/6/2024 2:00:29 PM', addedBy: 'Mr-Blacky', modifiedOn: '11/13/2024 12:32:56 PM', modifiedBy: 'Mr-Blacky' },
-    // Add rest of data...
-  ];
-  editDesignation(item: any): void {
-    // You can route to another page or open a modal here
+export class AllowanceTitleComponent implements AfterViewInit {
+  displayedColumns: string[] = ['sr', 'id', 'name', 'isAmount', 'actions'];
+  dataSource = new MatTableDataSource<Allowance>([]);
+  totalCount = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  isTableReady = false;
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(private allowanceService: EmployeeAllowanceService) {}
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.isTableReady = true;
+    this.loadAllowances();
+  }
+
+  loadAllowances(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
+    const params = {
+      SkipCount: pageIndex * pageSize,
+      MaxResultCount: pageSize
+    };
+
+    this.allowanceService.getAllAllowances(params).subscribe({
+      next: (response: ApiResponse) => {
+        if (response.success) {
+          this.dataSource.data = response.result.items;
+          this.totalCount = response.result.totalCount;
+          this.pageIndex = pageIndex;
+        } else {
+          console.error('API error:', response.error);
+        }
+      },
+      error: (error) => {
+        console.error('Failed to load allowances:', error);
+      }
+    });
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.loadAllowances(event.pageIndex, event.pageSize);
+  }
+
+  viewDetails(allowance: Allowance) {
+    console.log('View details:', allowance);
+    // Implement view details logic
+  }
+
+  exportLog(allowance: Allowance) {
+    console.log('Export log:', allowance);
+    // Implement export logic
+  }
+
+  get Math() {
+    return Math;
   }
 }

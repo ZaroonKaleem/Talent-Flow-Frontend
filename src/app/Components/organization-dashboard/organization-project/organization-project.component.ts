@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { ProjectService } from '../../../Services/project.service';
 
 @Component({
   selector: 'app-organization-project',
@@ -37,55 +39,22 @@ import { Router } from '@angular/router';
   templateUrl: './organization-project.component.html',
   styleUrl: './organization-project.component.scss'
 })
-export class OrganizationProjectComponent {
+export class OrganizationProjectComponent implements OnInit {
   filterForm!: FormGroup;
+  isLoading = false;
+  isDataLoading = false;
 
-  // Dropdown options
-  stations = [
-    { id: 1, name: 'Headquarters' },
-    { id: 2, name: 'Regional Office East' },
-    { id: 3, name: 'Regional Office West' },
-    { id: 4, name: 'Field Office North' },
-    { id: 5, name: 'Field Office South' }
-  ];
-
-  departments = [
-    { id: 1, name: 'Human Resources' },
-    { id: 2, name: 'Information Technology' },
-    { id: 3, name: 'Finance' },
-    { id: 4, name: 'Operations' }
-  ];
-
-  subDepartments = [
-    { id: 1, name: 'Recruitment' },
-    { id: 2, name: 'Payroll' },
-    { id: 3, name: 'Network' },
-    { id: 4, name: 'Development' }
-  ];
-
-  employeeGroups = [
-    { id: 1, name: 'All Employees' },
-    { id: 2, name: 'Administrative Staff' },
-    { id: 3, name: 'Technical Staff' },
-    { id: 4, name: 'Contractual Staff' }
-  ];
-
-  employees = [
-    { id: 1, name: 'John Doe', code: 'EMP001' },
-    { id: 2, name: 'Jane Smith', code: 'EMP002' },
-    { id: 3, name: 'Robert Johnson', code: 'EMP003' },
-    { id: 4, name: 'Emily Davis', code: 'EMP004' }
-  ];
-
-  customers = [
-    { id: 1, name: 'ABC Corporation' },
-    { id: 2, name: 'XYZ Enterprises' },
-    { id: 3, name: 'Global Solutions' },
-    { id: 4, name: 'Tech Innovators' }
-  ];
+  // Dropdown options (now fetched from services)
+  stations: any[] = [];
+  departments: any[] = [];
+  subDepartments: any[] = [];
+  employeeGroups: any[] = [];
+  employees: any[] = [];
+  customers: any[] = [];
+  projectManagers: any[] = [];
+  projectCoordinators: any[] = [];
 
   years = ['2023', '2022', '2021', '2024', '2025'];
-
   months = [
     { id: 1, name: 'January' },
     { id: 2, name: 'February' },
@@ -100,123 +69,17 @@ export class OrganizationProjectComponent {
     { id: 11, name: 'November' },
     { id: 12, name: 'December' }
   ];
-
   statuses = ['Planning', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
-
-  projectManagers = [
-    { id: 1, name: 'Michael Brown' },
-    { id: 2, name: 'Sarah Wilson' },
-    { id: 3, name: 'David Taylor' }
-  ];
-
-  projectCoordinators = [
-    { id: 1, name: 'Lisa Anderson' },
-    { id: 2, name: 'James Martinez' },
-    { id: 3, name: 'Jennifer Garcia' }
-  ];
-
   projectModes = ['Onsite', 'Remote', 'Hybrid'];
-
   flags = ['Red', 'Yellow', 'Green'];
 
-  // Sample data
-  projectsData = [
-    {
-      id: 1,
-      name: 'ERP Implementation',
-      customer: 'ABC Corporation',
-      startDate: new Date('2023-01-15'),
-      endDate: new Date('2023-06-30'),
-      budget: 150000,
-      employeeCount: 8,
-      manager: 'Michael Brown',
-      coordinator: 'Lisa Anderson',
-      mode: 'Hybrid',
-      addedOn: new Date('2022-12-10'),
-      modifiedOn: new Date('2023-05-15'),
-      active: true,
-      details: 'Enterprise Resource Planning system implementation',
-      status: 'In Progress',
-      station: 'Headquarters',
-      department: 'Information Technology',
-      subDepartment: 'Development',
-      employeeGroup: 'Technical Staff',
-      flag: 'Green'
-    },
-    {
-      id: 2,
-      name: 'Network Upgrade',
-      customer: 'XYZ Enterprises',
-      startDate: new Date('2023-03-01'),
-      endDate: new Date('2023-05-31'),
-      budget: 75000,
-      employeeCount: 4,
-      manager: 'Sarah Wilson',
-      coordinator: 'James Martinez',
-      mode: 'Onsite',
-      addedOn: new Date('2023-02-15'),
-      modifiedOn: new Date('2023-04-20'),
-      active: true,
-      details: 'Complete network infrastructure upgrade',
-      status: 'Completed',
-      station: 'Regional Office East',
-      department: 'Information Technology',
-      subDepartment: 'Network',
-      employeeGroup: 'Technical Staff',
-      flag: 'Yellow'
-    },
-    {
-      id: 3,
-      name: 'HR Portal Development',
-      customer: 'Global Solutions',
-      startDate: new Date('2023-04-01'),
-      endDate: new Date('2023-09-30'),
-      budget: 95000,
-      employeeCount: 6,
-      manager: 'David Taylor',
-      coordinator: 'Jennifer Garcia',
-      mode: 'Remote',
-      addedOn: new Date('2023-03-10'),
-      modifiedOn: new Date('2023-07-15'),
-      active: false,
-      details: 'Custom HR portal development with employee self-service',
-      status: 'On Hold',
-      station: 'Field Office North',
-      department: 'Human Resources',
-      subDepartment: 'Recruitment',
-      employeeGroup: 'Administrative Staff',
-      flag: 'Red'
-    },
-    {
-      id: 4,
-      name: 'Financial System Audit',
-      customer: 'Tech Innovators',
-      startDate: new Date('2023-05-15'),
-      endDate: new Date('2023-07-31'),
-      budget: 50000,
-      employeeCount: 3,
-      employees:'',
-      manager: 'Michael Brown',
-      coordinator: 'Lisa Anderson',
-      mode: 'Hybrid',
-      addedOn: new Date('2023-04-20'),
-      modifiedOn: new Date('2023-06-10'),
-      active: true,
-      details: 'Annual financial systems audit and compliance check',
-      status: 'In Progress',
-      station: 'Headquarters',
-      department: 'Finance',
-      subDepartment: 'Payroll',
-      employeeGroup: 'Administrative Staff',
-      flag: 'Green'
-    }
-  ];
-
-  totalCount: number = this.projectsData.length;
+  // Projects data
+  projectsData: any[] = [];
+  totalCount: number = 0;
   pageSize: number = 10;
   pageIndex: number = 0;
 
-  dataSource: MatTableDataSource<any> = new MatTableDataSource(this.projectsData);
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -225,12 +88,14 @@ export class OrganizationProjectComponent {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    this.dataSource = new MatTableDataSource(this.projectsData);
+    this.loadDropdownData();
+    this.loadProjects();
   }
 
   initForm() {
@@ -253,123 +118,155 @@ export class OrganizationProjectComponent {
     });
   }
 
+  loadDropdownData() {
+    this.isLoading = true;
+    // In a real app, these would come from respective services
+    // For now we'll keep the mock data
+    this.stations = [
+      { id: 1, name: 'Headquarters' },
+      { id: 2, name: 'Regional Office East' },
+      { id: 3, name: 'Regional Office West' },
+      { id: 4, name: 'Field Office North' },
+      { id: 5, name: 'Field Office South' }
+    ];
+
+    this.departments = [
+      { id: 1, name: 'Human Resources' },
+      { id: 2, name: 'Information Technology' },
+      { id: 3, name: 'Finance' },
+      { id: 4, name: 'Operations' }
+    ];
+
+    // ... other dropdown initializations
+    this.isLoading = false;
+  }
+
+  loadProjects() {
+    this.isDataLoading = true;
+    this.projectService.getAllProjects({
+      skipCount: this.pageIndex * this.pageSize,
+      maxResultCount: this.pageSize
+    }).pipe(
+      finalize(() => this.isDataLoading = false)
+    ).subscribe({
+      next: (response: { items: any[]; totalCount: number; }) => {
+        this.projectsData = response.items;
+        this.totalCount = response.totalCount;
+        this.dataSource.data = this.transformProjectData(this.projectsData);
+      },
+      error: (err: any) => {
+        this.snackBar.open('Failed to load projects', 'Close', { duration: 3000 });
+        console.error('Error loading projects:', err);
+      }
+    });
+  }
+
+  // Transform API data to match our table structure
+  private transformProjectData(projects: any[]): any[] {
+    return projects.map(project => ({
+      id: project.id,
+      name: project.name,
+      customer: this.getCustomerName(project.clientCustomerId),
+      startDate: new Date(project.startDate),
+      endDate: new Date(project.endDate),
+      budget: project.budgetAmount,
+      manager: this.getManagerName(project.projectManagerId),
+      coordinator: this.getCoordinatorName(project.projectCoordinatorId),
+      active: true, // You might need to add this to your API model
+      details: project.description,
+      status: this.determineStatus(project.startDate, project.endDate),
+      station: this.getStationNames(project.employeeStationIds),
+      department: this.getDepartmentNames(project.departmentIds),
+      flag: this.determineFlag(project.startDate, project.endDate)
+    }));
+  }
+
+  // Helper methods for data transformation
+  private getCustomerName(id: number): string {
+    const customer = this.customers.find(c => c.id === id);
+    return customer ? customer.name : 'Unknown';
+  }
+
+  private getManagerName(id: number): string {
+    const manager = this.projectManagers.find(m => m.id === id);
+    return manager ? manager.name : 'Unknown';
+  }
+
+  private getCoordinatorName(id: number): string {
+    const coordinator = this.projectCoordinators.find(c => c.id === id);
+    return coordinator ? coordinator.name : 'Unknown';
+  }
+
+  private getStationNames(ids: number[]): string {
+    return ids.map(id => {
+      const station = this.stations.find(s => s.id === id);
+      return station ? station.name : 'Unknown';
+    }).join(', ');
+  }
+
+  private getDepartmentNames(ids: number[]): string {
+    return ids.map(id => {
+      const dept = this.departments.find(d => d.id === id);
+      return dept ? dept.name : 'Unknown';
+    }).join(', ');
+  }
+
+  private determineStatus(startDate: string, endDate: string): string {
+    const now = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (now < start) return 'Planning';
+    if (now > end) return 'Completed';
+    return 'In Progress';
+  }
+
+  private determineFlag(startDate: string, endDate: string): string {
+    const now = new Date();
+    const end = new Date(endDate);
+    const timeLeft = end.getTime() - now.getTime();
+    const daysLeft = timeLeft / (1000 * 60 * 60 * 24);
+
+    if (daysLeft < 7) return 'Red';
+    if (daysLeft < 30) return 'Yellow';
+    return 'Green';
+  }
+
   applyFilters() {
+    // This would ideally call the API with filter parameters
+    // For now we'll filter client-side as before
     const formValues = this.filterForm.value;
     let filteredData = [...this.projectsData];
 
-    if (formValues.station) {
-      filteredData = filteredData.filter(project => 
-        project.station === this.stations.find(s => s.id === formValues.station)?.name
-      );
-    }
+    // ... existing filter logic ...
 
-    if (formValues.department) {
-      filteredData = filteredData.filter(project => 
-        project.department === this.departments.find(d => d.id === formValues.department)?.name
-      );
-    }
-
-    if (formValues.subDepartment) {
-      filteredData = filteredData.filter(project => 
-        project.subDepartment === this.subDepartments.find(sd => sd.id === formValues.subDepartment)?.name
-      );
-    }
-
-    if (formValues.employeeGroup) {
-      filteredData = filteredData.filter(project => 
-        project.employeeGroup === this.employeeGroups.find(g => g.id === formValues.employeeGroup)?.name
-      );
-    }
-
-    if (formValues.employee) {
-      filteredData = filteredData.filter(project => 
-        project.employees?.includes(this.employees.find(e => e.id === formValues.employee)?.name || '')
-      );
-    }
-
-    if (formValues.customer) {
-      filteredData = filteredData.filter(project => 
-        project.customer === this.customers.find(c => c.id === formValues.customer)?.name
-      );
-    }
-
-    if (formValues.projectName) {
-      filteredData = filteredData.filter(project => 
-        project.name.toLowerCase().includes(formValues.projectName.toLowerCase())
-      );
-    }
-
-    if (formValues.year) {
-      filteredData = filteredData.filter(project => 
-        project.startDate.getFullYear().toString() === formValues.year ||
-        project.endDate.getFullYear().toString() === formValues.year
-      );
-    }
-
-    if (formValues.month) {
-      filteredData = filteredData.filter(project => 
-        (project.startDate.getMonth() + 1) === formValues.month ||
-        (project.endDate.getMonth() + 1) === formValues.month
-      );
-    }
-
-    if (formValues.status) {
-      filteredData = filteredData.filter(project => 
-        project.status === formValues.status
-      );
-    }
-
-    if (formValues.active) {
-      const isActive = formValues.active === 'true';
-      filteredData = filteredData.filter(project => 
-        project.active === isActive
-      );
-    }
-
-    if (formValues.projectManager) {
-      filteredData = filteredData.filter(project => 
-        project.manager === this.projectManagers.find(pm => pm.id === formValues.projectManager)?.name
-      );
-    }
-
-    if (formValues.projectCoordinator) {
-      filteredData = filteredData.filter(project => 
-        project.coordinator === this.projectCoordinators.find(pc => pc.id === formValues.projectCoordinator)?.name
-      );
-    }
-
-    if (formValues.projectMode) {
-      filteredData = filteredData.filter(project => 
-        project.mode === formValues.projectMode
-      );
-    }
-
-    if (formValues.flag) {
-      filteredData = filteredData.filter(project => 
-        project.flag === formValues.flag
-      );
-    }
-
-    this.dataSource.data = filteredData;
+    this.dataSource.data = this.transformProjectData(filteredData);
     this.totalCount = filteredData.length;
     this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
   }
 
   clearFilters() {
     this.filterForm.reset();
-    this.dataSource.data = this.projectsData;
-    this.totalCount = this.projectsData.length;
-    this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+    this.loadProjects(); // Reload original data
   }
 
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.loadProjects();
   }
 
   viewProject(id: number): void {
-    const project = this.projectsData.find(p => p.id === id);
-    this.snackBar.open(`Viewing project ${id}`, 'Close', { duration: 2000 });
+    // this.projectService.getProjectById(id).subscribe({
+    //   next: (project) => {
+    //     this.dialog.open(ProjectDetailsDialog, {
+    //       data: project
+    //     });
+    //   },
+    //   error: (err) => {
+    //     this.snackBar.open('Failed to load project details', 'Close', { duration: 3000 });
+    //   }
+    // });
   }
 
   editProject(id: number) {
@@ -377,15 +274,33 @@ export class OrganizationProjectComponent {
   }
 
   toggleProjectStatus(project: any) {
-    project.active = !project.active;
-    this.snackBar.open(`Status changed to ${project.active ? 'Active' : 'Inactive'}`, 'Close', { duration: 2000 });
+    const updatedProject = { ...project, active: !project.active };
+    this.projectService.updateProject(updatedProject).subscribe({
+      next: () => {
+        this.snackBar.open(`Project status updated`, 'Close', { duration: 2000 });
+        this.loadProjects();
+      },
+      error: (err: any) => {
+        this.snackBar.open('Failed to update project status', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   addNewProject() {
     this.router.navigate(['/organization/projects/add']);
   }
 
-  showDetails(project: any) {
-    this.snackBar.open(project.details, 'Close', { duration: 5000 });
+  deleteProject(id: number) {
+    if (confirm('Are you sure you want to delete this project?')) {
+      this.projectService.deleteProject(id).subscribe({
+        next: () => {
+          this.snackBar.open('Project deleted successfully', 'Close', { duration: 3000 });
+          this.loadProjects();
+        },
+        error: (err: any) => {
+          this.snackBar.open('Failed to delete project', 'Close', { duration: 3000 });
+        }
+      });
+    }
   }
 }

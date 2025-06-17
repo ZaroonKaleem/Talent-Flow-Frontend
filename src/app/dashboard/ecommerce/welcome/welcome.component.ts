@@ -3,11 +3,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-welcome',
     standalone: true,
-    imports: [RouterLink, MatCardModule, MatDividerModule],
+    imports: [
+        RouterLink, 
+        MatCardModule, 
+        MatDividerModule,
+        MatButtonModule,
+        MatButton
+    ],
     templateUrl: './welcome.component.html',
     styleUrl: './welcome.component.scss'
 })

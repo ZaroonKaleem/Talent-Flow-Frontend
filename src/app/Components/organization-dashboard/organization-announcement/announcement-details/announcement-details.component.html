@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Announcement Details</h2>
+<mat-dialog-content>
+    <div class="details-grid">
+        <div class="detail-item">
+            <span class="detail-label">Gender:</span>
+            <span class="detail-value">{{ data.genderName }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value">{{ data.employeeStatusName }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Stations:</span>
+            <span class="detail-value">{{ formatList(data.employeeStations) }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Departments:</span>
+            <span class="detail-value">{{ formatList(data.departments) }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Designations:</span>
+            <span class="detail-value">{{ formatList(data.designations) }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Groups:</span>
+            <span class="detail-value">{{ formatList(data.employeeGroups) }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Exempted Employees:</span>
+            <span class="detail-value">{{ formatList(data.exemptedEmployees) || 'None' }}</span>
+        </div>
+        <div class="detail-item full-width">
+            <span class="detail-label">Details:</span>
+            <span class="detail-value">{{ data.description }}</span>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

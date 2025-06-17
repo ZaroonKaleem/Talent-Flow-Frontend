@@ -127,45 +127,120 @@
     </div>
 
     <!-- Registration Request Table -->
-    <mat-card class="table-card">
-        <mat-card-content>
-            <div class="table-responsive">
-                <table class="registration-table">
-                    <thead>
-                        <tr>
-                            <th>Employee</th>
-                            <th>Station</th>
-                            <th>Department</th>
-                            <th>Request Type</th>
-                            <th>Registration Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let request of registrationRequests">
-                            <td>{{ request.employeeName }}</td>
-                            <td>{{ request.station }}</td>
-                            <td>{{ request.department }}</td>
-                            <td>{{ request.requestType }}</td>
-                            <td>{{ request.registrationDate | date }}</td>
-                            <td>
-                                <span class="status-badge" [ngClass]="request.status.toLowerCase()">
-                                    {{ request.status }}
-                                </span>
-                            </td>
-                            <td>
-                                <button mat-icon-button color="primary" (click)="viewDetails(request)">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                                <button mat-icon-button color="accent" (click)="editRequest(request)">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </mat-card-content>
-    </mat-card>
+     <mat-card class="table-card mat-elevation-z8">
+    <mat-card-content>
+      <div class="buttons-list">
+        <!-- <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="downloadPDF()">Export
+          Data</button> -->
+        <!-- <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="uploadExcel()">Upload
+          Excel</button> -->
+        <!-- <button type="button" mat-flat-button class="custom-clear-btns" color="primary" (click)="sendCredentials()">Send
+          Credentials</button> -->
+          <button type="button" mat-flat-button class="custom-clear-btns" color="primary">
+              View Report</button>
+        <button type="button" mat-flat-button class="custom-clear-btns" color="primary">Add
+          New Request</button>
+      </div>
+      <div class="table-responsive">
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th scope="col" class="fw-medium">Sr#</th>
+              <th scope="col" class="fw-medium">Employee</th>
+              <th scope="col" class="fw-medium">Detail</th>
+              <th scope="col" class="fw-medium">Role Template</th>
+              <th scope="col" class="fw-medium">Active</th>
+              <th scope="col" class="fw-medium">Added On</th>
+              <th scope="col" class="fw-medium">Modified On</th>
+              <th scope="col" class="fw-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of employees; let i = index">
+              <td data-label="Sr#">{{ i + 1 }}</td>
+              <td data-label="Employee">
+                <div class="employee-info">
+                  <div class="employee-name">{{ emp.name }} {{ emp.surname }}</div>
+                  <div class="employee-code">{{ emp.employeeCode }}</div>
+                  <div class="employee-email">{{ emp.emailAddress }}</div>
+                </div>
+              </td>
+              <td data-label="Detail">
+                <div class="employee-details">
+                  <div><strong>Station:</strong> {{ emp.employeeStationName || 'N/A' }}</div>
+                  <div><strong>Department:</strong> {{ emp.departmentName || 'N/A' }}</div>
+                  <div><strong>Sub Department:</strong> {{ emp.subDepartmentName || 'N/A' }}</div>
+                  <div><strong>Group:</strong> {{ emp.employeeGroupName || 'N/A' }}</div>
+                  <div><strong>Designation:</strong> {{ emp.designationName || 'N/A' }}</div>
+                  <div><strong>Division:</strong> {{ emp.divisionName || 'N/A' }}</div>
+                  <div><strong>Grade:</strong> {{ emp.gradeName || 'N/A' }}</div>
+                  <div><strong>Joining Date:</strong> {{ emp.joiningDate | date:'mediumDate' || 'N/A' }}</div>
+                  <div><strong>Status:</strong> {{ emp.employeeStatusName || 'N/A' }}</div>
+                </div>
+              </td>
+              <td data-label="Role Template">
+                {{ emp.roleTemplate || 'Default' }}
+              </td>
+              <td data-label="Active">
+                <i class="material-symbols-outlined" [class.active]="emp.isActive" [class.inactive]="!emp.isActive">
+                  {{ emp.isActive ? 'check_circle' : 'cancel' }}
+                </i>
+
+              </td>
+              <td data-label="Added On">
+                {{ emp.joiningDate | date:'mediumDate' || 'N/A' }}
+              </td>
+              <td data-label="Modified On">
+                {{ emp.modifiedDate | date:'mediumDate' || 'N/A' }}
+              </td>
+              <td data-label="Actions">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <i class="material-symbols-outlined">more_horiz</i>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item >
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">visibility</i>
+                      <span>View</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">edit</i>
+                      <span>Edit</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">info</i>
+                      <span>Additional Information</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">
+                        {{ emp.isActive ? 'block' : 'check_circle' }}
+                      </i>
+                      <span>{{ emp.isActive ? 'Inactive' : 'Activate' }}</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div class="menu-item-content">
+                      <i class="material-symbols-outlined">warning</i>
+                      <span>Blacklist</span>
+                    </div>
+                  </button>
+                </mat-menu>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
 </div>

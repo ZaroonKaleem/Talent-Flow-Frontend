@@ -1,0 +1,29 @@
+<mat-card class="leave-card">
+  <div class="leave-header">
+    <i class="material-symbols-outlined">request_quote</i>
+    <span class="title">EMPLOYEE PAYSLIPS</span>
+  </div>
+
+  <div class="leave-table-container">
+    <table mat-table [dataSource]="leaveData" class="leave-table">
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="payslip">
+        <th mat-header-cell *matHeaderCellDef>Payslip Period</th>
+        <td mat-cell *matCellDef="let row">{{ row.slip }}</td>
+      </ng-container>
+
+       <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-stroked-button color="primary">
+            view payslip
+        </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</mat-card>

@@ -113,14 +113,6 @@ export interface EmployeeListResponse {
   unAuthorizedRequest: boolean;
   __abp: boolean;
 }
-// export interface EmployeeListResponse {
-// //   items: Employee[];
-// //   totalCount: number;
-//   result: {
-//     items: Employee[];         // You can replace `any` with `Employee` if you have a proper model
-//     totalCount: number;
-//   };
-// }
 
 interface SuggestionItem {
     id: string;
@@ -289,89 +281,6 @@ export class EmployeeListComponent implements OnInit {
             }
         });
     }
-
-// loadEmployees(): void {
-//     this.loaderService.show();
-//     const params = {
-//         SkipCount: this.pageIndex * this.pageSize,
-//         MaxResultCount: this.pageSize
-//     };
-
-//     this.employeeService.getAllEmployees(params).subscribe({
-//         next: (response: any) => {
-//             // Make sure to access the 'result' property from the response
-//             const employeeResponse = response.result as EmployeeListResponse;
-//             this.employees = employeeResponse.result.items;
-//             this.totalCount = employeeResponse.result.totalCount;
-//             this.dataSource = new MatTableDataSource(this.employees);
-            
-//             // Initialize paginator after data is loaded
-//             if (this.paginator) {
-//                 this.paginator.length = this.totalCount;
-//                 this.dataSource.paginator = this.paginator;
-//             }
-            
-//             // Initialize sort if needed
-//             if (this.sort) {
-//                 this.dataSource.sort = this.sort;
-//             }
-            
-//             this.loaderService.hide();
-//         },
-//         error: (error) => {
-//             console.error('Error loading employees', error);
-//             this.loaderService.hide();
-//             this.snackBar.open('Error loading employees', 'Close', { duration: 3000 });
-//         }
-//     });
-// }
-    // applyFilter(): void {
-    //     this.loaderService.show();
-    //     this.pageIndex = 0;
-
-    //     const formValues = this.filterForm.value;
-    //     const params: any = {
-    //         SkipCount: this.pageIndex * this.pageSize,
-    //         MaxResultCount: this.pageSize
-    //     };
-
-    //     // Map form controls to API parameters
-    //     if (formValues.station) params.EmployeeStationId = formValues.station;
-    //     if (formValues.department) params.DepartmentId = formValues.department;
-    //     if (formValues.subDepartment) params.SubDepartmentId = formValues.subDepartment;
-    //     if (formValues.employeeGroup) params.EmployeeGroupId = formValues.employeeGroup;
-    //     if (formValues.designation) params.DesignationId = formValues.designation;
-    //     if (formValues.division) params.DivisionId = formValues.division;
-    //     if (formValues.employeeCode) params.Id = formValues.employeeCode;
-    //     if (formValues.employeeName) params.Name = formValues.employeeName;
-    //     if (formValues.username) params.UserName = formValues.username;
-    //     if (formValues.employeeStatus) params.EmployeeStatusId = formValues.employeeStatus;
-    //     if (formValues.cnic) params.Cnic = formValues.cnic;
-        
-    //     if (formValues.documentsAttached !== null) {
-    //         params.HasDocuments = formValues.documentsAttached;
-    //     }
-        
-    //     if (formValues.listStatus === 'blacklist') {
-    //         params.IsBlacklisted = true;
-    //     } else if (formValues.listStatus === 'whitelist') {
-    //         params.IsWhitelisted = true;
-    //     }
-
-    //     this.employeeService.getAllEmployees(params).subscribe({
-    //         next: (response: EmployeeListResponse) => {
-    //             this.employees = response.items;
-    //             this.totalCount = response.totalCount;
-    //             this.dataSource = new MatTableDataSource(this.employees);
-    //             this.loaderService.hide();
-    //         },
-    //         error: (error) => {
-    //             console.error('Error filtering employees', error);
-    //             this.loaderService.hide();
-    //             this.snackBar.open('Error applying filters', 'Close', { duration: 3000 });
-    //         }
-    //     });
-    // }
 
     loadEmployees(): void {
     this.loaderService.show();

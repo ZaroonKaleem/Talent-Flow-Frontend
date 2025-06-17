@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { TaskService } from '../../../Services/task.service';
 
 @Component({
   selector: 'app-organization-task',
@@ -55,66 +56,15 @@ export class OrganizationTaskComponent {
   flags = ['Red', 'Yellow', 'Green'];
 
   // Sample data
-  tasksData = [
-    {
-      id: 1,
-      name: 'Database Schema Design',
-      project: 'ERP Implementation',
-      teamLeader: 'John Doe',
-      mode: 'Team',
-      addedOn: new Date('2023-01-05'),
-      modifiedOn: new Date('2023-01-20'),
-      active: true,
-      details: 'Design database schema for all modules',
-      status: 'Completed',
-      flag: 'Green'
-    },
-    {
-      id: 2,
-      name: 'API Development',
-      project: 'ERP Implementation',
-      teamLeader: 'Jane Smith',
-      mode: 'Team',
-      addedOn: new Date('2023-02-10'),
-      modifiedOn: new Date('2023-03-15'),
-      active: true,
-      details: 'Develop REST APIs for core modules',
-      status: 'In Progress',
-      flag: 'Yellow'
-    },
-    {
-      id: 3,
-      name: 'Switch Configuration',
-      project: 'Network Upgrade',
-      teamLeader: 'Robert Johnson',
-      mode: 'Individual',
-      addedOn: new Date('2023-03-01'),
-      modifiedOn: new Date('2023-03-10'),
-      active: false,
-      details: 'Configure all network switches with new firmware',
-      status: 'Cancelled',
-      flag: 'Red'
-    },
-    {
-      id: 4,
-      name: 'Employee Self-Service Module',
-      project: 'HR Portal Development',
-      teamLeader: 'Emily Davis',
-      mode: 'Team',
-      addedOn: new Date('2023-04-15'),
-      modifiedOn: new Date('2023-05-20'),
-      active: true,
-      details: 'Develop employee self-service features',
-      status: 'In Progress',
-      flag: 'Green'
-    }
-  ];
+// Remove the static tasksData and update the initialization
+tasksData: any[] = [];
+dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   totalCount: number = this.tasksData.length;
   pageSize: number = 10;
   pageIndex: number = 0;
 
-  dataSource: MatTableDataSource<any> = new MatTableDataSource(this.tasksData);
+  // dataSource: MatTableDataSource<any> = new MatTableDataSource(this.tasksData);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -123,13 +73,30 @@ export class OrganizationTaskComponent {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.loadTasks();
     this.dataSource = new MatTableDataSource(this.tasksData);
   }
+
+  loadTasks(params?: any): void {
+  this.taskService.getAllTasks(params).subscribe({
+    next: (response) => {
+      // Assuming the API returns data in response.result.items
+      this.tasksData = response.result?.items || [];
+      this.dataSource.data = this.tasksData;
+      this.totalCount = response.result?.totalCount || this.tasksData.length;
+    },
+    error: (error) => {
+      console.error('Error loading tasks:', error);
+      this.snackBar.open('Failed to load tasks', 'Close', { duration: 3000 });
+    }
+  });
+}
 
   initForm() {
     this.filterForm = this.fb.group({
@@ -142,63 +109,124 @@ export class OrganizationTaskComponent {
     });
   }
 
+  // applyFilters() {
+  //   const formValues = this.filterForm.value;
+  //   let filteredData = [...this.tasksData];
+
+  //   if (formValues.project) {
+  //     filteredData = filteredData.filter(task => 
+  //       task.project === this.projects.find(p => p.id === formValues.project)?.name
+  //     );
+  //   }
+
+  //   if (formValues.taskName) {
+  //     filteredData = filteredData.filter(task => 
+  //       task.name.toLowerCase().includes(formValues.taskName.toLowerCase())
+  //     );
+  //   }
+
+  //   if (formValues.status) {
+  //     filteredData = filteredData.filter(task => 
+  //       task.status === formValues.status
+  //     );
+  //   }
+
+  //   if (formValues.active) {
+  //     const isActive = formValues.active === 'true';
+  //     filteredData = filteredData.filter(task => 
+  //       task.active === isActive
+  //     );
+  //   }
+
+  //   if (formValues.taskMode) {
+  //     filteredData = filteredData.filter(task => 
+  //       task.mode === formValues.taskMode
+  //     );
+  //   }
+
+  //   if (formValues.flag) {
+  //     filteredData = filteredData.filter(task => 
+  //       task.flag === formValues.flag
+  //     );
+  //   }
+
+  //   this.dataSource.data = filteredData;
+  //   this.totalCount = filteredData.length;
+  //   this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+  // }
+
   applyFilters() {
-    const formValues = this.filterForm.value;
-    let filteredData = [...this.tasksData];
+  const formValues = this.filterForm.value;
+  const params: any = {
+    skipCount: this.pageIndex * this.pageSize,
+    maxResultCount: this.pageSize
+  };
 
-    if (formValues.project) {
-      filteredData = filteredData.filter(task => 
-        task.project === this.projects.find(p => p.id === formValues.project)?.name
-      );
-    }
-
-    if (formValues.taskName) {
-      filteredData = filteredData.filter(task => 
-        task.name.toLowerCase().includes(formValues.taskName.toLowerCase())
-      );
-    }
-
-    if (formValues.status) {
-      filteredData = filteredData.filter(task => 
-        task.status === formValues.status
-      );
-    }
-
-    if (formValues.active) {
-      const isActive = formValues.active === 'true';
-      filteredData = filteredData.filter(task => 
-        task.active === isActive
-      );
-    }
-
-    if (formValues.taskMode) {
-      filteredData = filteredData.filter(task => 
-        task.mode === formValues.taskMode
-      );
-    }
-
-    if (formValues.flag) {
-      filteredData = filteredData.filter(task => 
-        task.flag === formValues.flag
-      );
-    }
-
-    this.dataSource.data = filteredData;
-    this.totalCount = filteredData.length;
-    this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+  // Map form values to API parameters
+  if (formValues.project) {
+    params.projectId = formValues.project;
   }
+
+  if (formValues.taskName) {
+    params.name = formValues.taskName;
+  }
+
+  if (formValues.status) {
+    params.status = formValues.status;
+  }
+
+  if (formValues.active) {
+    params.isActive = formValues.active === 'true';
+  }
+
+  if (formValues.taskMode) {
+    params.mode = formValues.taskMode;
+  }
+
+  if (formValues.flag) {
+    params.flag = formValues.flag;
+  }
+
+  this.loadTasks(params);
+  this.snackBar.open('Filters applied', 'Close', { duration: 2000 });
+}
+  
+  // clearFilters() {
+  //   this.filterForm.reset();
+  //   this.dataSource.data = this.tasksData;
+  //   this.totalCount = this.tasksData.length;
+  //   this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+  // }
+
+  // onPageChange(event: PageEvent) {
+  //   this.pageIndex = event.pageIndex;
+  //   this.pageSize = event.pageSize;
+  // }
 
   clearFilters() {
-    this.filterForm.reset();
-    this.dataSource.data = this.tasksData;
-    this.totalCount = this.tasksData.length;
-    this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
-  }
+  this.filterForm.reset();
+  this.pageIndex = 0;
+  this.loadTasks({
+    skipCount: 0,
+    maxResultCount: this.pageSize
+  });
+  this.snackBar.open('Filters cleared', 'Close', { duration: 2000 });
+}
 
   onPageChange(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-  }
+  this.pageIndex = event.pageIndex;
+  this.pageSize = event.pageSize;
+  
+  // Apply current filters with new pagination
+  const formValues = this.filterForm.value;
+  const params = {
+    skipCount: this.pageIndex * this.pageSize,
+    maxResultCount: this.pageSize,
+    ...formValues
+  };
+  
+  this.loadTasks(params);
+}
 
   viewTask(id: number): void {
     const task = this.tasksData.find(t => t.id === id);
@@ -215,7 +243,7 @@ export class OrganizationTaskComponent {
   }
 
   addNewTask() {
-    this.router.navigate(['/organization/tasks/add']);
+    this.router.navigate(['/organization-dashboard/task/add-task']);
   }
 
   showDetails(task: any) {

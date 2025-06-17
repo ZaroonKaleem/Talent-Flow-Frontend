@@ -142,10 +142,11 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button mat-flat-button color="primary" (click)="applyFilters()">
-                    Apply Filters
+                <button mat-flat-button color="primary" (click)="applyFilters()" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Apply Filters</span>
+                    <!-- <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner> -->
                 </button>
-                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn">
+                <button mat-stroked-button (click)="clearFilters()" class="custom-clear-btn" [disabled]="isLoading">
                     Clear Filters
                 </button>
             </div>
@@ -159,7 +160,8 @@
                     Add New Project
                 </button>
             </div>
-            <div class="table-responsive">
+            
+            <div class="table-responsive" *ngIf="!isDataLoading; else loadingTemplate">
                 <table class="employee-table">
                     <thead>
                         <tr>
@@ -181,7 +183,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let project of dataSource.data; let i = index">
-                            <td data-label="Sr#">{{ i + 1 }}</td>
+                            <td data-label="Sr#">{{ (pageIndex * pageSize) + i + 1 }}</td>
                             <td data-label="Project">{{ project.name }}</td>
                             <td data-label="Customer">{{ project.customer }}</td>
                             <td data-label="TimePeriod">
@@ -200,34 +202,40 @@
                                 </mat-icon>
                             </td>
                             <td data-label="Details">
-                                <button mat-icon-button (click)="showDetails(project)">
-                                    <i class="material-symbols-outlined">info</i>
+                                <button mat-icon-button>
+                                    <mat-icon>info</mat-icon>
                                 </button>
                             </td>
                             <td data-label="Actions">
                                 <button mat-icon-button [matMenuTriggerFor]="menu">
-                                    <i class="material-symbols-outlined">more_horiz</i>
+                                    <mat-icon>more_horiz</mat-icon>
                                 </button>
 
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item (click)="viewProject(project.id)">
                                         <div class="menu-item-content">
-                                            <i class="material-symbols-outlined">visibility</i>
+                                            <mat-icon>visibility</mat-icon>
                                             <span>View</span>
                                         </div>
                                     </button>
                                     <button mat-menu-item (click)="editProject(project.id)">
                                         <div class="menu-item-content">
-                                            <i class="material-symbols-outlined">edit</i>
+                                            <mat-icon>edit</mat-icon>
                                             <span>Edit</span>
                                         </div>
                                     </button>
                                     <button mat-menu-item (click)="toggleProjectStatus(project)">
                                         <div class="menu-item-content">
-                                            <i class="material-symbols-outlined">
+                                            <mat-icon>
                                                 {{ project.active ? 'block' : 'check_circle' }}
-                                            </i>
+                                            </mat-icon>
                                             <span>{{ project.active ? 'Deactivate' : 'Activate' }}</span>
+                                        </div>
+                                    </button>
+                                    <button mat-menu-item (click)="deleteProject(project.id)">
+                                        <div class="menu-item-content">
+                                            <mat-icon color="warn">delete</mat-icon>
+                                            <span class="warn-text">Delete</span>
                                         </div>
                                     </button>
                                 </mat-menu>
@@ -235,11 +243,25 @@
                         </tr>
                     </tbody>
                 </table>
+                
+                <div *ngIf="dataSource.data.length === 0" class="no-data-message">
+                    <i class="material-sumbols-outlined">info</i>
+                    <p>No projects found</p>
+                </div>
             </div>
+            
+            <ng-template #loadingTemplate>
+                <div class="loading-overlay">
+                    <!-- <mat-spinner diameter="50"></mat-spinner> -->
+                    <p>Loading projects...</p>
+                </div>
+            </ng-template>
+            
             <mat-paginator [length]="totalCount" 
                           [pageSize]="pageSize" 
                           [pageSizeOptions]="[5, 10, 25]"
-                          (page)="onPageChange($event)">
+                          (page)="onPageChange($event)"
+                          [disabled]="isDataLoading">
             </mat-paginator>
         </mat-card-content>
     </mat-card>

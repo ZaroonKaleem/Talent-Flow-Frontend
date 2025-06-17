@@ -75,20 +75,20 @@
                 <table class="employee-table">
                     <thead>
                         <tr>
-                            <th scope="col" class="fw-medium">Sr#</th>
+                            <th scope="col" class="fw-medium">S#</th>
                             <th scope="col" class="fw-medium">Title</th>
                             <th scope="col" class="fw-medium">Date</th>
                             <th scope="col" class="fw-medium">Added On</th>
                             <th scope="col" class="fw-medium">Modified On</th>
                             <th scope="col" class="fw-medium">Details</th>
-                            <th scope="col" class="fw-medium">Actions</th>
+                            <th scope="col" class="fw-medium">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let holiday of dataSource.data; let i = index">
-                            <td data-label="Sr#">{{ i + 1 }}</td>
-                            <td data-label="Title">{{ holiday.title }}</td>
-                            <td data-label="Date">{{ holiday.date | date:'mediumDate' }}</td>
+                            <td data-label="S#">{{ i + 1 }}</td>
+                            <td data-label="Title">{{ holiday.name }}</td>
+                            <td data-label="Date">{{ holiday.eventDate | date:'mediumDate' }}</td>
                             <td data-label="Added On">{{ holiday.addedOn | date:'mediumDate' }}</td>
                             <td data-label="Modified On">{{ holiday.modifiedOn | date:'mediumDate' }}</td>
                             <td data-label="Details">
@@ -96,11 +96,10 @@
                                     <i class="material-symbols-outlined">info</i>
                                 </button>
                             </td>
-                            <td data-label="Actions">
+                            <td data-label="Action">
                                 <button mat-icon-button [matMenuTriggerFor]="menu">
                                     <i class="material-symbols-outlined">more_horiz</i>
                                 </button>
-
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item (click)="viewHoliday(holiday.id)">
                                         <div class="menu-item-content">
@@ -117,9 +116,9 @@
                                     <button mat-menu-item (click)="toggleHolidayStatus(holiday)">
                                         <div class="menu-item-content">
                                             <i class="material-symbols-outlined">
-                                                {{ holiday.isActive ? 'block' : 'check_circle' }}
+                                                {{ holiday.sendEmail ? 'block' : 'check_circle' }}
                                             </i>
-                                            <span>{{ holiday.isActive ? 'Deactivate' : 'Activate' }}</span>
+                                            <span>{{ holiday.sendEmail ? 'Disable Email' : 'Enable Email' }}</span>
                                         </div>
                                     </button>
                                 </mat-menu>

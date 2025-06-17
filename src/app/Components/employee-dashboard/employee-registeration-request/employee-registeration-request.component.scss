@@ -144,3 +144,60 @@
         }
     }
 }
+
+
+
+    .employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 3px solid #1f4567;
+  }
+  
+  th {
+    background-color: white;
+    font-weight: 500;
+  }
+  
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+
+.custom-clear-btn {
+  border: 3px solid;
+  border-color: #1f4567 !important;
+  color: #1f4567 !important;
+  background-color: transparent !important;
+  font-size: 12px;
+  padding: 4px 12px;
+  min-height: auto;
+  line-height: 1.2;
+}
+
+.buttons-list {
+  // display: flex;
+  // gap: 1rem;
+  // margin-bottom: 2rem;
+    display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; // Optional: allows wrapping on smaller screens
+}
+.custom-clear-btns {
+  border: 3px solid;
+  border-color: #1f4567 !important;
+  color: white !important;
+//   background-color: transparent !important;
+}
+
+.table-card {
+    background-color: white;
+    box-shadow: none !important;
+    border: none !important;
+}
