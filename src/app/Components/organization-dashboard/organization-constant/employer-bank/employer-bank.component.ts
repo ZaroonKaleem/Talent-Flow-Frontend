@@ -10,7 +10,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeBankService } from '../../../../Services/Constants Services/employee-bank.service';
 
-interface EmployeeBank {
+interface EmployerBank {
   id: number;
   code: string;
   name: string;
@@ -19,7 +19,7 @@ interface EmployeeBank {
 interface ApiResponse {
   result: {
     totalCount: number;
-    items: EmployeeBank[];
+    items: EmployerBank[];
   };
   success: boolean;
   error: any;
@@ -48,7 +48,7 @@ interface ApiResponse {
 })
 export class EmployerBankComponent implements AfterViewInit {
   displayedColumns: string[] = ['sr', 'id', 'code', 'name', 'actions'];
-  dataSource = new MatTableDataSource<EmployeeBank>([]);
+  dataSource = new MatTableDataSource<EmployerBank>([]);
   totalCount = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -94,12 +94,12 @@ export class EmployerBankComponent implements AfterViewInit {
     this.loadEmployeeBanks(event.pageIndex, event.pageSize);
   }
 
-  viewDetails(bank: EmployeeBank) {
+  viewDetails(bank: EmployerBank) {
     console.log('View details:', bank);
     // Implement view details logic
   }
 
-  exportLog(bank: EmployeeBank) {
+  exportLog(bank: EmployerBank) {
     console.log('Export log:', bank);
     // Implement export logic
   }
