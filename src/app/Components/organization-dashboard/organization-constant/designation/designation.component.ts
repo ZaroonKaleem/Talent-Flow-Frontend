@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDesignationService } from '../../../../Services/Constants Services/employee-designation.service';
+import { AddNewDesignationDialogComponent } from './add-new-designation-dialog/add-new-designation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Designation {
   id: number;
@@ -57,7 +59,11 @@ export class DesignationComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private designationService: EmployeeDesignationService) {}
+  constructor(
+    private designationService: EmployeeDesignationService,
+    private dialog: MatDialog
+
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -107,4 +113,17 @@ export class DesignationComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+    openAddDesignationDialog(): void {
+      const dialogRef = this.dialog.open(AddNewDesignationDialogComponent, {
+        width: '400px'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // console.log('New Employee Group:', result);
+          // Handle the result (e.g., send to backend)
+        }
+      });
+    }
 }

@@ -9,6 +9,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { EmployeeGroupService } from '../../../../Services/Constants Services/employee-group-service.service';
+import { AddNewEmployeeGroupDialogComponent } from './add-new-employee-group-dialog/add-new-employee-group-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface EmployeeGroup {
   id: number;
@@ -56,13 +58,29 @@ export class EmployeeGroupComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeGroupService: EmployeeGroupService) {}
+  constructor(
+    private employeeGroupService: EmployeeGroupService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.isTableReady = true;
     this.loadEmployeeGroups();
+  }
+
+  openAddEmployeeGroupDialog(): void {
+    const dialogRef = this.dialog.open(AddNewEmployeeGroupDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('New Employee Group:', result);
+        // Handle the result (e.g., send to backend)
+      }
+    });
   }
 
   loadEmployeeGroups(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {

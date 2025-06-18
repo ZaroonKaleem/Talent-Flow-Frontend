@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeStatusService } from '../../../../Services/Constants Services/employee-status.service';
+import { AddNewEmployeeStatusDialogComponent } from './add-new-employee-status-dialog/add-new-employee-status-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface EmployeeStatus {
   id: number;
@@ -57,7 +59,10 @@ export class EmployeeStatusComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeStatusService: EmployeeStatusService) {}
+  constructor(
+    private employeeStatusService: EmployeeStatusService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -65,6 +70,19 @@ export class EmployeeStatusComponent implements AfterViewInit {
     this.isTableReady = true;
     this.loadEmployeeStatuses();
   }
+
+    openAddEmployeeStatusDialog(): void {
+      const dialogRef = this.dialog.open(AddNewEmployeeStatusDialogComponent, {
+        width: '400px'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('New Employee Group:', result);
+          // Handle the result (e.g., send to backend)
+        }
+      });
+    }
 
   loadEmployeeStatuses(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     const params = {

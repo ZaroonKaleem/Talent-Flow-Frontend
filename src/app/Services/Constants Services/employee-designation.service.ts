@@ -38,4 +38,19 @@ export class EmployeeDesignationService {
       params: httpParams
     });
   }
+
+  /**
+   * Create a new designation
+   * @param designation Data for the new designation
+   * @returns Observable of the created designation
+   */
+  createDesignation(designation: { id: number; name: string; code: string }): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/Create`, designation, { headers });
+  }
 }
