@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeBankService } from '../../../../Services/Constants Services/employee-bank.service';
+import { AddNewEmployeeBankDialogComponent } from './add-new-employee-bank-dialog/add-new-employee-bank-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface EmployeeBank {
   id: number;
@@ -57,7 +59,10 @@ export class EmployeeBankComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeBankService: EmployeeBankService) {}
+  constructor(
+    private employeeBankService: EmployeeBankService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -107,4 +112,18 @@ export class EmployeeBankComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+   openAddEmployeeBankDialog(): void {
+          const dialogRef = this.dialog.open(AddNewEmployeeBankDialogComponent, {
+            width: '400px'
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              // console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadEmployeeBanks(0, this.pageSize)
+            }
+          });
+        }
 }

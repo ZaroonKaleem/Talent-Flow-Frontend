@@ -38,4 +38,19 @@ export class EmployeeAllowanceService {
       params: httpParams
     });
   }
+
+    /**
+   * Create a new designation
+   * @param designation Data for the new designation
+   * @returns Observable of the created designation
+   */
+  createAllowance(AllowanceTitle: { id: number; name: string; isAmount: boolean }): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/Create`, AllowanceTitle, { headers });
+  }
 }

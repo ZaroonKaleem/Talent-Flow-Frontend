@@ -1,0 +1,26 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Cost Center</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="costCenterForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Cost Center Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="costCenterForm.get('name')?.hasError('required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Cost Center Code</mat-label>
+      <input matInput type="text" formControlName="code" required>
+      <mat-error *ngIf="costCenterForm.get('code')?.hasError('required')">
+        Code is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!costCenterForm.valid" (click)="onSave()">
+    Save
+  </button>
+</mat-dialog-actions>

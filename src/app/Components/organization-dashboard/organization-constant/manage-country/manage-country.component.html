@@ -1,7 +1,8 @@
 <div class="mat-container">
-  <div class="header-container">
-    <h4>Manage Country</h4>
-  </div>
+ <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h4>Manage Country</h4>
+  <button mat-flat-button color="primary" (click)="openAddCountryDialog()">Add New Country</button>
+</div>
 
   <div *ngIf="isLoading" class="loading-container">
     Loading countries...

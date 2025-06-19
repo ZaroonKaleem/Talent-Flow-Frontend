@@ -9,6 +9,9 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeJobTitleService } from '../../../../Services/Constants Services/employee-job-title.service';
+import { AddNewJobTitleDialogComponent } from './add-new-job-title-dialog/add-new-job-title-dialog.component';
+import { EmployeeJobFieldService } from '../../../../Services/Constants Services/employee-job-field.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-title',
@@ -48,7 +51,10 @@ export class JobTitleComponent implements OnInit {
        pageSize: this.pageSize
      };
    
-   constructor(private jobTitleService: EmployeeJobTitleService) {}
+   constructor(
+    private jobTitleService: EmployeeJobTitleService,
+    private dialog: MatDialog
+  ) {}
    
    ngOnInit() {
      this.loadJobTitles();
@@ -96,4 +102,18 @@ export class JobTitleComponent implements OnInit {
      get Math() {
        return Math;
      }
+
+     openAddJobTitleDialog(): void {
+           const dialogRef = this.dialog.open(AddNewJobTitleDialogComponent, {
+             width: '400px'
+           });
+       
+           dialogRef.afterClosed().subscribe(result => {
+             if (result) {
+               console.log('New Employee Group:', result);
+               // Handle the result (e.g., send to backend)
+               this.loadJobTitles()
+             }
+           });
+         }
 }

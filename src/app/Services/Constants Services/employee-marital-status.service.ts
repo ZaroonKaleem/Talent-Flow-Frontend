@@ -38,4 +38,19 @@ private apiUrl = `${environment.apiUrl}services/app/MaritalStatus`;
       params: httpParams
     });
   }
+
+  createMaritalStatus(maritalStatusData: {
+        id: number;
+        name: string;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.post<any>(`${this.apiUrl}/Create`, maritalStatusData, {
+            headers,
+        });
+    }
 }

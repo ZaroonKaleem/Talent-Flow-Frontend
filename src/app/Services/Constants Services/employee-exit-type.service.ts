@@ -38,4 +38,20 @@ private apiUrl = `${environment.apiUrl}services/app/ExitType`;
       params: httpParams
     });
   }
+
+  createExitType(exitTypeData: {
+        id: number;
+        name: string;
+        isResignationDateRequired: boolean;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.post<any>(`${this.apiUrl}/Create`, exitTypeData, {
+            headers,
+        });
+    }
 }

@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeMaritalStatusService } from '../../../../Services/Constants Services/employee-marital-status.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNewMaritalStatusDialogComponent } from './add-new-marital-status/add-new-marital-status.component';
 
 interface MaritalStatus {
   id: number;
@@ -56,7 +58,10 @@ export class ManageMaritalStatusComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeMaritalStatusService: EmployeeMaritalStatusService) {}
+  constructor(
+    private employeeMaritalStatusService: EmployeeMaritalStatusService,
+  private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageMaritalStatusComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+   openAddMaritalStatusDialog(): void {
+              const dialogRef = this.dialog.open(AddNewMaritalStatusDialogComponent, {
+                width: '400px'
+              });
+          
+              dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                  console.log('New Employee Group:', result);
+                  // Handle the result (e.g., send to backend)
+                  this.loadMaritalStatuses();
+                }
+              });
+            }
 }

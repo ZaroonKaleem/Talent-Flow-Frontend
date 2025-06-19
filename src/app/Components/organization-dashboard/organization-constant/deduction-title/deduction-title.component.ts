@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDeductionService } from '../../../../Services/Constants Services/employee-deduction.service';
+import { AddNewDeductionTitleDialogComponent } from './add-new-deduction-title-dialog/add-new-deduction-title-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Deduction {
   id: number;
@@ -58,7 +60,10 @@ export class DeductionTitleComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private deductionService: EmployeeDeductionService) {}
+  constructor(
+    private deductionService: EmployeeDeductionService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -118,4 +123,18 @@ export class DeductionTitleComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddDeductionTitleDialog(): void {
+        const dialogRef = this.dialog.open(AddNewDeductionTitleDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            // console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadDeductions(0, this.pageSize)
+          }
+        });
+      }
 }

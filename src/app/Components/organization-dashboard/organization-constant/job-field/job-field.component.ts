@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeJobFieldService } from '../../../../Services/Constants Services/employee-job-field.service';
+import { AddNewJobFieldDialogComponent } from './add-new-job-field-dialog/add-new-job-field-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-field',
@@ -42,7 +44,9 @@ export class JobFieldComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private jobFieldService: EmployeeJobFieldService) {}
+  constructor(private jobFieldService: EmployeeJobFieldService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadJobFields();
@@ -90,4 +94,18 @@ export class JobFieldComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+    openAddJobFieldDialog(): void {
+        const dialogRef = this.dialog.open(AddNewJobFieldDialogComponent, {
+          width: '400px'
+        });
+  
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadJobFields()
+          }
+        });
+      }
 }

@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeCityService } from '../../../../Services/Constants Services/employee-city.service';
+import { AddNewCityDialogComponent } from './add-new-city-dialog/add-new-city-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-city',
@@ -42,7 +44,9 @@ export class ManageCityComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private cityService: EmployeeCityService) {}
+  constructor(
+    private cityService: EmployeeCityService,
+  private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadCities();
@@ -50,7 +54,7 @@ export class ManageCityComponent implements OnInit {
 
   loadCities() {
     this.isLoading = true;
-    this.cityService.getAllEmployeeBanks().subscribe({
+    this.cityService.getAllCities().subscribe({
       next: (response) => {
         if (response.success && response.result?.items) {
           this.cities = response.result.items;
@@ -90,4 +94,18 @@ export class ManageCityComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+    openAddCountryDialog(): void {
+        const dialogRef = this.dialog.open(AddNewCityDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadCities();
+          }
+        });
+      }
 }

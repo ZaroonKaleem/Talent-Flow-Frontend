@@ -16,7 +16,7 @@ private apiUrl = `${environment.apiUrl}services/app/City`;
    * @param params Filter and pagination parameters
    * @returns Observable of any
    */
-  getAllEmployeeBanks(params?: any): Observable<any> {
+  getAllCities(params?: any): Observable<any> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -38,4 +38,18 @@ private apiUrl = `${environment.apiUrl}services/app/City`;
       params: httpParams
     });
   }
+
+createCity(cityData: { 
+  id: number; 
+  name: string; 
+  code: string; 
+}): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post<any>(`${this.apiUrl}/Create`, cityData, { headers });
+}
 }

@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeCostCenterService } from '../../../../Services/Constants Services/employee-cost-center.service';
+import { AddNewCostCenterDialogComponent } from './add-new-cost-center-dialog/add-new-cost-center-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-cost-center',
@@ -49,7 +51,10 @@ export class ManageCostCenterComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private costCenterService: EmployeeCostCenterService) {}
+  constructor(
+    private costCenterService: EmployeeCostCenterService,
+    private dialog: MatDialog
+) {}
 
   ngOnInit() {
     this.loadCostCenters();
@@ -95,4 +100,18 @@ export class ManageCostCenterComponent implements OnInit {
     get Math() {
     return Math;
   }
+
+    openAddCostCenterDialog(): void {
+        const dialogRef = this.dialog.open(AddNewCostCenterDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadCostCenters();
+          }
+        });
+      }
 }

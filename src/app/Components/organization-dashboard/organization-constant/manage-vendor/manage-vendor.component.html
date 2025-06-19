@@ -1,6 +1,7 @@
 <div class="mat-container">
-  <div class="header-container">
+  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
     <h4>Manage Vendor</h4>
+    <button mat-flat-button color="primary" (click)="openAddVendorDialog()">Add New Vendor</button>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
@@ -25,27 +26,27 @@
         </td>
       </ng-container>
 
-      <!-- Contact Person Column -->
-      <ng-container matColumnDef="contactPerson">
-        <th class="heading" mat-header-cell *matHeaderCellDef>Contact Person</th>
+      <!-- Code Column -->
+      <ng-container matColumnDef="code">
+        <th class="heading" mat-header-cell *matHeaderCellDef>Code</th>
         <td mat-cell *matCellDef="let vendor">
-          {{ vendor.contactPerson || 'N/A' }}
+          {{ vendor.code }}
         </td>
       </ng-container>
 
-      <!-- Email Column -->
-      <ng-container matColumnDef="email">
-        <th class="heading" mat-header-cell *matHeaderCellDef>Email</th>
+      <!-- Service Charges Percentage Column -->
+      <ng-container matColumnDef="serviceChargesPercentage">
+        <th class="heading" mat-header-cell *matHeaderCellDef>Service Charges (%)</th>
         <td mat-cell *matCellDef="let vendor">
-          {{ vendor.email || 'N/A' }}
+          {{ vendor.serviceChargesPercentage }}
         </td>
       </ng-container>
 
-      <!-- Phone Column -->
-      <ng-container matColumnDef="phone">
-        <th class="heading" mat-header-cell *matHeaderCellDef>Phone</th>
+      <!-- Country Name Column -->
+      <ng-container matColumnDef="countryName">
+        <th class="heading" mat-header-cell *matHeaderCellDef>Country</th>
         <td mat-cell *matCellDef="let vendor">
-          {{ vendor.phone || 'N/A' }}
+          {{ vendor.countryName }}
         </td>
       </ng-container>
 
@@ -80,10 +81,10 @@
     </div>
     
     <mat-paginator [length]="vendors.length"
-                  [pageSize]="pageSize"
-                  [pageSizeOptions]="[5, 10, 25, 100]"
-                  (page)="pageChanged($event)"
-                  aria-label="Select page">
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="pageChanged($event)"
+                   aria-label="Select page">
     </mat-paginator>
   </div>
 </div>

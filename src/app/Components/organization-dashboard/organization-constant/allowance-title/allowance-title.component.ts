@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeAllowanceService } from '../../../../Services/Constants Services/employee-allowance.service';
+import { AddNewAllowanceTitleDialogComponent } from './add-new-allowance-title-dialog/add-new-allowance-title-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Allowance {
   id: number;
@@ -57,7 +59,10 @@ export class AllowanceTitleComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private allowanceService: EmployeeAllowanceService) {}
+  constructor(
+    private allowanceService: EmployeeAllowanceService,
+    private dialog: MatDialog,
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -107,4 +112,18 @@ export class AllowanceTitleComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddAllowanceTitleDialog(): void {
+        const dialogRef = this.dialog.open(AddNewAllowanceTitleDialogComponent, {
+          width: '400px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            // console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadAllowances(0, this.pageSize)
+          }
+        });
+      }
 }

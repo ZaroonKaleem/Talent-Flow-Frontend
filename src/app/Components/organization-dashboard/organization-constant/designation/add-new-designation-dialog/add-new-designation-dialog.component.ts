@@ -32,7 +32,7 @@ export class AddNewDesignationDialogComponent {
     private snackBar: MatSnackBar
   ) {
     this.designationForm = this.fb.group({
-      id: [0, Validators.required],
+      id: [0],
       name: ['', Validators.required],
       code: ['', Validators.required]
     });

@@ -5,105 +5,131 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+    MatPaginator,
+    MatPaginatorModule,
+    PageEvent,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeGradeService } from '../../../../Services/Constants Services/employee-grade.service';
+import { AddNewGradeDialogComponent } from './add-new-grade-dialog/add-new-grade-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Grade {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 interface ApiResponse {
-  result: {
-    totalCount: number;
-    items: Grade[];
-  };
-  success: boolean;
-  error: any;
-  targetUrl: string | null;
-  unAuthorizedRequest: boolean;
-  __abp: boolean;
+    result: {
+        totalCount: number;
+        items: Grade[];
+    };
+    success: boolean;
+    error: any;
+    targetUrl: string | null;
+    unAuthorizedRequest: boolean;
+    __abp: boolean;
 }
 
 @Component({
-  selector: 'app-manage-grade',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule,
-    DatePipe
-  ],
-  templateUrl: './manage-grade.component.html',
-  styleUrl: './manage-grade.component.scss'
+    selector: 'app-manage-grade',
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatCardModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatChipsModule,
+        DatePipe,
+    ],
+    templateUrl: './manage-grade.component.html',
+    styleUrl: './manage-grade.component.scss',
 })
 export class ManageGradeComponent implements AfterViewInit {
-  displayedColumns: string[] = ['sr', 'id', 'name', 'actions'];
-  dataSource = new MatTableDataSource<Grade>([]);
-  totalCount = 0;
-  pageSize = 10;
-  pageIndex = 0;
-  isTableReady = false;
+    displayedColumns: string[] = ['sr', 'id', 'name', 'actions'];
+    dataSource = new MatTableDataSource<Grade>([]);
+    totalCount = 0;
+    pageSize = 10;
+    pageIndex = 0;
+    isTableReady = false;
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeGradeService: EmployeeGradeService) {}
+    constructor(
+        private employeeGradeService: EmployeeGradeService,
+        private dialog: MatDialog
+    ) {}
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.isTableReady = true;
-    this.loadGrades();
-  }
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.isTableReady = true;
+        this.loadGrades();
+    }
 
-  loadGrades(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
-    const params = {
-      SkipCount: pageIndex * pageSize,
-      MaxResultCount: pageSize
-    };
+    loadGrades(
+        pageIndex: number = this.pageIndex,
+        pageSize: number = this.pageSize
+    ) {
+        const params = {
+            SkipCount: pageIndex * pageSize,
+            MaxResultCount: pageSize,
+        };
 
-    this.employeeGradeService.getAllEmployeeBanks(params).subscribe({
-      next: (response: ApiResponse) => {
-        if (response.success) {
-          this.dataSource.data = response.result.items;
-          this.totalCount = response.result.totalCount;
-          this.pageIndex = pageIndex;
-        } else {
-          console.error('API error:', response.error);
-        }
-      },
-      error: (error) => {
-        console.error('Failed to load grades:', error);
-      }
-    });
-  }
+        this.employeeGradeService.getAllEmployeeBanks(params).subscribe({
+            next: (response: ApiResponse) => {
+                if (response.success) {
+                    this.dataSource.data = response.result.items;
+                    this.totalCount = response.result.totalCount;
+                    this.pageIndex = pageIndex;
+                } else {
+                    console.error('API error:', response.error);
+                }
+            },
+            error: (error) => {
+                console.error('Failed to load grades:', error);
+            },
+        });
+    }
 
-  pageChanged(event: PageEvent) {
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    this.loadGrades(event.pageIndex, event.pageSize);
-  }
+    pageChanged(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageIndex = event.pageIndex;
+        this.loadGrades(event.pageIndex, event.pageSize);
+    }
 
-  viewDetails(grade: Grade) {
-    console.log('View details:', grade);
-    // Implement view details logic
-  }
+    viewDetails(grade: Grade) {
+        console.log('View details:', grade);
+        // Implement view details logic
+    }
 
-  exportLog(grade: Grade) {
-    console.log('Export log:', grade);
-    // Implement export logic
-  }
+    exportLog(grade: Grade) {
+        console.log('Export log:', grade);
+        // Implement export logic
+    }
 
-  get Math() {
-    return Math;
-  }
+    get Math() {
+        return Math;
+    }
+
+    openAddGradeDialog(): void {
+        const dialogRef = this.dialog.open(AddNewGradeDialogComponent, {
+            width: '400px',
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                console.log('New Employee Group:', result);
+                // Handle the result (e.g., send to backend)
+                this.loadGrades();
+            }
+        });
+    }
 }

@@ -9,10 +9,13 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeBankService } from '../../../../Services/Constants Services/employee-bank.service';
+import { AddNewEmployerBankDialogComponent } from './add-new-employer-bank-dialog/add-new-employer-bank-dialog.component';
+import { EmployerBankService } from '../../../../Services/Constants Services/employer-bank.service';
+import { MatDialog } from '@angular/material/dialog';
 
 interface EmployerBank {
   id: number;
-  code: string;
+  // code: string;
   name: string;
 }
 
@@ -47,7 +50,7 @@ interface ApiResponse {
   styleUrl: './employer-bank.component.scss'
 })
 export class EmployerBankComponent implements AfterViewInit {
-  displayedColumns: string[] = ['sr', 'id', 'code', 'name', 'actions'];
+  displayedColumns: string[] = ['sr', 'id', 'name', 'actions'];
   dataSource = new MatTableDataSource<EmployerBank>([]);
   totalCount = 0;
   pageSize = 10;
@@ -57,22 +60,26 @@ export class EmployerBankComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeBankService: EmployeeBankService) {}
+  constructor(
+    private employeeBankService: EmployeeBankService,
+    private employerBankService: EmployerBankService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.isTableReady = true;
-    this.loadEmployeeBanks();
+    this.loadEmployerBanks();
   }
 
-  loadEmployeeBanks(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
+  loadEmployerBanks(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     const params = {
       SkipCount: pageIndex * pageSize,
       MaxResultCount: pageSize
     };
 
-    this.employeeBankService.getAllEmployeeBanks(params).subscribe({
+    this.employerBankService.getAllEmployeeBanks(params).subscribe({
       next: (response: ApiResponse) => {
         if (response.success) {
           this.dataSource.data = response.result.items;
@@ -91,7 +98,7 @@ export class EmployerBankComponent implements AfterViewInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.loadEmployeeBanks(event.pageIndex, event.pageSize);
+    this.loadEmployerBanks(event.pageIndex, event.pageSize);
   }
 
   viewDetails(bank: EmployerBank) {
@@ -107,4 +114,18 @@ export class EmployerBankComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddEmployerBankDialog(): void {
+          const dialogRef = this.dialog.open(AddNewEmployerBankDialogComponent, {
+            width: '400px'
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadEmployerBanks()
+            }
+          });
+        }
 }

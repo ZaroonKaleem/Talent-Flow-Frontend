@@ -1,0 +1,26 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Deduction</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="deductionForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="deductionForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Deduction Type</mat-label>
+      <mat-select formControlName="deductionType" required>
+        <mat-option [value]="1">Type 1</mat-option>
+        <mat-option [value]="2">Type 2</mat-option>
+        <mat-option [value]="3">Type 3</mat-option>
+        <mat-option [value]="4">Type 4</mat-option>
+        <!-- Add more options as needed -->
+      </mat-select>
+      <mat-error *ngIf="deductionForm.get('deductionType')?.hasError('required')">Deduction Type is required</mat-error>
+    </mat-form-field>
+    <mat-checkbox formControlName="isAmount" class="mb-1">Is Amount</mat-checkbox>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!deductionForm.valid" (click)="onSave()">Save</button>
+</mat-dialog-actions>

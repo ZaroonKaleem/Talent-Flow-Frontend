@@ -9,6 +9,9 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeStationService } from '../../../../Services/Constants Services/employee-station.service';
+import { AddNewEmployeeStatusDialogComponent } from '../employee-status/add-new-employee-status-dialog/add-new-employee-status-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNewEmployeeStationDialogComponent } from './add-new-employee-station-dialog/add-new-employee-station-dialog.component';
 
 interface EmployeeStation {
   id: number;
@@ -65,7 +68,10 @@ export class EmployeeStationComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeStationService: EmployeeStationService) {}
+  constructor(
+    private employeeStationService: EmployeeStationService,
+  private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -115,4 +121,18 @@ export class EmployeeStationComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+   openAddEmployeeStationDialog(): void {
+        const dialogRef = this.dialog.open(AddNewEmployeeStationDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadEmployeeStations(0, this.pageSize)
+          }
+        });
+      }
 }

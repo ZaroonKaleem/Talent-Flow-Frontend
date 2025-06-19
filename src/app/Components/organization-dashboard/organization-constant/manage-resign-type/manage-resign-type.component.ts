@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeResignTypeService } from '../../../../Services/Constants Services/employee-resign-type.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNewResignTypeDialogComponent } from './add-new-resign-type-dialog/add-new-resign-type-dialog.component';
 
 interface ResignType {
   id: number;
@@ -56,7 +58,10 @@ export class ManageResignTypeComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeResignTypeService: EmployeeResignTypeService) {}
+  constructor(
+    private employeeResignTypeService: EmployeeResignTypeService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageResignTypeComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+     openAddResignTypeDialog(): void {
+            const dialogRef = this.dialog.open(AddNewResignTypeDialogComponent, {
+              width: '400px'
+            });
+        
+            dialogRef.afterClosed().subscribe(result => {
+              if (result) {
+                console.log('New Employee Group:', result);
+                // Handle the result (e.g., send to backend)
+                this.loadResignTypes();
+              }
+            });
+          }
 }

@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeProvinceService } from '../../../../Services/Constants Services/employee-province.service';
+import { AddNewProvinceDialogComponent } from './add-new-province-dialog/add-new-province-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-province',
@@ -42,7 +44,9 @@ export class ManageProvinceComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private provinceService: EmployeeProvinceService) {}
+  constructor(private provinceService: EmployeeProvinceService, 
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadProvinces();
@@ -50,7 +54,7 @@ export class ManageProvinceComponent implements OnInit {
 
   loadProvinces() {
     this.isLoading = true;
-    this.provinceService.getAllEmployeeBanks().subscribe({
+    this.provinceService.getAllProvinces().subscribe({
       next: (response) => {
         if (response.success && response.result?.items) {
           this.provinces = response.result.items;
@@ -90,4 +94,18 @@ export class ManageProvinceComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+   openAddProvinceDialog(): void {
+        const dialogRef = this.dialog.open(AddNewProvinceDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadProvinces();
+          }
+        });
+      }
 }

@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeAreaService } from '../../../../Services/Constants Services/employee-area.service';
+import { AddNewAreaDialogComponent } from './add-new-area-dialog/add-new-area-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-area',
@@ -50,7 +52,10 @@ export class ManageAreaComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private areaService: EmployeeAreaService) {}
+  constructor(
+    private areaService: EmployeeAreaService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadAreas();
@@ -98,4 +103,18 @@ export class ManageAreaComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+  openAddAreaDialog(): void {
+          const dialogRef = this.dialog.open(AddNewAreaDialogComponent, {
+            width: '400px'
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadAreas();
+            }
+          });
+        }
 }

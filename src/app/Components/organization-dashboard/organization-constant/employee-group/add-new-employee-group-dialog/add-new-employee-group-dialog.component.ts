@@ -7,12 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { Validators } from 'ngx-editor';
 import { EmployeeGroupService } from '../../../../../Services/Constants Services/employee-group-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-new-employee-group-dialog',
   standalone: true,
   imports: [
-      MatDialogModule,
+    CommonModule,
+    MatDialogModule,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -33,7 +35,7 @@ export class AddNewEmployeeGroupDialogComponent {
 
   ) {
     this.employeeGroupForm = this.fb.group({
-      id: [0, Validators.required],
+      id: [0],
       name: ['', Validators.required]
     });
   }

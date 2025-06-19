@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeePrefixService } from '../../../../Services/Constants Services/employee-prefix.service';
+import { AddNewEmployeePrefixDialogComponent } from './add-new-employee-prefix-dialog/add-new-employee-prefix-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-employee-prefix',
@@ -42,7 +44,11 @@ export class EmployeePrefixComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private prefixService: EmployeePrefixService) {}
+  constructor(
+    private prefixService: EmployeePrefixService,
+    private employeePrefixService: EmployeePrefixService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadPrefixes();
@@ -90,4 +96,18 @@ export class EmployeePrefixComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+    openAddEmployeePrefixDialog(): void {
+          const dialogRef = this.dialog.open(AddNewEmployeePrefixDialogComponent, {
+            width: '400px'
+          });
+    
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadPrefixes()
+            }
+          });
+        }
 }

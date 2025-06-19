@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeAssetTypeService } from '../../../../Services/Constants Services/employee-asset-type.service';
+import { AddNewAssetTypeDialogComponent } from './add-new-asset-type-dialog/add-new-asset-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-asset-type',
@@ -42,7 +44,11 @@ export class AssetTypeComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private assetTypeService: EmployeeAssetTypeService) {}
+  constructor(
+    private assetTypeService: EmployeeAssetTypeService,
+    private employeeAssetTypeService: EmployeeAssetTypeService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadAssetTypes();
@@ -90,4 +96,18 @@ export class AssetTypeComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+      openAddAssetTypeDialog(): void {
+        const dialogRef = this.dialog.open(AddNewAssetTypeDialogComponent, {
+          width: '400px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            // console.log('New Employee Group:', result);
+            // Handle the result (e.g., send to backend)
+            this.loadAssetTypes()
+          }
+        });
+      }
 }

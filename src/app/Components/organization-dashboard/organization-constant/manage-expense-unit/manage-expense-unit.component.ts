@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeExpenseUnitService } from '../../../../Services/Constants Services/employee-expense-unit.service';
+import { AddNewExpenseUnitDialogComponent } from './add-new-expense-unit-dialog/add-new-expense-unit-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface ExpenseUnit {
   id: number;
@@ -56,7 +58,10 @@ export class ManageExpenseUnitComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeExpenseUnitService: EmployeeExpenseUnitService) {}
+  constructor(
+    private employeeExpenseUnitService: EmployeeExpenseUnitService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageExpenseUnitComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+     openAddExpenseUnitDialog(): void {
+                const dialogRef = this.dialog.open(AddNewExpenseUnitDialogComponent, {
+                  width: '400px'
+                });
+            
+                dialogRef.afterClosed().subscribe(result => {
+                  if (result) {
+                    console.log('New Employee Group:', result);
+                    // Handle the result (e.g., send to backend)
+                    this.loadExpenseUnits();
+                  }
+                });
+              }
 }

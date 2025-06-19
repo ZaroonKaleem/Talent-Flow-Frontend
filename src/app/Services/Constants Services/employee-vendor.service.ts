@@ -38,4 +38,21 @@ private apiUrl = `${environment.apiUrl}services/app/Vendor`;
       params: httpParams
     });
   }
+
+createVendor(countryData: { 
+  id: number;
+  name: string; 
+  code: string;
+  serviceChargesPercentage: string;
+  hasVAT13Percent: boolean;
+  countryId: string; 
+}): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post<any>(`${this.apiUrl}/Create`, countryData, { headers });
+}
 }

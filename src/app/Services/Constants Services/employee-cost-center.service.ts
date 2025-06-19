@@ -4,38 +4,54 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.dev';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class EmployeeCostCenterService {
-private apiUrl = `${environment.apiUrl}services/app/CostCenter`;
+    private apiUrl = `${environment.apiUrl}services/app/CostCenter`;
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
-  /**
-   * Get all employee banks with optional filtering and pagination
-   * @param params Filter and pagination parameters
-   * @returns Observable of any
-   */
-  getAllEmployeeBanks(params?: any): Observable<any> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    /**
+     * Get all employee banks with optional filtering and pagination
+     * @param params Filter and pagination parameters
+     * @returns Observable of any
+     */
+    getAllEmployeeBanks(params?: any): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
 
-    // Convert params object to HttpParams
-    let httpParams = new HttpParams();
-    if (params) {
-      Object.keys(params).forEach(key => {
-        if (params[key] !== null && params[key] !== undefined) {
-          httpParams = httpParams.append(key, params[key]);
+        // Convert params object to HttpParams
+        let httpParams = new HttpParams();
+        if (params) {
+            Object.keys(params).forEach((key) => {
+                if (params[key] !== null && params[key] !== undefined) {
+                    httpParams = httpParams.append(key, params[key]);
+                }
+            });
         }
-      });
+
+        return this.http.get<any>(`${this.apiUrl}/GetAll`, {
+            headers,
+            params: httpParams,
+        });
     }
 
-    return this.http.get<any>(`${this.apiUrl}/GetAll`, {
-      headers,
-      params: httpParams
-    });
-  }
+    createCostCenter(costCenterData: {
+        id: number;
+        name: string;
+        code: string;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.post<any>(`${this.apiUrl}/Create`, costCenterData, {
+            headers,
+        });
+    }
 }

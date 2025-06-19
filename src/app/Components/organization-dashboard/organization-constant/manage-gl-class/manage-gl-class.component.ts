@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeGlService } from '../../../../Services/Constants Services/employee-gl.service';
+import { AddNewGlClassDialogComponent } from './add-new-gl-class-dialog/add-new-gl-class-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-gl-class',
@@ -49,7 +51,10 @@ export class ManageGlClassComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private glService: EmployeeGlService) {}
+  constructor(
+    private glService: EmployeeGlService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadGlClasses();
@@ -95,4 +100,18 @@ export class ManageGlClassComponent implements OnInit {
       get Math() {
     return Math;
   }
+
+    openAddGlClassDialog(): void {
+            const dialogRef = this.dialog.open(AddNewGlClassDialogComponent, {
+              width: '400px'
+            });
+        
+            dialogRef.afterClosed().subscribe(result => {
+              if (result) {
+                console.log('New Employee Group:', result);
+                // Handle the result (e.g., send to backend)
+                this.loadGlClasses();
+              }
+            });
+          }
 }

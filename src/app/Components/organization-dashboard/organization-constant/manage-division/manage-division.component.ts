@@ -5,105 +5,131 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+    MatPaginator,
+    MatPaginatorModule,
+    PageEvent,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDivisionService } from '../../../../Services/Constants Services/employee-division.service';
+import { AddNewDivisionDialogComponent } from './add-new-division-dialog/add-new-division-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Division {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 interface ApiResponse {
-  result: {
-    totalCount: number;
-    items: Division[];
-  };
-  success: boolean;
-  error: any;
-  targetUrl: string | null;
-  unAuthorizedRequest: boolean;
-  __abp: boolean;
+    result: {
+        totalCount: number;
+        items: Division[];
+    };
+    success: boolean;
+    error: any;
+    targetUrl: string | null;
+    unAuthorizedRequest: boolean;
+    __abp: boolean;
 }
 
 @Component({
-  selector: 'app-manage-division',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule,
-    DatePipe
-  ],
-  templateUrl: './manage-division.component.html',
-  styleUrl: './manage-division.component.scss'
+    selector: 'app-manage-division',
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatCardModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatChipsModule,
+        DatePipe,
+    ],
+    templateUrl: './manage-division.component.html',
+    styleUrl: './manage-division.component.scss',
 })
 export class ManageDivisionComponent implements AfterViewInit {
-  displayedColumns: string[] = ['sr', 'id', 'name', 'actions'];
-  dataSource = new MatTableDataSource<Division>([]);
-  totalCount = 0;
-  pageSize = 10;
-  pageIndex = 0;
-  isTableReady = false;
+    displayedColumns: string[] = ['sr', 'id', 'name', 'actions'];
+    dataSource = new MatTableDataSource<Division>([]);
+    totalCount = 0;
+    pageSize = 10;
+    pageIndex = 0;
+    isTableReady = false;
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeDivisionService: EmployeeDivisionService) {}
+    constructor(
+        private employeeDivisionService: EmployeeDivisionService,
+        private dialog: MatDialog
+    ) {}
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.isTableReady = true;
-    this.loadDivisions();
-  }
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.isTableReady = true;
+        this.loadDivisions();
+    }
 
-  loadDivisions(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
-    const params = {
-      SkipCount: pageIndex * pageSize,
-      MaxResultCount: pageSize
-    };
+    loadDivisions(
+        pageIndex: number = this.pageIndex,
+        pageSize: number = this.pageSize
+    ) {
+        const params = {
+            SkipCount: pageIndex * pageSize,
+            MaxResultCount: pageSize,
+        };
 
-    this.employeeDivisionService.getAllEmployeeBanks(params).subscribe({
-      next: (response: ApiResponse) => {
-        if (response.success) {
-          this.dataSource.data = response.result.items;
-          this.totalCount = response.result.totalCount;
-          this.pageIndex = pageIndex;
-        } else {
-          console.error('API error:', response.error);
-        }
-      },
-      error: (error) => {
-        console.error('Failed to load divisions:', error);
-      }
-    });
-  }
+        this.employeeDivisionService.getAllEmployeeBanks(params).subscribe({
+            next: (response: ApiResponse) => {
+                if (response.success) {
+                    this.dataSource.data = response.result.items;
+                    this.totalCount = response.result.totalCount;
+                    this.pageIndex = pageIndex;
+                } else {
+                    console.error('API error:', response.error);
+                }
+            },
+            error: (error) => {
+                console.error('Failed to load divisions:', error);
+            },
+        });
+    }
 
-  pageChanged(event: PageEvent) {
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    this.loadDivisions(event.pageIndex, event.pageSize);
-  }
+    pageChanged(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageIndex = event.pageIndex;
+        this.loadDivisions(event.pageIndex, event.pageSize);
+    }
 
-  viewDetails(division: Division) {
-    console.log('View details:', division);
-    // Implement view details logic
-  }
+    viewDetails(division: Division) {
+        console.log('View details:', division);
+        // Implement view details logic
+    }
 
-  exportLog(division: Division) {
-    console.log('Export log:', division);
-    // Implement export logic
-  }
+    exportLog(division: Division) {
+        console.log('Export log:', division);
+        // Implement export logic
+    }
 
-  get Math() {
-    return Math;
-  }
+    get Math() {
+        return Math;
+    }
+
+    openAddDivisionDialog(): void {
+        const dialogRef = this.dialog.open(AddNewDivisionDialogComponent, {
+            width: '400px',
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                console.log('New Employee Group:', result);
+                // Handle the result (e.g., send to backend)
+                this.loadDivisions();
+            }
+        });
+    }
 }

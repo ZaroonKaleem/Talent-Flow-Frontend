@@ -1,1 +1,15 @@
-<p>add-new-employee-status works!</p>
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Employee Group</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="employeeStatusForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="employeeStatusForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+<mat-checkbox formControlName="isContractual" class="mb-1">Is Contractual</mat-checkbox>
+</form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!employeeStatusForm.valid" (click)="onSave()">Save</button>
+</mat-dialog-actions>

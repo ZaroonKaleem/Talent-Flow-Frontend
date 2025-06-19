@@ -38,4 +38,19 @@ private apiUrl = `${environment.apiUrl}services/app/JobField`;
       params: httpParams
     });
   }
+
+   /**
+   * Create a new employee group
+   * @param employeeGroup Data for the new employee group
+   * @returns Observable of the created employee group
+   */
+  createJobField(jobField: { id: number; name: string }): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/Create`, jobField, { headers });
+  }
 }

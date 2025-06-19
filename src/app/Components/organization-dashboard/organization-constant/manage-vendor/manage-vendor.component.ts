@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeVendorService } from '../../../../Services/Constants Services/employee-vendor.service';
+import { AddNewVendorDialogComponent } from './add-new-vendor-dialog/add-new-vendor-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-vendor',
@@ -29,7 +31,7 @@ import { EmployeeVendorService } from '../../../../Services/Constants Services/e
   styleUrls: ['./manage-vendor.component.scss']
 })
 export class ManageVendorComponent implements OnInit {
-  displayedColumns: string[] = ['sr', 'name', 'contactPerson', 'email', 'phone', 'actions'];
+  displayedColumns: string[] = ['sr', 'name', 'code', 'serviceChargesPercentage', 'countryName', 'actions'];
   pageSize = 10;
   pagedItems: any[] = [];
   vendors: any[] = [];
@@ -42,7 +44,10 @@ export class ManageVendorComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private vendorService: EmployeeVendorService) {}
+  constructor(
+    private vendorService: EmployeeVendorService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadVendors();
@@ -89,5 +94,18 @@ export class ManageVendorComponent implements OnInit {
 
   get Math() {
     return Math;
+  }
+
+  openAddVendorDialog(): void {
+    const dialogRef = this.dialog.open(AddNewVendorDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('New Vendor:', result);
+        this.loadVendors();
+      }
+    });
   }
 }

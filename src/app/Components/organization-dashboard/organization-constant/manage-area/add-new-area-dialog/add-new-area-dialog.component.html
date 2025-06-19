@@ -1,0 +1,48 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Area</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="areaForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Area Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="areaForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="countryId" required (selectionChange)="onCountryChange()">
+        <mat-option *ngFor="let country of countries" [value]="country.id">
+          {{country.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="areaForm.get('countryId')?.hasError('required')">Country is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Province</mat-label>
+      <mat-select formControlName="provinceId" required (selectionChange)="onProvinceChange()" 
+                 [disabled]="!areaForm.get('countryId')?.value">
+        <mat-option *ngFor="let province of filteredProvinces" [value]="province.id">
+          {{province.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="areaForm.get('provinceId')?.hasError('required')">Province is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>City</mat-label>
+      <mat-select formControlName="cityId" required 
+                 [disabled]="!areaForm.get('provinceId')?.value">
+        <mat-option *ngFor="let city of filteredCities" [value]="city.id">
+          {{city.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="areaForm.get('cityId')?.hasError('required')">City is required</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!areaForm.valid || isLoading" (click)="onSave()">
+    {{isLoading ? 'Loading...' : 'Save'}}
+  </button>
+</mat-dialog-actions>

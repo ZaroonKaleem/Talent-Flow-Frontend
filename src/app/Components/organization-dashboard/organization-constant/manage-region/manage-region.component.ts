@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeRegionService } from '../../../../Services/Constants Services/employee-region.service';
+import { AddNewRegionDialogComponent } from './add-new-region-dialog/add-new-region-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-region',
@@ -42,7 +44,10 @@ export class ManageRegionComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private regionService: EmployeeRegionService) {}
+  constructor(
+    private regionService: EmployeeRegionService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadRegions();
@@ -90,4 +95,18 @@ export class ManageRegionComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+   openAddRegionDialog(): void {
+          const dialogRef = this.dialog.open(AddNewRegionDialogComponent, {
+            width: '400px'
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadRegions();
+            }
+          });
+        }
 }

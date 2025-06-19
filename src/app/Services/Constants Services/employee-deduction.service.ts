@@ -38,4 +38,19 @@ export class EmployeeDeductionService {
       params: httpParams
     });
   }
+
+createDeduction(deductionData: { 
+  id: number; 
+  name: string; 
+  deductionType: number; 
+  isAmount: boolean 
+}): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post<any>(`${this.apiUrl}/Create`, deductionData, { headers });
+}
 }

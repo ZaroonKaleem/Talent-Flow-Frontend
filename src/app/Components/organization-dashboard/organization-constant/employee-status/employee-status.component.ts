@@ -75,11 +75,12 @@ export class EmployeeStatusComponent implements AfterViewInit {
       const dialogRef = this.dialog.open(AddNewEmployeeStatusDialogComponent, {
         width: '400px'
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           console.log('New Employee Group:', result);
           // Handle the result (e.g., send to backend)
+          this.loadEmployeeStatuses(0, this.pageSize)
         }
       });
     }

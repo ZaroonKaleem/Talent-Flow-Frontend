@@ -38,4 +38,28 @@ export class EmployeeStationService {
       params: httpParams
     });
   }
+
+
+    /**
+   * Create a new employee station
+   * @param stationData Data for the new station
+   * @returns Observable of the created station
+   */
+  createStation(stationData: { 
+    id: number;
+    name: string;
+    code: string;
+    areaId: number;
+    stationHeadId: number;
+    hrManagerId: number;
+    accountsManagerId: number;
+  }): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/Create`, stationData, { headers });
+  }
 }

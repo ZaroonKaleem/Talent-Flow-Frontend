@@ -38,4 +38,18 @@ private apiUrl = `${environment.apiUrl}services/app/Country`;
       params: httpParams
     });
   }
+
+  createCountry(countryData: { 
+  id: number; 
+  name: string; 
+  code: string; 
+}): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post<any>(`${this.apiUrl}/Create`, countryData, { headers });
+}
 }

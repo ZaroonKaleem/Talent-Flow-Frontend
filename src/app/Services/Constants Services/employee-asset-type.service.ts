@@ -38,4 +38,14 @@ private apiUrl = `${environment.apiUrl}services/app/AssetType`;
       params: httpParams
     });
   }
+
+    createassetType(assetType: { id: number; name: string }): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/Create`, assetType, { headers });
+  }
 }

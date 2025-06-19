@@ -16,7 +16,7 @@ private apiUrl = `${environment.apiUrl}services/app/Province`;
    * @param params Filter and pagination parameters
    * @returns Observable of any
    */
-  getAllEmployeeBanks(params?: any): Observable<any> {
+  getAllProvinces(params?: any): Observable<any> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -38,4 +38,18 @@ private apiUrl = `${environment.apiUrl}services/app/Province`;
       params: httpParams
     });
   }
+
+  createProvince(countryData: { 
+  id: number; 
+  name: string; 
+  countryId: string; 
+}): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.post<any>(`${this.apiUrl}/Create`, countryData, { headers });
+}
 }

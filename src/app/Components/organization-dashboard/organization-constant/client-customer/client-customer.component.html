@@ -1,7 +1,8 @@
 <div class="mat-container">
-  <div class="header-container">
-    <h4>Manage Client Customer</h4>
-  </div>
+ <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h4>Manage Client Customer</h4>
+  <button mat-flat-button color="primary" (click)="openAddClientCustomerDialog()">Add New Client Customer</button>
+</div>
 
   <div *ngIf="isLoading" class="loading-container">
     Loading client customers...

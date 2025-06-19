@@ -1,0 +1,14 @@
+<h2 mat-dialog-title style="margin: 0 0 16px 0; padding: 16px 24px 0 24px;">Add New Job Field</h2>
+<mat-dialog-content style="padding: 0 24px;">
+  <form [formGroup]="prefixFieldForm" style="display: flex; flex-direction: column; gap: 16px; padding: 8px 0;">
+    <mat-form-field appearance="fill" class="full-width" style="margin-bottom: 8px;">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="prefixFieldForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" style="padding: 16px 24px; margin-top: 8px;">
+  <button mat-button (click)="onCancel()" style="margin-right: 8px;">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!prefixFieldForm.valid" (click)="onSave()">Save</button>
+</mat-dialog-actions>

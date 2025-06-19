@@ -123,6 +123,7 @@ export class DesignationComponent implements AfterViewInit {
         if (result) {
           // console.log('New Employee Group:', result);
           // Handle the result (e.g., send to backend)
+          this.loadDesignations(0, this.pageSize)
         }
       });
     }

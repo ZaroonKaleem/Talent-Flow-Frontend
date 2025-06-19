@@ -1,7 +1,8 @@
 <div class="mat-container">
-  <div class="header-container">
-    <h4>Manage Document Type</h4>
-  </div>
+ <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h4>Manage Document Type</h4>
+  <button mat-flat-button color="primary" (click)="openAddDocumentTypeDialog()">Add New Document Type</button>
+</div>
 
   <div class="table-container" *ngIf="paginator">
     <table mat-table [dataSource]="pagedItems" class="mat-elevation-z8 mat-table">

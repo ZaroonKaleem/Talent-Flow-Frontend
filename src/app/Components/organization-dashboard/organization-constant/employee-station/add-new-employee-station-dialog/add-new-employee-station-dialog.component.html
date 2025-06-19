@@ -1,0 +1,60 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Employee Station</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="stationForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Station Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="stationForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Station Code</mat-label>
+      <input matInput type="text" formControlName="code" required>
+      <mat-error *ngIf="stationForm.get('code')?.hasError('required')">Code is required</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Area</mat-label>
+      <mat-select formControlName="areaId" required>
+        <mat-option *ngFor="let area of areas" [value]="area.id">
+          {{area.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stationForm.get('areaId')?.hasError('required')">Area is required</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Station Head</mat-label>
+      <mat-select formControlName="stationHeadId">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          {{employee.fullName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>HR Manager</mat-label>
+      <mat-select formControlName="hrManagerId">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          {{employee.fullName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Accounts Manager</mat-label>
+      <mat-select formControlName="accountsManagerId">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          {{employee.fullName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!stationForm.valid" (click)="onSave()">Save</button>
+</mat-dialog-actions>

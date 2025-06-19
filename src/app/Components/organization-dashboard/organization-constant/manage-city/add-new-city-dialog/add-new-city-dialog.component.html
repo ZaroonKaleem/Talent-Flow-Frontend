@@ -1,0 +1,42 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New City</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="cityForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>City Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="cityForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+  <mat-label>City Code</mat-label>
+  <input matInput type="text" formControlName="code" required>
+  <mat-error *ngIf="cityForm.get('code')?.hasError('required')">Code is required</mat-error>
+</mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="countryId" required (selectionChange)="onCountryChange()">
+        <mat-option *ngFor="let country of countries" [value]="country.id">
+          {{country.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="cityForm.get('countryId')?.hasError('required')">Country is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Province</mat-label>
+      <mat-select formControlName="provinceId" required [disabled]="!cityForm.get('countryId')?.value">
+        <mat-option *ngFor="let province of filteredProvinces" [value]="province.id">
+          {{province.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="cityForm.get('provinceId')?.hasError('required')">Province is required</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!cityForm.valid || isLoading" (click)="onSave()">
+    {{isLoading ? 'Loading...' : 'Save'}}
+  </button>
+</mat-dialog-actions>

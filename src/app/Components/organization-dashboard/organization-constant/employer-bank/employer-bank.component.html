@@ -1,7 +1,8 @@
 <div class="mat-container">
-  <div class="header-container">
-    <h4>Manage Employer Bank</h4>
-  </div>
+ <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h4>Manage Employer Bank</h4>
+  <button mat-flat-button color="primary" (click)="openAddEmployerBankDialog()">Add New Employer Bank</button>
+</div>
 
   <div class="table-container" *ngIf="isTableReady">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mat-table">
@@ -22,12 +23,12 @@
       </ng-container>
 
       <!-- Code Column -->
-      <ng-container matColumnDef="code">
+      <!-- <ng-container matColumnDef="code">
         <th class="heading" mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
         <td mat-cell *matCellDef="let bank">
           {{ bank.code }}
         </td>
-      </ng-container>
+      </ng-container> -->
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">

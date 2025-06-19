@@ -1,0 +1,18 @@
+<h2 mat-dialog-title class="mat-headline-6 mb-3 px-3 pt-3">Add New Resign Type</h2>
+<mat-dialog-content class="px-3">
+  <form [formGroup]="resignTypeForm" class="d-flex flex-column gap-2 py-1">
+    <mat-form-field appearance="fill" class="full-width mb-1">
+      <mat-label>Resign Type Name</mat-label>
+      <input matInput type="text" formControlName="name" required>
+      <mat-error *ngIf="resignTypeForm.get('name')?.hasError('required')">
+        Resign Type name is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="px-3 py-2 mt-1">
+  <button mat-button (click)="onCancel()" class="mr-1">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!resignTypeForm.valid" (click)="onSave()">
+    Save
+  </button>
+</mat-dialog-actions>

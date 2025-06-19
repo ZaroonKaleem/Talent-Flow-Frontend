@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ClientCustomerService } from '../../../../Services/Constants Services/client-customer.service';
+import { AddNewClientCustomerDialogComponent } from './add-new-client-customer-dialog/add-new-client-customer-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-client-customer',
@@ -42,7 +44,10 @@ export class ClientCustomerComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private clientCustomerService: ClientCustomerService) {}
+  constructor(
+    private clientCustomerService: ClientCustomerService,
+    private dialog : MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadClientCustomers();
@@ -90,4 +95,18 @@ export class ClientCustomerComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+    openAddClientCustomerDialog(): void {
+          const dialogRef = this.dialog.open(AddNewClientCustomerDialogComponent, {
+            width: '400px'
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              // console.log('New Employee Group:', result);
+              // Handle the result (e.g., send to backend)
+              this.loadClientCustomers()
+            }
+          });
+        }
 }

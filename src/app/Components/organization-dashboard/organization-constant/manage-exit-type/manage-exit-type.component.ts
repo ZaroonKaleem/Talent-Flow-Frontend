@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeExitTypeService } from '../../../../Services/Constants Services/employee-exit-type.service';
+import { AddNewExitTypeDialogComponent } from './add-new-exit-type-dialog/add-new-exit-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface ExitType {
   id: number;
@@ -57,7 +59,10 @@ export class ManageExitTypeComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeExitTypeService: EmployeeExitTypeService) {}
+  constructor(
+    private employeeExitTypeService: EmployeeExitTypeService,
+  private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -107,4 +112,18 @@ export class ManageExitTypeComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddExitTypeDialog(): void {
+              const dialogRef = this.dialog.open(AddNewExitTypeDialogComponent, {
+                width: '400px'
+              });
+          
+              dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                  console.log('New Employee Group:', result);
+                  // Handle the result (e.g., send to backend)
+                  this.loadExitTypes();
+                }
+              });
+            }
 }

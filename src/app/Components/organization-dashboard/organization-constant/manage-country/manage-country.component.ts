@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeCountryService } from '../../../../Services/Constants Services/employee-country.service';
+import { AddNewCountryDialogComponent } from './add-new-country-dialog/add-new-country-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-country',
@@ -42,7 +44,10 @@ export class ManageCountryComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private countryService: EmployeeCountryService) {}
+  constructor(
+    private countryService: EmployeeCountryService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadCountries();
@@ -90,4 +95,18 @@ export class ManageCountryComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+  openAddCountryDialog(): void {
+      const dialogRef = this.dialog.open(AddNewCountryDialogComponent, {
+        width: '400px'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('New Employee Group:', result);
+          // Handle the result (e.g., send to backend)
+          this.loadCountries();
+        }
+      });
+    }
 }

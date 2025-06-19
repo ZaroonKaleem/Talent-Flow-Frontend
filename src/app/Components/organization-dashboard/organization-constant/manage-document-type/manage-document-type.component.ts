@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { EmployeeDocumentTypeService } from '../../../../Services/Constants Services/employee-document-type.service';
+import { AddNewDocumentTypeDialogComponent } from './add-new-document-type-dialog/add-new-document-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-document-type',
@@ -48,7 +50,10 @@ export class ManageDocumentTypeComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private documentTypeService: EmployeeDocumentTypeService) {}
+  constructor(
+    private documentTypeService: EmployeeDocumentTypeService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadDocumentTypes();
@@ -94,4 +99,18 @@ export class ManageDocumentTypeComponent implements OnInit {
   get Math(){
     return Math
   }
-}
+
+   openAddDocumentTypeDialog(): void {
+              const dialogRef = this.dialog.open(AddNewDocumentTypeDialogComponent, {
+                width: '400px'
+              });
+          
+              dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                  console.log('New Employee Group:', result);
+                  // Handle the result (e.g., send to backend)
+                  this.loadDocumentTypes();
+                }
+              });
+            }
+  }

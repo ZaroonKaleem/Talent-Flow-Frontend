@@ -79,6 +79,7 @@ export class EmployeeGroupComponent implements AfterViewInit {
       if (result) {
         console.log('New Employee Group:', result);
         // Handle the result (e.g., send to backend)
+        this.loadEmployeeGroups(0, this.pageSize);
       }
     });
   }
