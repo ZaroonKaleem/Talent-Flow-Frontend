@@ -11,6 +11,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { EmployeeGroupService } from '../../../../Services/Constants Services/employee-group-service.service';
 import { AddNewEmployeeGroupDialogComponent } from './add-new-employee-group-dialog/add-new-employee-group-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteEmployeeGroupDialogComponent } from './delete-employee-group-dialog/delete-employee-group-dialog.component';
 
 interface EmployeeGroup {
   id: number;
@@ -60,7 +62,8 @@ export class EmployeeGroupComponent implements AfterViewInit {
 
   constructor(
     private employeeGroupService: EmployeeGroupService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -125,5 +128,31 @@ export class EmployeeGroupComponent implements AfterViewInit {
   // Access Math in template
   get Math() {
     return Math;
+  }
+
+    openDeleteConfirmationDialog(group: any): void {
+    const dialogRef = this.dialog.open(DeleteEmployeeGroupDialogComponent, {
+      width: '400px',
+      data: { id: group.id, name: group.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeGroupService.deleteEmployeeGroup(group.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Employee group deleted successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeGroups();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete employee group', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting employee group:', error);
+            this.snackBar.open('Error deleting employee group: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 }

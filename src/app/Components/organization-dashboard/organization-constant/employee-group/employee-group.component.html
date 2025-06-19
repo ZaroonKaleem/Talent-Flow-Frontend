@@ -41,8 +41,9 @@
             <button mat-menu-item (click)="viewDetails(group)">
               <i class="material-symbols-outlined">visibility</i>
             </button>
-            <button mat-menu-item (click)="exportLog(group)">
-              <i class="material-symbols-outlined">download</i>
+<button mat-menu-item (click)="openDeleteConfirmationDialog(group)">
+              <!-- <i class="material-symbols-outlined">delete</i> -->
+            <span>Delete</span>  
             </button>
           </mat-menu>
         </td>

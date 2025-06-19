@@ -55,4 +55,20 @@ createVendor(countryData: {
 
   return this.http.post<any>(`${this.apiUrl}/Create`, countryData, { headers });
 }
+
+deleteVendor(id: number): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    // Create query parameter for the ID
+    const params = new HttpParams().set('Id', id.toString());
+
+    return this.http.delete<any>(`${this.apiUrl}/Delete`, {
+      headers,
+      params
+    });
+  }
 }

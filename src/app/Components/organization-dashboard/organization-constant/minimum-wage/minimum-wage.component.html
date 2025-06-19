@@ -1,7 +1,8 @@
 <div class="mat-container">
-  <div class="header-container">
-    <h4>Manage Minimum Wage</h4>
-  </div>
+ <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+  <h4>Manage Minimum Wage</h4>
+  <button mat-flat-button color="primary" (click)="openAddMinimumWageDialog()">Add New Minimum Wage</button>
+</div>
 
   <div class="table-container" *ngIf="isTableReady">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mat-table">

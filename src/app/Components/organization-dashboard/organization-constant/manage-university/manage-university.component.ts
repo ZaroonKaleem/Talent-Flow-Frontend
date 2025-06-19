@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeUniversityService } from '../../../../Services/Constants Services/employee-university.service';
+import { AddNewUniversityDialogComponent } from './add-new-university-dialog/add-new-university-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface University {
   id: number;
@@ -56,7 +58,10 @@ export class ManageUniversityComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeUniversityService: EmployeeUniversityService) {}
+  constructor(
+    private employeeUniversityService: EmployeeUniversityService,
+  private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageUniversityComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+    openAddUniversityDialog(): void {
+            const dialogRef = this.dialog.open(AddNewUniversityDialogComponent, {
+                width: '400px',
+            });
+    
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result) {
+                    console.log('New Employee Group:', result);
+                    // Handle the result (e.g., send to backend)
+                    this.loadUniversities();
+                }
+            });
+        }
 }

@@ -1,6 +1,7 @@
 <div class="mat-container">
-  <div class="header-container">
+  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
     <h4>Manage Bank Branch</h4>
+    <button mat-flat-button color="primary" (click)="openAddBankBranchDialog()">Add New Bank Branch</button>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
@@ -96,10 +97,10 @@
     </div>
     
     <mat-paginator [length]="bankBranches.length"
-                  [pageSize]="pageSize"
-                  [pageSizeOptions]="[5, 10, 25, 100]"
-                  (page)="pageChanged($event)"
-                  aria-label="Select page">
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="pageChanged($event)"
+                   aria-label="Select page">
     </mat-paginator>
   </div>
 </div>

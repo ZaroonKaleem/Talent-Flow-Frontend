@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -9,6 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { BankBranchService } from '../../../../Services/Constants Services/bank-branch.service';
+import { AddNewBankBranchDialogComponent } from './add-new-bank-branch-dialog/add-new-bank-branch-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-bank-branch',
@@ -22,8 +24,7 @@ import { BankBranchService } from '../../../../Services/Constants Services/bank-
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    MatChipsModule,
-    DatePipe
+    MatChipsModule
   ],
   templateUrl: './bank-branch.component.html',
   styleUrl: './bank-branch.component.scss'
@@ -52,7 +53,10 @@ export class BankBranchComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private bankBranchService: BankBranchService) {}
+  constructor(
+    private bankBranchService: BankBranchService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadBankBranches();
@@ -60,15 +64,17 @@ export class BankBranchComponent implements OnInit {
 
   loadBankBranches() {
     this.isLoading = true;
-    this.bankBranchService.getAllEmployeeStations().subscribe({
+    this.bankBranchService.getAllBankBranches().subscribe({
       next: (response) => {
-        if (response.items) {
-          this.bankBranches = response.items;
+        if (response.success && response.result?.items) {
+          this.bankBranches = response.result.items;
           this.pageChanged({
             pageIndex: 0,
             pageSize: this.pageSize,
             length: this.bankBranches.length
           } as PageEvent);
+        } else {
+          this.bankBranches = [];
         }
         this.isLoading = false;
       },
@@ -99,5 +105,18 @@ export class BankBranchComponent implements OnInit {
 
   get Math() {
     return Math;
+  }
+
+  openAddBankBranchDialog(): void {
+    const dialogRef = this.dialog.open(AddNewBankBranchDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('New Bank Branch:', result);
+        this.loadBankBranches();
+      }
+    });
   }
 }

@@ -9,8 +9,10 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDesignationService } from '../../../../Services/Constants Services/employee-designation.service';
-import { AddNewDesignationDialogComponent } from './add-new-designation-dialog/add-new-designation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteDesignationDialogComponent } from './delete-designation-dialog-component/delete-designation-dialog-component';
+import { AddNewDesignationDialogComponent } from './add-new-designation-dialog/add-new-designation-dialog.component';
 
 interface Designation {
   id: number;
@@ -61,7 +63,8 @@ export class DesignationComponent implements AfterViewInit {
 
   constructor(
     private designationService: EmployeeDesignationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
 
   ) {}
 
@@ -127,4 +130,30 @@ export class DesignationComponent implements AfterViewInit {
         }
       });
     }
+
+     openDeleteConfirmationDialog(designation: any): void {
+    const dialogRef = this.dialog.open(DeleteDesignationDialogComponent, {
+      width: '400px',
+      data: { id: designation.id, name: designation.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.designationService.deleteEmployeeDesignation(designation.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Designation deleted successfully', 'Close', { duration: 3000 });
+              this.loadDesignations();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete designation', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting designation:', error);
+            this.snackBar.open('Error deleting designation: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeRoomService } from '../../../../Services/Constants Services/employee-room.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNewRoomDialogComponent } from './add-new-room-dialog/add-new-room-dialog.component';
 
 interface Room {
   id: number;
@@ -56,7 +58,10 @@ export class ManageRoomComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeRoomService: EmployeeRoomService) {}
+  constructor(
+    private employeeRoomService: EmployeeRoomService,
+  private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageRoomComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddRoomDialog(): void {
+          const dialogRef = this.dialog.open(AddNewRoomDialogComponent, {
+              width: '400px',
+          });
+  
+          dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                  console.log('New Employee Group:', result);
+                  // Handle the result (e.g., send to backend)
+                  this.loadRooms();
+              }
+          });
+      }
 }

@@ -79,7 +79,7 @@ export class EmployerBankComponent implements AfterViewInit {
       MaxResultCount: pageSize
     };
 
-    this.employerBankService.getAllEmployeeBanks(params).subscribe({
+    this.employerBankService.getAllEmployerBanks(params).subscribe({
       next: (response: ApiResponse) => {
         if (response.success) {
           this.dataSource.data = response.result.items;

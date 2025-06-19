@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeFloorService } from '../../../../Services/Constants Services/employee-floor.service';
+import { AddNewFloorDialogComponent } from './add-new-floor-dialog/add-new-floor-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Floor {
   id: number;
@@ -56,7 +58,10 @@ export class ManageFloorComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeFloorService: EmployeeFloorService) {}
+  constructor(
+    private employeeFloorService: EmployeeFloorService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageFloorComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+      openAddFloorDialog(): void {
+          const dialogRef = this.dialog.open(AddNewFloorDialogComponent, {
+              width: '400px',
+          });
+  
+          dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                  console.log('New Employee Group:', result);
+                  // Handle the result (e.g., send to backend)
+                  this.loadFloors();
+              }
+          });
+      }
 }

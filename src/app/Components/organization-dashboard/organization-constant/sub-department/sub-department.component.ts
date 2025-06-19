@@ -9,6 +9,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SubDepartmentService } from '../../../../Services/Constants Services/sub-department.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sub-department',
@@ -50,7 +51,7 @@ export class SubDepartmentComponent implements OnInit {
     pageSize: this.pageSize
   };
 
-  constructor(private subDepartmentService: SubDepartmentService) {}
+  constructor(private subDepartmentService: SubDepartmentService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadSubDepartments();
@@ -98,4 +99,22 @@ export class SubDepartmentComponent implements OnInit {
   get Math() {
     return Math;
   }
+
+    //  openAddSubDepartmentDialog(): void {
+    //             const dialogRef = this.dialog.open(AddNewMinimumWageDialogComponent, {
+    //                 width: '400px',
+    //             });
+        
+    //             dialogRef.afterClosed().subscribe((result) => {
+    //                 if (result) {
+    //                     console.log('New Employee Group:', result);
+    //                     // Handle the result (e.g., send to backend)
+    //                     this.loadSubDepartments();
+    //                 }
+    //             });
+    //         }
+
+    openAddSubDepartmentDialog(){
+      
+    }
 }

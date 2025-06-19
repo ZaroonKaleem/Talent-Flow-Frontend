@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <h2 mat-dialog-title>Add New Minimum Wage</h2>
+  <form>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="minimumWageData.name" name="name" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Province</mat-label>
+      <mat-select [(ngModel)]="minimumWageData.provinceId" name="provinceId" required>
+        <mat-option *ngFor="let province of provinces" [value]="province.id">
+          {{ province.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions style="justify-content: flex-end;">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!minimumWageData.name || !minimumWageData.provinceId">Save</button>
+</div>

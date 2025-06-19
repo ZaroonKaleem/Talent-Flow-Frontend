@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeMinimumWageService } from '../../../../Services/Constants Services/employee-minimum-wage.service';
+import { AddNewMinimumWageDialogComponent } from './add-new-minimum-wage-dialog/add-new-minimum-wage-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface MinimumWage {
   id: number;
@@ -58,7 +60,10 @@ export class MinimumWageComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeMinimumWageService: EmployeeMinimumWageService) {}
+  constructor(
+    private employeeMinimumWageService: EmployeeMinimumWageService,
+    private dialog: MatDialog
+) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -108,4 +113,18 @@ export class MinimumWageComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+   openAddMinimumWageDialog(): void {
+              const dialogRef = this.dialog.open(AddNewMinimumWageDialogComponent, {
+                  width: '400px',
+              });
+      
+              dialogRef.afterClosed().subscribe((result) => {
+                  if (result) {
+                      console.log('New Employee Group:', result);
+                      // Handle the result (e.g., send to backend)
+                      this.loadMinimumWages();
+                  }
+              });
+          }
 }

@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeGenderService } from '../../../../Services/Constants Services/employee-gender.service';
+import { AddNewGenderDialogComponent } from './add-new-gender-dialog/add-new-gender-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Gender {
   id: number;
@@ -56,7 +58,10 @@ export class ManageGenderComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private employeeGenderService: EmployeeGenderService) {}
+  constructor(
+    private employeeGenderService: EmployeeGenderService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,4 +111,18 @@ export class ManageGenderComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+     openAddGenderDialog(): void {
+            const dialogRef = this.dialog.open(AddNewGenderDialogComponent, {
+                width: '400px',
+            });
+    
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result) {
+                    console.log('New Employee Group:', result);
+                    // Handle the result (e.g., send to backend)
+                    this.loadGenders();
+                }
+            });
+        }
 }

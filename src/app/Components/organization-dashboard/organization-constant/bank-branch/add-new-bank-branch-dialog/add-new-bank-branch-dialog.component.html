@@ -1,0 +1,41 @@
+<div mat-dialog-content class="mat-mdc-dialog-content">
+  <h2 mat-dialog-title class="mat-typography">Add New Bank Branch</h2>
+  <form class="mat-mdc-form">
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>Branch Name</mat-label>
+      <input matInput [(ngModel)]="bankBranchData.name" name="name" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>Bank</mat-label>
+      <mat-select [(ngModel)]="bankBranchData.EmployerBankId" name="employeeBankId" required>
+        <mat-option *ngFor="let bank of banks" [value]="bank.id">
+          {{ bank.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>City</mat-label>
+      <mat-select [(ngModel)]="bankBranchData.cityId" name="cityId" required>
+        <mat-option *ngFor="let city of cities" [value]="city.id">
+          {{ city.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>Branch Number</mat-label>
+      <input matInput [(ngModel)]="bankBranchData.branchNumber" name="branchNumber" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>Account Number</mat-label>
+      <input matInput [(ngModel)]="bankBranchData.accountNumber" name="accountNumber" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mat-mdc-form-field mat-block">
+      <mat-label>Account Name</mat-label>
+      <input matInput [(ngModel)]="bankBranchData.accountName" name="accountName" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions class="mat-mdc-dialog-actions" align="end">
+  <button mat-button (click)="onCancel()" class="mat-mdc-button">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!isFormValid()" class="mat-mdc-flat-button mat-primary">Save</button>
+</div>
