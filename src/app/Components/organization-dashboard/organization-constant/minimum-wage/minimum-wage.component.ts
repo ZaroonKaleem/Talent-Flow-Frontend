@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeMinimumWageService } from '../../../../Services/Constants Services/employee-minimum-wage.service';
 import { AddNewMinimumWageDialogComponent } from './add-new-minimum-wage-dialog/add-new-minimum-wage-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteMinimumWageDialogComponent } from './delete-minimum-wage-dialog/delete-minimum-wage-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface MinimumWage {
   id: number;
@@ -62,7 +64,8 @@ export class MinimumWageComponent implements AfterViewInit {
 
   constructor(
     private employeeMinimumWageService: EmployeeMinimumWageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -127,4 +130,31 @@ export class MinimumWageComponent implements AfterViewInit {
                   }
               });
           }
+
+
+    openDeleteConfirmationDialog(minimumWage: any): void {
+    const dialogRef = this.dialog.open(DeleteMinimumWageDialogComponent, {
+      width: '400px',
+      data: { id: minimumWage.id, name: minimumWage.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeMinimumWageService.deleteMinimumWage(minimumWage.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('minimumWage deleted successfully', 'Close', { duration: 3000 });
+              this.loadMinimumWages();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete minimumWage', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting minimumWage:', error);
+            this.snackBar.open('Error deleting minimumWage: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

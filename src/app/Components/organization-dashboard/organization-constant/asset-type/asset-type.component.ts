@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeAssetTypeService } from '../../../../Services/Constants Services/employee-asset-type.service';
 import { AddNewAssetTypeDialogComponent } from './add-new-asset-type-dialog/add-new-asset-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteAssetTypeDialogComponent } from './delete-asset-type-dialog/delete-asset-type-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-asset-type',
@@ -47,7 +49,8 @@ export class AssetTypeComponent implements OnInit {
   constructor(
     private assetTypeService: EmployeeAssetTypeService,
     private employeeAssetTypeService: EmployeeAssetTypeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -110,4 +113,31 @@ export class AssetTypeComponent implements OnInit {
           }
         });
       }
+
+
+        openDeleteConfirmationDialog(asset: any): void {
+    const dialogRef = this.dialog.open(DeleteAssetTypeDialogComponent, {
+      width: '400px',
+      data: { id: asset.id, name: asset.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.assetTypeService.deleteAssetType(asset.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('asset deleted successfully', 'Close', { duration: 3000 });
+              this.loadAssetTypes();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete asset', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting asset:', error);
+            this.snackBar.open('Error deleting asset: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

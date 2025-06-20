@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeAllowanceService } from '../../../../Services/Constants Services/employee-allowance.service';
 import { AddNewAllowanceTitleDialogComponent } from './add-new-allowance-title-dialog/add-new-allowance-title-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteAllowanceTitleDialogComponent } from './delete-allowance-title-dialog/delete-allowance-title-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Allowance {
   id: number;
@@ -62,6 +64,7 @@ export class AllowanceTitleComponent implements AfterViewInit {
   constructor(
     private allowanceService: EmployeeAllowanceService,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -126,4 +129,30 @@ export class AllowanceTitleComponent implements AfterViewInit {
           }
         });
       }
+
+        openDeleteConfirmationDialog(allowance: any): void {
+    const dialogRef = this.dialog.open(DeleteAllowanceTitleDialogComponent, {
+      width: '400px',
+      data: { id: allowance.id, name: allowance.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.allowanceService.deleteAllowance(allowance.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('allowance deleted successfully', 'Close', { duration: 3000 });
+              this.loadAllowances();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete allowance', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting allowance:', error);
+            this.snackBar.open('Error deleting allowance: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

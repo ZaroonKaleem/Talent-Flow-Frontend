@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeAreaService } from '../../../../Services/Constants Services/employee-area.service';
 import { AddNewAreaDialogComponent } from './add-new-area-dialog/add-new-area-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteAreaDialogComponent } from './delete-area-dialog/delete-area-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-area',
@@ -54,7 +56,8 @@ export class ManageAreaComponent implements OnInit {
 
   constructor(
     private areaService: EmployeeAreaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -117,4 +120,30 @@ export class ManageAreaComponent implements OnInit {
             }
           });
         }
+
+      openDeleteConfirmationDialog(area: any): void {
+    const dialogRef = this.dialog.open(DeleteAreaDialogComponent, {
+      width: '400px',
+      data: { id: area.id, name: area.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.areaService.deleteArea(area.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('area deleted successfully', 'Close', { duration: 3000 });
+              this.loadAreas();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete area', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting area:', error);
+            this.snackBar.open('Error deleting area: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

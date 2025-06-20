@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeVendorService } from '../../../../Services/Constants Services/employee-vendor.service';
 import { AddNewVendorDialogComponent } from './add-new-vendor-dialog/add-new-vendor-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteVendorDialogComponent } from './delete-vendor-dialog/delete-vendor-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-vendor',
@@ -46,7 +48,8 @@ export class ManageVendorComponent implements OnInit {
 
   constructor(
     private vendorService: EmployeeVendorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -105,6 +108,32 @@ export class ManageVendorComponent implements OnInit {
       if (result) {
         console.log('New Vendor:', result);
         this.loadVendors();
+      }
+    });
+  }
+
+    openDeleteConfirmationDialog(vendor: any): void {
+    const dialogRef = this.dialog.open(DeleteVendorDialogComponent, {
+      width: '400px',
+      data: { id: vendor.id, name: vendor.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.vendorService.deleteVendor(vendor.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('vendor deleted successfully', 'Close', { duration: 3000 });
+              this.loadVendors();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete vendor', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting vendor:', error);
+            this.snackBar.open('Error deleting vendor: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
       }
     });
   }

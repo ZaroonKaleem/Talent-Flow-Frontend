@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { BankBranchService } from '../../../../Services/Constants Services/bank-branch.service';
 import { AddNewBankBranchDialogComponent } from './add-new-bank-branch-dialog/add-new-bank-branch-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteBankBranchDialogComponent } from './delete-bank-branch-dialog/delete-bank-branch-dialog.component';
 
 @Component({
   selector: 'app-bank-branch',
@@ -55,7 +57,8 @@ export class BankBranchComponent implements OnInit {
 
   constructor(
     private bankBranchService: BankBranchService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -116,6 +119,32 @@ export class BankBranchComponent implements OnInit {
       if (result) {
         console.log('New Bank Branch:', result);
         this.loadBankBranches();
+      }
+    });
+  }
+
+    openDeleteConfirmationDialog(bankBranch: any): void {
+    const dialogRef = this.dialog.open(DeleteBankBranchDialogComponent, {
+      width: '400px',
+      data: { id: bankBranch.id, name: bankBranch.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.bankBranchService.deleteBankBranch(bankBranch.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('bankBranch deleted successfully', 'Close', { duration: 3000 });
+              this.loadBankBranches();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete bankBranch', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting bankBranch:', error);
+            this.snackBar.open('Error deleting bankBranch: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
       }
     });
   }

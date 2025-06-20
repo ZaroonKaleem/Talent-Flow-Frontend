@@ -15,6 +15,7 @@ import { EmployeeJobTitleService } from '../../../../../Services/Constants Servi
   selector: 'app-add-new-job-title-dialog',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogModule,
     MatButtonModule,
     MatInputModule,

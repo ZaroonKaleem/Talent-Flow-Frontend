@@ -12,6 +12,8 @@ import { EmployeeJobTitleService } from '../../../../Services/Constants Services
 import { AddNewJobTitleDialogComponent } from './add-new-job-title-dialog/add-new-job-title-dialog.component';
 import { EmployeeJobFieldService } from '../../../../Services/Constants Services/employee-job-field.service';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteJobTitleGialogComponent } from './delete-job-title-gialog/delete-job-title-gialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-job-title',
@@ -53,7 +55,8 @@ export class JobTitleComponent implements OnInit {
    
    constructor(
     private jobTitleService: EmployeeJobTitleService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
    
    ngOnInit() {
@@ -116,4 +119,30 @@ export class JobTitleComponent implements OnInit {
              }
            });
          }
+
+           openDeleteConfirmationDialog(jobTitle: any): void {
+    const dialogRef = this.dialog.open(DeleteJobTitleGialogComponent, {
+      width: '400px',
+      data: { id: jobTitle.id, name: jobTitle.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.jobTitleService.deleteJobTitle(jobTitle.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('jobTitle deleted successfully', 'Close', { duration: 3000 });
+              this.loadJobTitles();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete jobTitle', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting jobTitle:', error);
+            this.snackBar.open('Error deleting jobTitle: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeStatusService } from '../../../../Services/Constants Services/employee-status.service';
 import { AddNewEmployeeStatusDialogComponent } from './add-new-employee-status-dialog/add-new-employee-status-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteEmployeeStatusDialogComponent } from './delete-employee-status-dialog/delete-employee-status-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeStatus {
   id: number;
@@ -61,7 +63,8 @@ export class EmployeeStatusComponent implements AfterViewInit {
 
   constructor(
     private employeeStatusService: EmployeeStatusService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -126,4 +129,30 @@ export class EmployeeStatusComponent implements AfterViewInit {
   get Math() {
     return Math;
   }
+
+       openDeleteConfirmationDialog(status: any): void {
+      const dialogRef = this.dialog.open(DeleteEmployeeStatusDialogComponent, {
+        width: '400px',
+        data: { id: status.id, name: status.name }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.employeeStatusService.deleteEmployeeStatus(status.id).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.snackBar.open('Designation deleted successfully', 'Close', { duration: 3000 });
+                this.loadEmployeeStatuses();
+              } else {
+                this.snackBar.open(response.error?.message || 'Failed to delete designation', 'Close', { duration: 3000 });
+              }
+            },
+            error: (error) => {
+              console.error('Error deleting designation:', error);
+              this.snackBar.open('Error deleting designation: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+            }
+          });
+        }
+      });
+    }
 }

@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeCityService } from '../../../../Services/Constants Services/employee-city.service';
 import { AddNewCityDialogComponent } from './add-new-city-dialog/add-new-city-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteCityDialogComponent } from './delete-city-dialog/delete-city-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-city',
@@ -45,8 +47,10 @@ export class ManageCityComponent implements OnInit {
   };
 
   constructor(
-    private cityService: EmployeeCityService,
-  private dialog: MatDialog) {}
+  private cityService: EmployeeCityService,
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
+) {}
 
   ngOnInit() {
     this.loadCities();
@@ -108,4 +112,30 @@ export class ManageCityComponent implements OnInit {
           }
         });
       }
+
+    openDeleteConfirmationDialog(city: any): void {
+    const dialogRef = this.dialog.open(DeleteCityDialogComponent, {
+      width: '400px',
+      data: { id: city.id, name: city.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.cityService.deleteity(city.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('city deleted successfully', 'Close', { duration: 3000 });
+              this.loadCities();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete city', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting city:', error);
+            this.snackBar.open('Error deleting city: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

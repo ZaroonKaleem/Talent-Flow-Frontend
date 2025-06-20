@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeUniversityService } from '../../../../Services/Constants Services/employee-university.service';
 import { AddNewUniversityDialogComponent } from './add-new-university-dialog/add-new-university-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteUniversityDialogComponent } from './delete-university-dialog/delete-university-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface University {
   id: number;
@@ -60,7 +62,8 @@ export class ManageUniversityComponent implements AfterViewInit {
 
   constructor(
     private employeeUniversityService: EmployeeUniversityService,
-  private dialog: MatDialog
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,30 @@ export class ManageUniversityComponent implements AfterViewInit {
                 }
             });
         }
+
+    openDeleteConfirmationDialog(university: any): void {
+    const dialogRef = this.dialog.open(DeleteUniversityDialogComponent, {
+      width: '400px',
+      data: { id: university.id, name: university.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeUniversityService.deleteUniversity(university.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('university deleted successfully', 'Close', { duration: 3000 });
+              this.loadUniversities();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete university', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting university:', error);
+            this.snackBar.open('Error deleting university: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

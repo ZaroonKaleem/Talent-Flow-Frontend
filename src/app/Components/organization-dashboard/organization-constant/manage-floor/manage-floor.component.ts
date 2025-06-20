@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeFloorService } from '../../../../Services/Constants Services/employee-floor.service';
 import { AddNewFloorDialogComponent } from './add-new-floor-dialog/add-new-floor-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteFloorDialogComponent } from './delete-floor-dialog/delete-floor-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Floor {
   id: number;
@@ -60,7 +62,8 @@ export class ManageFloorComponent implements AfterViewInit {
 
   constructor(
     private employeeFloorService: EmployeeFloorService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,30 @@ export class ManageFloorComponent implements AfterViewInit {
               }
           });
       }
+
+    openDeleteConfirmationDialog(floor: any): void {
+    const dialogRef = this.dialog.open(DeleteFloorDialogComponent, {
+      width: '400px',
+      data: { id: floor.id, name: floor.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeFloorService.deleteFloor(floor.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('floor deleted successfully', 'Close', { duration: 3000 });
+              this.loadFloors();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete floor', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting floor:', error);
+            this.snackBar.open('Error deleting floor: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

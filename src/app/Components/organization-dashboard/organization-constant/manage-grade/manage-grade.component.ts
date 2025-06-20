@@ -15,6 +15,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeGradeService } from '../../../../Services/Constants Services/employee-grade.service';
 import { AddNewGradeDialogComponent } from './add-new-grade-dialog/add-new-grade-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteGradeDialogComponent } from './delete-grade-dialog/delete-grade-dialog.component';
+import { MatSnackBar, MatSnackBarLabel } from '@angular/material/snack-bar';
 
 interface Grade {
     id: number;
@@ -64,7 +66,8 @@ export class ManageGradeComponent implements AfterViewInit {
 
     constructor(
         private employeeGradeService: EmployeeGradeService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar
     ) {}
 
     ngAfterViewInit() {
@@ -132,4 +135,31 @@ export class ManageGradeComponent implements AfterViewInit {
             }
         });
     }
+
+
+      openDeleteConfirmationDialog(grade: any): void {
+    const dialogRef = this.dialog.open(DeleteGradeDialogComponent, {
+      width: '400px',
+      data: { id: grade.id, name: grade.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeGradeService.deleteGrade(grade.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('grade deleted successfully', 'Close', { duration: 3000 });
+              this.loadGrades();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete grade', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting grade:', error);
+            this.snackBar.open('Error deleting grade: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

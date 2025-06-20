@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeRegionService } from '../../../../Services/Constants Services/employee-region.service';
 import { AddNewRegionDialogComponent } from './add-new-region-dialog/add-new-region-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteRegionDialogComponent } from './delete-region-dialog/delete-region-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-region',
@@ -46,7 +48,8 @@ export class ManageRegionComponent implements OnInit {
 
   constructor(
     private regionService: EmployeeRegionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -109,4 +112,31 @@ export class ManageRegionComponent implements OnInit {
             }
           });
         }
+
+
+    openDeleteConfirmationDialog(region: any): void {
+    const dialogRef = this.dialog.open(DeleteRegionDialogComponent, {
+      width: '400px',
+      data: { id: region.id, name: region.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.regionService.deleteRegion(region.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('region deleted successfully', 'Close', { duration: 3000 });
+              this.loadRegions();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete region', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting region:', error);
+            this.snackBar.open('Error deleting region: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeExpenseUnitService } from '../../../../Services/Constants Services/employee-expense-unit.service';
 import { AddNewExpenseUnitDialogComponent } from './add-new-expense-unit-dialog/add-new-expense-unit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteExpenseUnitDIalogComponent } from './delete-expense-unit-dialog/delete-expense-unit-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface ExpenseUnit {
   id: number;
@@ -60,7 +62,8 @@ export class ManageExpenseUnitComponent implements AfterViewInit {
 
   constructor(
     private employeeExpenseUnitService: EmployeeExpenseUnitService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,31 @@ export class ManageExpenseUnitComponent implements AfterViewInit {
                   }
                 });
               }
+
+
+   openDeleteConfirmationDialog(expenseUnit: any): void {
+    const dialogRef = this.dialog.open(DeleteExpenseUnitDIalogComponent, {
+      width: '400px',
+      data: { id: expenseUnit.id, name: expenseUnit.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeExpenseUnitService.deleteExpenseUnit(expenseUnit.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('expenseUnit deleted successfully', 'Close', { duration: 3000 });
+              this.loadExpenseUnits();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete expenseUnit', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting expenseUnit:', error);
+            this.snackBar.open('Error deleting expenseUnit: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

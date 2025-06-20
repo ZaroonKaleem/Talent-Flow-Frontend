@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeCostCenterService } from '../../../../Services/Constants Services/employee-cost-center.service';
 import { AddNewCostCenterDialogComponent } from './add-new-cost-center-dialog/add-new-cost-center-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteCostCenterDialogComponent } from './delete-cost-center-dialog/delete-cost-center-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-cost-center',
@@ -53,7 +55,8 @@ export class ManageCostCenterComponent implements OnInit {
 
   constructor(
     private costCenterService: EmployeeCostCenterService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
 ) {}
 
   ngOnInit() {
@@ -114,4 +117,30 @@ export class ManageCostCenterComponent implements OnInit {
           }
         });
       }
+
+    openDeleteConfirmationDialog(costCenter: any): void {
+    const dialogRef = this.dialog.open(DeleteCostCenterDialogComponent, {
+      width: '400px',
+      data: { id: costCenter.id, name: costCenter.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.costCenterService.deleteCostCenter(costCenter.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('costCenter deleted successfully', 'Close', { duration: 3000 });
+              this.loadCostCenters();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete costCenter', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting costCenter:', error);
+            this.snackBar.open('Error deleting costCenter: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

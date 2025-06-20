@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeExitTypeService } from '../../../../Services/Constants Services/employee-exit-type.service';
 import { AddNewExitTypeDialogComponent } from './add-new-exit-type-dialog/add-new-exit-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteExitTypeDialogComponent } from './delete-exit-type-dialog/delete-exit-type-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface ExitType {
   id: number;
@@ -61,7 +63,8 @@ export class ManageExitTypeComponent implements AfterViewInit {
 
   constructor(
     private employeeExitTypeService: EmployeeExitTypeService,
-  private dialog: MatDialog
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -126,4 +129,31 @@ export class ManageExitTypeComponent implements AfterViewInit {
                 }
               });
             }
+
+
+    openDeleteConfirmationDialog(exitType: any): void {
+    const dialogRef = this.dialog.open(DeleteExitTypeDialogComponent, {
+      width: '400px',
+      data: { id: exitType.id, name: exitType.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeExitTypeService.deleteExitType(exitType.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('exitType deleted successfully', 'Close', { duration: 3000 });
+              this.loadExitTypes();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete exitType', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting exitType:', error);
+            this.snackBar.open('Error deleting exitType: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

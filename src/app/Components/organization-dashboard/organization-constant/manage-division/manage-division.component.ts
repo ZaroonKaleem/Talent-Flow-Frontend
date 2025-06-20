@@ -15,6 +15,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDivisionService } from '../../../../Services/Constants Services/employee-division.service';
 import { AddNewDivisionDialogComponent } from './add-new-division-dialog/add-new-division-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteDivisionDialogComponent } from './delete-division-dialog/delete-division-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Division {
     id: number;
@@ -64,7 +66,8 @@ export class ManageDivisionComponent implements AfterViewInit {
 
     constructor(
         private employeeDivisionService: EmployeeDivisionService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar
     ) {}
 
     ngAfterViewInit() {
@@ -132,4 +135,30 @@ export class ManageDivisionComponent implements AfterViewInit {
             }
         });
     }
+
+      openDeleteConfirmationDialog(division: any): void {
+    const dialogRef = this.dialog.open(DeleteDivisionDialogComponent, {
+      width: '400px',
+      data: { id: division.id, name: division.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeDivisionService.deleteDivision(division.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('division deleted successfully', 'Close', { duration: 3000 });
+              this.loadDivisions();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete division', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting division:', error);
+            this.snackBar.open('Error deleting division: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

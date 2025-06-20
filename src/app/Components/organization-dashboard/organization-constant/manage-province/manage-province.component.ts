@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeProvinceService } from '../../../../Services/Constants Services/employee-province.service';
 import { AddNewProvinceDialogComponent } from './add-new-province-dialog/add-new-province-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteProvinceDialogComponent } from './delete-province-dialog/delete-province-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-province',
@@ -45,7 +47,8 @@ export class ManageProvinceComponent implements OnInit {
   };
 
   constructor(private provinceService: EmployeeProvinceService, 
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -108,4 +111,31 @@ export class ManageProvinceComponent implements OnInit {
           }
         });
       }
+
+
+    openDeleteConfirmationDialog(province: any): void {
+    const dialogRef = this.dialog.open(DeleteProvinceDialogComponent, {
+      width: '400px',
+      data: { id: province.id, name: province.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.provinceService.deleteProvince(province.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('province deleted successfully', 'Close', { duration: 3000 });
+              this.loadProvinces();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete province', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting province:', error);
+            this.snackBar.open('Error deleting province: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

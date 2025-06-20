@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeJobFieldService } from '../../../../Services/Constants Services/employee-job-field.service';
 import { AddNewJobFieldDialogComponent } from './add-new-job-field-dialog/add-new-job-field-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteJobFieldDialogComponent } from './delete-job-field-dialog/delete-job-field-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-job-field',
@@ -45,7 +47,8 @@ export class JobFieldComponent implements OnInit {
   };
 
   constructor(private jobFieldService: EmployeeJobFieldService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -108,4 +111,31 @@ export class JobFieldComponent implements OnInit {
           }
         });
       }
+
+
+        openDeleteConfirmationDialog(jobField: any): void {
+    const dialogRef = this.dialog.open(DeleteJobFieldDialogComponent, {
+      width: '400px',
+      data: { id: jobField.id, name: jobField.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.jobFieldService.deleteJobField(jobField.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('jobField deleted successfully', 'Close', { duration: 3000 });
+              this.loadJobFields();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete jobField', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting jobField:', error);
+            this.snackBar.open('Error deleting jobField: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -16,7 +16,7 @@ export class EmployeeDocumentTypeService {
    * @param params Filter and pagination parameters
    * @returns Observable of any
    */
-  getAllDesignations(params?: any): Observable<any> {
+  getAllDocumentTypes(params?: any): Observable<any> {
     const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

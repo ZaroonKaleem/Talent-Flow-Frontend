@@ -37,8 +37,8 @@
             <button mat-menu-item (click)="viewDetails(prefix)">
               <i class="material-symbols-outlined">visibility</i>
             </button>
-            <button mat-menu-item (click)="exportPrefix(prefix)">
-              <i class="material-symbols-outlined">download</i>
+            <button mat-menu-item (click)="openDeleteConfirmationDialog(prefix)">
+              <span>Delete</span>
             </button>
           </mat-menu>
         </td>

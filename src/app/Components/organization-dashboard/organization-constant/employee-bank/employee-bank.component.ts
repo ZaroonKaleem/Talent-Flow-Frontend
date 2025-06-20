@@ -11,6 +11,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeBankService } from '../../../../Services/Constants Services/employee-bank.service';
 import { AddNewEmployeeBankDialogComponent } from './add-new-employee-bank-dialog/add-new-employee-bank-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteBankBranchDialogComponent } from '../bank-branch/delete-bank-branch-dialog/delete-bank-branch-dialog.component';
+import { DeleteEmployeeBankDialogComponent } from './delete-employee-bank-dialog/delete-employee-bank-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeBank {
   id: number;
@@ -61,7 +64,8 @@ export class EmployeeBankComponent implements AfterViewInit {
 
   constructor(
     private employeeBankService: EmployeeBankService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -126,4 +130,30 @@ export class EmployeeBankComponent implements AfterViewInit {
             }
           });
         }
+
+          openDeleteConfirmationDialog(bank: any): void {
+    const dialogRef = this.dialog.open(DeleteEmployeeBankDialogComponent, {
+      width: '400px',
+      data: { id: bank.id, name: bank.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeBankService.deleteEmployeeBank(bank.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('bank deleted successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeBanks();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete bank', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting bank:', error);
+            this.snackBar.open('Error deleting bank: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -12,6 +12,8 @@ import { EmployeeBankService } from '../../../../Services/Constants Services/emp
 import { AddNewEmployerBankDialogComponent } from './add-new-employer-bank-dialog/add-new-employer-bank-dialog.component';
 import { EmployerBankService } from '../../../../Services/Constants Services/employer-bank.service';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteEmployerBankDialogComponent } from './delete-employer-bank-dialog/delete-employer-bank-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployerBank {
   id: number;
@@ -63,7 +65,8 @@ export class EmployerBankComponent implements AfterViewInit {
   constructor(
     private employeeBankService: EmployeeBankService,
     private employerBankService: EmployerBankService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -128,4 +131,31 @@ export class EmployerBankComponent implements AfterViewInit {
             }
           });
         }
+
+
+         openDeleteConfirmationDialog(employerBank: any): void {
+        const dialogRef = this.dialog.open(DeleteEmployerBankDialogComponent, {
+          width: '400px',
+          data: { id: employerBank.id, name: employerBank.name }
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.employerBankService.deleteEmployerBank(employerBank.id).subscribe({
+              next: (response) => {
+                if (response.success) {
+                  this.snackBar.open('Designation deleted successfully', 'Close', { duration: 3000 });
+                  this.loadEmployerBanks();
+                } else {
+                  this.snackBar.open(response.error?.message || 'Failed to delete designation', 'Close', { duration: 3000 });
+                }
+              },
+              error: (error) => {
+                console.error('Error deleting designation:', error);
+                this.snackBar.open('Error deleting designation: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+              }
+            });
+          }
+        });
+      }
 }

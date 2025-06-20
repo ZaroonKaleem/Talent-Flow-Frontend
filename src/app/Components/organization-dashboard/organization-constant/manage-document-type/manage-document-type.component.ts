@@ -11,6 +11,9 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeDocumentTypeService } from '../../../../Services/Constants Services/employee-document-type.service';
 import { AddNewDocumentTypeDialogComponent } from './add-new-document-type-dialog/add-new-document-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteDeductionTitleDialogComponent } from '../deduction-title/delete-deduction-title-dialog/delete-deduction-title-dialog.component';
+import { DeleteDocumentTypeDialogComponent } from './delete-document-type-dialog/delete-document-type-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-document-type',
@@ -52,7 +55,8 @@ export class ManageDocumentTypeComponent implements OnInit {
 
   constructor(
     private documentTypeService: EmployeeDocumentTypeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -60,7 +64,7 @@ export class ManageDocumentTypeComponent implements OnInit {
   }
 
   loadDocumentTypes() {
-    this.documentTypeService.getAllDesignations().subscribe({
+    this.documentTypeService.getAllDocumentTypes().subscribe({
       next: (response) => {
         if (response.success && response.result) {
           this.documentTypes = response.result.items;
@@ -113,4 +117,31 @@ export class ManageDocumentTypeComponent implements OnInit {
                 }
               });
             }
+
+
+    openDeleteConfirmationDialog(documentType: any): void {
+    const dialogRef = this.dialog.open(DeleteDocumentTypeDialogComponent, {
+      width: '400px',
+      data: { id: documentType.id, name: documentType.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.documentTypeService.deleteDocumentType(documentType.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('documentType deleted successfully', 'Close', { duration: 3000 });
+              this.loadDocumentTypes();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete documentType', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting documentType:', error);
+            this.snackBar.open('Error deleting documentType: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
   }

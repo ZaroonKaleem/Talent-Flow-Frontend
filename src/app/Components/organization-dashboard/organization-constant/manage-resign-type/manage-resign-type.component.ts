@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeResignTypeService } from '../../../../Services/Constants Services/employee-resign-type.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewResignTypeDialogComponent } from './add-new-resign-type-dialog/add-new-resign-type-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteResignTypeDialogComponent } from './delete-resign-type-dialog/delete-resign-type-dialog.component';
 
 interface ResignType {
   id: number;
@@ -60,7 +62,8 @@ export class ManageResignTypeComponent implements AfterViewInit {
 
   constructor(
     private employeeResignTypeService: EmployeeResignTypeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,31 @@ export class ManageResignTypeComponent implements AfterViewInit {
               }
             });
           }
+
+
+    openDeleteConfirmationDialog(resignType: any): void {
+    const dialogRef = this.dialog.open(DeleteResignTypeDialogComponent, {
+      width: '400px',
+      data: { id: resignType.id, name: resignType.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeResignTypeService.deleteResignType(resignType.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('resignType deleted successfully', 'Close', { duration: 3000 });
+              this.loadResignTypes();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete resignType', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting resignType:', error);
+            this.snackBar.open('Error deleting resignType: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

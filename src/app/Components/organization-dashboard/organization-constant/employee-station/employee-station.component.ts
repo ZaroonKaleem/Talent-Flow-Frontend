@@ -12,6 +12,8 @@ import { EmployeeStationService } from '../../../../Services/Constants Services/
 import { AddNewEmployeeStatusDialogComponent } from '../employee-status/add-new-employee-status-dialog/add-new-employee-status-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewEmployeeStationDialogComponent } from './add-new-employee-station-dialog/add-new-employee-station-dialog.component';
+import { DeleteEmployeeStationDialogComponent } from './delete-employee-station-dialog/delete-employee-station-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeStation {
   id: number;
@@ -69,8 +71,9 @@ export class EmployeeStationComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private employeeStationService: EmployeeStationService,
-  private dialog: MatDialog
+  private employeeStationService: EmployeeStationService,
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -135,4 +138,30 @@ export class EmployeeStationComponent implements AfterViewInit {
           }
         });
       }
+
+        openDeleteConfirmationDialog(station: any): void {
+    const dialogRef = this.dialog.open(DeleteEmployeeStationDialogComponent, {
+      width: '400px',
+      data: { id: station.id, name: station.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeStationService.deleteEmployeeStation(station.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('station deleted successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeStations();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete station', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting station:', error);
+            this.snackBar.open('Error deleting station: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

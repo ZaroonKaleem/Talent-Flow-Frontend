@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeeCountryService } from '../../../../Services/Constants Services/employee-country.service';
 import { AddNewCountryDialogComponent } from './add-new-country-dialog/add-new-country-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteCountryDialogComponent } from './delete-country-dialog/delete-country-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-country',
@@ -46,7 +48,8 @@ export class ManageCountryComponent implements OnInit {
 
   constructor(
     private countryService: EmployeeCountryService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -109,4 +112,30 @@ export class ManageCountryComponent implements OnInit {
         }
       });
     }
+
+      openDeleteConfirmationDialog(country: any): void {
+    const dialogRef = this.dialog.open(DeleteCountryDialogComponent, {
+      width: '400px',
+      data: { id: country.id, name: country.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.countryService.deleteCountry(country.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('country deleted successfully', 'Close', { duration: 3000 });
+              this.loadCountries();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete country', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting country:', error);
+            this.snackBar.open('Error deleting country: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

@@ -9,11 +9,13 @@ import { Validators } from 'ngx-editor';
 import { EmployeeDesignationService } from '../../../../../Services/Constants Services/employee-designation.service';
 import { AddNewDesignationDialogComponent } from '../../designation/add-new-designation-dialog/add-new-designation-dialog.component';
 import { EmployerBankService } from '../../../../../Services/Constants Services/employer-bank.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-new-employer-bank-dialog',
   standalone: true,
   imports: [
+    CommonModule,
      MatDialogModule,
         MatButtonModule,
         MatInputModule,

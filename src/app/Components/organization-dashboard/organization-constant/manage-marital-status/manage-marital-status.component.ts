@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeMaritalStatusService } from '../../../../Services/Constants Services/employee-marital-status.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewMaritalStatusDialogComponent } from './add-new-marital-status/add-new-marital-status.component';
+import { DeleteMaritalStatusDialogComponent } from './delete-marital-status-dialog/delete-marital-status-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface MaritalStatus {
   id: number;
@@ -60,7 +62,8 @@ export class ManageMaritalStatusComponent implements AfterViewInit {
 
   constructor(
     private employeeMaritalStatusService: EmployeeMaritalStatusService,
-  private dialog: MatDialog
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,30 @@ export class ManageMaritalStatusComponent implements AfterViewInit {
                 }
               });
             }
+
+    openDeleteConfirmationDialog(maritalStatus: any): void {
+    const dialogRef = this.dialog.open(DeleteMaritalStatusDialogComponent, {
+      width: '400px',
+      data: { id: maritalStatus.id, name: maritalStatus.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeMaritalStatusService.deleteMaritalStatus(maritalStatus.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('maritalStatus deleted successfully', 'Close', { duration: 3000 });
+              this.loadMaritalStatuses();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete maritalStatus', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting maritalStatus:', error);
+            this.snackBar.open('Error deleting maritalStatus: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

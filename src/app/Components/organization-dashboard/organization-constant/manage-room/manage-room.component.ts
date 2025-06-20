@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeRoomService } from '../../../../Services/Constants Services/employee-room.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewRoomDialogComponent } from './add-new-room-dialog/add-new-room-dialog.component';
+import { DeleteRoomDialogComponent } from './delete-room-dialog/delete-room-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Room {
   id: number;
@@ -60,7 +62,8 @@ export class ManageRoomComponent implements AfterViewInit {
 
   constructor(
     private employeeRoomService: EmployeeRoomService,
-  private dialog: MatDialog
+  private dialog: MatDialog,
+  private snackBar: MatSnackBar
 ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,30 @@ export class ManageRoomComponent implements AfterViewInit {
               }
           });
       }
+
+        openDeleteConfirmationDialog(room: any): void {
+    const dialogRef = this.dialog.open(DeleteRoomDialogComponent, {
+      width: '400px',
+      data: { id: room.id, name: room.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeRoomService.deleteRoom(room.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('room deleted successfully', 'Close', { duration: 3000 });
+              this.loadRooms();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete room', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting room:', error);
+            this.snackBar.open('Error deleting room: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

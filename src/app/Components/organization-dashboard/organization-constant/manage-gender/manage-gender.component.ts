@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeGenderService } from '../../../../Services/Constants Services/employee-gender.service';
 import { AddNewGenderDialogComponent } from './add-new-gender-dialog/add-new-gender-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteGenderDialogComponent } from './delete-gender-dialog/delete-gender-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Gender {
   id: number;
@@ -60,7 +62,8 @@ export class ManageGenderComponent implements AfterViewInit {
 
   constructor(
     private employeeGenderService: EmployeeGenderService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -125,4 +128,30 @@ export class ManageGenderComponent implements AfterViewInit {
                 }
             });
         }
+
+    openDeleteConfirmationDialog(gender: any): void {
+    const dialogRef = this.dialog.open(DeleteGenderDialogComponent, {
+      width: '400px',
+      data: { id: gender.id, name: gender.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeGenderService.deleteGender(gender.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('gender deleted successfully', 'Close', { duration: 3000 });
+              this.loadGenders();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete gender', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting gender:', error);
+            this.snackBar.open('Error deleting gender: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

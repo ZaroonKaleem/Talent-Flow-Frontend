@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDeductionService } from '../../../../Services/Constants Services/employee-deduction.service';
 import { AddNewDeductionTitleDialogComponent } from './add-new-deduction-title-dialog/add-new-deduction-title-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteDeductionTitleDialogComponent } from './delete-deduction-title-dialog/delete-deduction-title-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Deduction {
   id: number;
@@ -62,7 +64,8 @@ export class DeductionTitleComponent implements AfterViewInit {
 
   constructor(
     private deductionService: EmployeeDeductionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -137,4 +140,30 @@ export class DeductionTitleComponent implements AfterViewInit {
           }
         });
       }
+
+        openDeleteConfirmationDialog(deductionTitle: any): void {
+    const dialogRef = this.dialog.open(DeleteDeductionTitleDialogComponent, {
+      width: '400px',
+      data: { id: deductionTitle.id, name: deductionTitle.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deductionService.deleteDeduction(deductionTitle.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('deductionTitle deleted successfully', 'Close', { duration: 3000 });
+              this.loadDeductions();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete deductionTitle', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting deductionTitle:', error);
+            this.snackBar.open('Error deleting deductionTitle: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

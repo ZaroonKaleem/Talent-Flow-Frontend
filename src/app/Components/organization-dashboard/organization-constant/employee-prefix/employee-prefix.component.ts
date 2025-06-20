@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EmployeePrefixService } from '../../../../Services/Constants Services/employee-prefix.service';
 import { AddNewEmployeePrefixDialogComponent } from './add-new-employee-prefix-dialog/add-new-employee-prefix-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteEmployeePrefixDialogComponent } from './delete-employee-prefix-dialog/delete-employee-prefix-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-prefix',
@@ -47,7 +49,8 @@ export class EmployeePrefixComponent implements OnInit {
   constructor(
     private prefixService: EmployeePrefixService,
     private employeePrefixService: EmployeePrefixService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -110,4 +113,31 @@ export class EmployeePrefixComponent implements OnInit {
             }
           });
         }
+
+
+          openDeleteConfirmationDialog(prefix: any): void {
+    const dialogRef = this.dialog.open(DeleteEmployeePrefixDialogComponent, {
+      width: '400px',
+      data: { id: prefix.id, name: prefix.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeePrefixService.deleteEmployeePrefix(prefix.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('prefix deleted successfully', 'Close', { duration: 3000 });
+              this.loadPrefixes();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete prefix', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting prefix:', error);
+            this.snackBar.open('Error deleting prefix: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

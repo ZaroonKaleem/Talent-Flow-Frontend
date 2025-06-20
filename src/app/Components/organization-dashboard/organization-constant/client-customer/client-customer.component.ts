@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { ClientCustomerService } from '../../../../Services/Constants Services/client-customer.service';
 import { AddNewClientCustomerDialogComponent } from './add-new-client-customer-dialog/add-new-client-customer-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteClientCustomerDialogComponent } from './delete-client-customer-dialog/delete-client-customer-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-client-customer',
@@ -46,7 +48,8 @@ export class ClientCustomerComponent implements OnInit {
 
   constructor(
     private clientCustomerService: ClientCustomerService,
-    private dialog : MatDialog
+    private dialog : MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -109,4 +112,30 @@ export class ClientCustomerComponent implements OnInit {
             }
           });
         }
+
+          openDeleteConfirmationDialog(clientCustomer: any): void {
+    const dialogRef = this.dialog.open(DeleteClientCustomerDialogComponent, {
+      width: '400px',
+      data: { id: clientCustomer.id, name: clientCustomer.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clientCustomerService.deleteClientCustomer(clientCustomer.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('clientCustomer deleted successfully', 'Close', { duration: 3000 });
+              this.loadClientCustomers();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete clientCustomer', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting clientCustomer:', error);
+            this.snackBar.open('Error deleting clientCustomer: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }
