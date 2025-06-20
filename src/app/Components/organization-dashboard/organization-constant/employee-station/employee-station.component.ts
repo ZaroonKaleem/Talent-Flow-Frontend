@@ -9,10 +9,10 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeStationService } from '../../../../Services/Constants Services/employee-station.service';
-import { AddNewEmployeeStatusDialogComponent } from '../employee-status/add-new-employee-status-dialog/add-new-employee-status-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { AddNewEmployeeStationDialogComponent } from './add-new-employee-station-dialog/add-new-employee-station-dialog.component';
 import { DeleteEmployeeStationDialogComponent } from './delete-employee-station-dialog/delete-employee-station-dialog.component';
+import { EditEmployeeStationDialogComponent } from './edit-employee-station-dialog/edit-employee-station-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeStation {
@@ -71,10 +71,10 @@ export class EmployeeStationComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-  private employeeStationService: EmployeeStationService,
-  private dialog: MatDialog,
-  private snackBar: MatSnackBar
-) {}
+    private employeeStationService: EmployeeStationService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -116,30 +116,57 @@ export class EmployeeStationComponent implements AfterViewInit {
     // Implement view details logic
   }
 
-  exportLog(station: EmployeeStation) {
-    console.log('Export log:', station);
-    // Implement export logic
-  }
-
   get Math() {
     return Math;
   }
 
-   openAddEmployeeStationDialog(): void {
-        const dialogRef = this.dialog.open(AddNewEmployeeStationDialogComponent, {
-          width: '400px'
-        });
-    
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            console.log('New Employee Group:', result);
-            // Handle the result (e.g., send to backend)
-            this.loadEmployeeStations(0, this.pageSize)
+  openAddEmployeeStationDialog(): void {
+    const dialogRef = this.dialog.open(AddNewEmployeeStationDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadEmployeeStations(0, this.pageSize);
+      }
+    });
+  }
+
+  openEditEmployeeStation(station: EmployeeStation): void {
+    const dialogRef = this.dialog.open(EditEmployeeStationDialogComponent, {
+      width: '400px',
+      data: {
+        id: station.id,
+        name: station.name,
+        code: station.code,
+        areaId: station.areaId,
+        stationHeadId: station.stationHeadId,
+        hrManagerId: station.hrManagerId,
+        accountsManagerId: station.accountsManagerId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeStationService.updateEmployeeStation(result).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Employee station updated successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeStations();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to update employee station', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error updating employee station:', error);
+            this.snackBar.open('Error updating employee station: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
           }
         });
       }
+    });
+  }
 
-        openDeleteConfirmationDialog(station: any): void {
+  openDeleteConfirmationDialog(station: any): void {
     const dialogRef = this.dialog.open(DeleteEmployeeStationDialogComponent, {
       width: '400px',
       data: { id: station.id, name: station.name }
@@ -150,15 +177,15 @@ export class EmployeeStationComponent implements AfterViewInit {
         this.employeeStationService.deleteEmployeeStation(station.id).subscribe({
           next: (response) => {
             if (response.success) {
-              this.snackBar.open('station deleted successfully', 'Close', { duration: 3000 });
+              this.snackBar.open('Employee station deleted successfully', 'Close', { duration: 3000 });
               this.loadEmployeeStations();
             } else {
-              this.snackBar.open(response.error?.message || 'Failed to delete station', 'Close', { duration: 3000 });
+              this.snackBar.open(response.error?.message || 'Failed to delete employee station', 'Close', { duration: 3000 });
             }
           },
           error: (error) => {
-            console.error('Error deleting station:', error);
-            this.snackBar.open('Error deleting station: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+            console.error('Error deleting employee station:', error);
+            this.snackBar.open('Error deleting employee station: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
           }
         });
       }

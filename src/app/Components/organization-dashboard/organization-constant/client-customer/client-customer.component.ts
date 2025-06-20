@@ -34,7 +34,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ClientCustomerComponent implements OnInit {
   displayedColumns: string[] = ['sr', 'name', 'actions'];
-  pageSize = 10;
+  pageSize = 5;
   pagedItems: any[] = [];
   clientCustomers: any[] = [];
   isLoading = true;

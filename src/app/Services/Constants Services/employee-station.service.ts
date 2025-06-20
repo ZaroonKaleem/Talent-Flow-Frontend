@@ -78,4 +78,24 @@ export class EmployeeStationService {
       params
     });
   }
+
+    updateEmployeeStation(stationData: {
+    id: number;
+    name: string;
+    code: string;
+    areaId: number;
+    stationHeadId: number;
+    hrManagerId: number;
+    accountsManagerId: number;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.put<any>(`${this.apiUrl}/Update`, stationData, {
+            headers,
+        });
+  }
 }

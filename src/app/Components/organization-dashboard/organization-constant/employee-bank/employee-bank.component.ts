@@ -10,9 +10,9 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeBankService } from '../../../../Services/Constants Services/employee-bank.service';
 import { AddNewEmployeeBankDialogComponent } from './add-new-employee-bank-dialog/add-new-employee-bank-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { DeleteBankBranchDialogComponent } from '../bank-branch/delete-bank-branch-dialog/delete-bank-branch-dialog.component';
 import { DeleteEmployeeBankDialogComponent } from './delete-employee-bank-dialog/delete-employee-bank-dialog.component';
+import { EditEmployeeBankDialogComponent } from './edit-employee-bank-dialog/edit-employee-bank-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeBank {
@@ -34,7 +34,7 @@ interface ApiResponse {
 }
 
 @Component({
-  selector: 'app-employer-bank',
+  selector: 'app-employee-bank',
   standalone: true,
   imports: [
     CommonModule,
@@ -108,30 +108,49 @@ export class EmployeeBankComponent implements AfterViewInit {
     // Implement view details logic
   }
 
-  exportLog(bank: EmployeeBank) {
-    console.log('Export log:', bank);
-    // Implement export logic
-  }
-
   get Math() {
     return Math;
   }
 
-   openAddEmployeeBankDialog(): void {
-          const dialogRef = this.dialog.open(AddNewEmployeeBankDialogComponent, {
-            width: '400px'
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-              // console.log('New Employee Group:', result);
-              // Handle the result (e.g., send to backend)
-              this.loadEmployeeBanks(0, this.pageSize)
-            }
-          });
-        }
+  openAddEmployeeBankDialog(): void {
+    const dialogRef = this.dialog.open(AddNewEmployeeBankDialogComponent, {
+      width: '400px'
+    });
 
-          openDeleteConfirmationDialog(bank: any): void {
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadEmployeeBanks(0, this.pageSize);
+      }
+    });
+  }
+
+  openEditEmployeeBank(bank: EmployeeBank): void {
+    const dialogRef = this.dialog.open(EditEmployeeBankDialogComponent, {
+      width: '400px',
+      data: { id: bank.id, name: bank.name, code: bank.code }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeBankService.updateEmployeeBank(result).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Employee bank updated successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeBanks();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to update employee bank', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error updating employee bank:', error);
+            this.snackBar.open('Error updating employee bank: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+
+  openDeleteConfirmationDialog(bank: any): void {
     const dialogRef = this.dialog.open(DeleteEmployeeBankDialogComponent, {
       width: '400px',
       data: { id: bank.id, name: bank.name }
@@ -142,15 +161,15 @@ export class EmployeeBankComponent implements AfterViewInit {
         this.employeeBankService.deleteEmployeeBank(bank.id).subscribe({
           next: (response) => {
             if (response.success) {
-              this.snackBar.open('bank deleted successfully', 'Close', { duration: 3000 });
+              this.snackBar.open('Employee bank deleted successfully', 'Close', { duration: 3000 });
               this.loadEmployeeBanks();
             } else {
-              this.snackBar.open(response.error?.message || 'Failed to delete bank', 'Close', { duration: 3000 });
+              this.snackBar.open(response.error?.message || 'Failed to delete employee bank', 'Close', { duration: 3000 });
             }
           },
           error: (error) => {
-            console.error('Error deleting bank:', error);
-            this.snackBar.open('Error deleting bank: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+            console.error('Error deleting employee bank:', error);
+            this.snackBar.open('Error deleting employee bank: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
           }
         });
       }

@@ -10,13 +10,15 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeStatusService } from '../../../../Services/Constants Services/employee-status.service';
 import { AddNewEmployeeStatusDialogComponent } from './add-new-employee-status-dialog/add-new-employee-status-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { DeleteEmployeeStatusDialogComponent } from './delete-employee-status-dialog/delete-employee-status-dialog.component';
+import { EditEmployeeStatusDialogComponent } from './edit-employee-status-dialog/edit-employee-status-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EmployeeStatus {
   id: number;
   name: string;
+  code: string;
   isContractual: boolean;
 }
 
@@ -74,19 +76,44 @@ export class EmployeeStatusComponent implements AfterViewInit {
     this.loadEmployeeStatuses();
   }
 
-    openAddEmployeeStatusDialog(): void {
-      const dialogRef = this.dialog.open(AddNewEmployeeStatusDialogComponent, {
-        width: '400px'
-      });
+  openAddEmployeeStatusDialog(): void {
+    const dialogRef = this.dialog.open(AddNewEmployeeStatusDialogComponent, {
+      width: '400px'
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          console.log('New Employee Group:', result);
-          // Handle the result (e.g., send to backend)
-          this.loadEmployeeStatuses(0, this.pageSize)
-        }
-      });
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('New Employee Status:', result);
+        this.loadEmployeeStatuses(0, this.pageSize);
+      }
+    });
+  }
+
+  openEditEmployeeStatusDialog(status: EmployeeStatus): void {
+    const dialogRef = this.dialog.open(EditEmployeeStatusDialogComponent, {
+      width: '400px',
+      data: { id: status.id, name: status.name, code: status.code, isContractual: status.isContractual }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeStatusService.updateEmployeeStatus(result).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Employee status updated successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeStatuses();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to update employee status', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error updating employee status:', error);
+            this.snackBar.open('Error updating employee status: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 
   loadEmployeeStatuses(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     const params = {
@@ -130,29 +157,29 @@ export class EmployeeStatusComponent implements AfterViewInit {
     return Math;
   }
 
-       openDeleteConfirmationDialog(status: any): void {
-      const dialogRef = this.dialog.open(DeleteEmployeeStatusDialogComponent, {
-        width: '400px',
-        data: { id: status.id, name: status.name }
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.employeeStatusService.deleteEmployeeStatus(status.id).subscribe({
-            next: (response) => {
-              if (response.success) {
-                this.snackBar.open('Designation deleted successfully', 'Close', { duration: 3000 });
-                this.loadEmployeeStatuses();
-              } else {
-                this.snackBar.open(response.error?.message || 'Failed to delete designation', 'Close', { duration: 3000 });
-              }
-            },
-            error: (error) => {
-              console.error('Error deleting designation:', error);
-              this.snackBar.open('Error deleting designation: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+  openDeleteConfirmationDialog(status: any): void {
+    const dialogRef = this.dialog.open(DeleteEmployeeStatusDialogComponent, {
+      width: '400px',
+      data: { id: status.id, name: status.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeStatusService.deleteEmployeeStatus(status.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Employee status deleted successfully', 'Close', { duration: 3000 });
+              this.loadEmployeeStatuses();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete employee status', 'Close', { duration: 3000 });
             }
-          });
-        }
-      });
-    }
+          },
+          error: (error) => {
+            console.error('Error deleting employee status:', error);
+            this.snackBar.open('Error deleting employee status: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }

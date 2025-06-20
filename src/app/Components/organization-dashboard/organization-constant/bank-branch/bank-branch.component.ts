@@ -43,7 +43,7 @@ export class BankBranchComponent implements OnInit {
     'actions'
   ];
   
-  pageSize = 10;
+  pageSize = 5;
   pagedItems: any[] = [];
   bankBranches: any[] = [];
   isLoading = true;

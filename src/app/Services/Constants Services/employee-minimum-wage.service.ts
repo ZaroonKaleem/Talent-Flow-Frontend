@@ -70,4 +70,21 @@ private apiUrl = `${environment.apiUrl}services/app/MinimumWage`;
       params
     });
   }
+
+
+    updateMinimumWage(minimumWageData: {
+        id: number;
+        name: string;
+        provinceId: number;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.put<any>(`${this.apiUrl}/Update`, minimumWageData, {
+            headers,
+        });
+  }
 }

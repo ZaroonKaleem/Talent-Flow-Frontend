@@ -68,4 +68,21 @@ deleteRegion(id: number): Observable<any> {
       params
     });
   }
+
+
+    updateRegion(regionData: {
+        id: number;
+        name: string;
+        code: string;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.put<any>(`${this.apiUrl}/Update`, regionData, {
+            headers,
+        });
+  }
 }

@@ -10,8 +10,9 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmployeeDeductionService } from '../../../../Services/Constants Services/employee-deduction.service';
 import { AddNewDeductionTitleDialogComponent } from './add-new-deduction-title-dialog/add-new-deduction-title-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { DeleteDeductionTitleDialogComponent } from './delete-deduction-title-dialog/delete-deduction-title-dialog.component';
+import { EditDeductionTitleDialogComponent } from './edit-deduction-title-dialog/edit-deduction-title-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Deduction {
@@ -55,7 +56,7 @@ export class DeductionTitleComponent implements AfterViewInit {
   displayedColumns: string[] = ['sr', 'id', 'name', 'isAmount', 'deductionType', 'actions'];
   dataSource = new MatTableDataSource<Deduction>([]);
   totalCount = 0;
-  pageSize = 10;
+  pageSize = 5;
   pageIndex = 0;
   isTableReady = false;
 
@@ -108,12 +109,6 @@ export class DeductionTitleComponent implements AfterViewInit {
     // Implement view details logic
   }
 
-  exportLog(deduction: Deduction) {
-    console.log('Export log:', deduction);
-    // Implement export logic
-  }
-
-  // Map deductionType to readable labels
   getDeductionTypeLabel(deductionType: number): string {
     const typeMap: { [key: number]: string } = {
       0: 'General',
@@ -127,40 +122,64 @@ export class DeductionTitleComponent implements AfterViewInit {
     return Math;
   }
 
-      openAddDeductionTitleDialog(): void {
-        const dialogRef = this.dialog.open(AddNewDeductionTitleDialogComponent, {
-          width: '400px'
-        });
-    
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            // console.log('New Employee Group:', result);
-            // Handle the result (e.g., send to backend)
-            this.loadDeductions(0, this.pageSize)
-          }
-        });
-      }
-
-        openDeleteConfirmationDialog(deductionTitle: any): void {
-    const dialogRef = this.dialog.open(DeleteDeductionTitleDialogComponent, {
-      width: '400px',
-      data: { id: deductionTitle.id, name: deductionTitle.name }
+  openAddDeductionTitleDialog(): void {
+    const dialogRef = this.dialog.open(AddNewDeductionTitleDialogComponent, {
+      width: '400px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.deductionService.deleteDeduction(deductionTitle.id).subscribe({
+        this.loadDeductions(0, this.pageSize);
+      }
+    });
+  }
+
+  openEditDeductionTitle(deduction: Deduction): void {
+    const dialogRef = this.dialog.open(EditDeductionTitleDialogComponent, {
+      width: '400px',
+      data: { id: deduction.id, name: deduction.name, isAmount: deduction.isAmount, deductionType: deduction.deductionType }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deductionService.employeeDeduction(result).subscribe({
           next: (response) => {
             if (response.success) {
-              this.snackBar.open('deductionTitle deleted successfully', 'Close', { duration: 3000 });
+              this.snackBar.open('Deduction title updated successfully', 'Close', { duration: 3000 });
               this.loadDeductions();
             } else {
-              this.snackBar.open(response.error?.message || 'Failed to delete deductionTitle', 'Close', { duration: 3000 });
+              this.snackBar.open(response.error?.message || 'Failed to update deduction title', 'Close', { duration: 3000 });
             }
           },
           error: (error) => {
-            console.error('Error deleting deductionTitle:', error);
-            this.snackBar.open('Error deleting deductionTitle: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+            console.error('Error updating deduction title:', error);
+            this.snackBar.open('Error updating deduction title: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+
+  openDeleteConfirmationDialog(deduction: any): void {
+    const dialogRef = this.dialog.open(DeleteDeductionTitleDialogComponent, {
+      width: '400px',
+      data: { id: deduction.id, name: deduction.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deductionService.deleteDeduction(deduction.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Deduction title deleted successfully', 'Close', { duration: 3000 });
+              this.loadDeductions();
+            } else {
+              this.snackBar.open(response.error?.message || 'Failed to delete deduction title', 'Close', { duration: 3000 });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting deduction title:', error);
+            this.snackBar.open('Error deleting deduction title: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
           }
         });
       }

@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDesignationDialogComponent } from './delete-designation-dialog-component/delete-designation-dialog-component';
 import { AddNewDesignationDialogComponent } from './add-new-designation-dialog/add-new-designation-dialog.component';
+import { EditDesignationDialogComponent } from './edit-designation-dialog/edit-designation-dialog.component';
 
 interface Designation {
   id: number;
@@ -30,6 +31,12 @@ interface ApiResponse {
   targetUrl: string | null;
   unAuthorizedRequest: boolean;
   __abp: boolean;
+}
+
+interface Designation {
+    id: number;
+    name: string;
+    code: string;
 }
 
 @Component({
@@ -124,7 +131,7 @@ export class DesignationComponent implements AfterViewInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          // console.log('New Employee Group:', result);
+          // console.log('New Employee designation:', result);
           // Handle the result (e.g., send to backend)
           this.loadDesignations(0, this.pageSize)
         }
@@ -156,4 +163,44 @@ export class DesignationComponent implements AfterViewInit {
       }
     });
   }
+
+       openEdit(designation: Designation): void {
+          const dialogRef = this.dialog.open(EditDesignationDialogComponent, {
+              width: '400px',
+              data: { id: designation.id, name: designation.name },
+          });
+  
+          dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                  this.designationService.updateDesignation(result).subscribe({
+                      next: (response) => {
+                          if (response.success) {
+                              this.snackBar.open(
+                                  'Employee designation updated successfully',
+                                  'Close',
+                                  { duration: 3000 }
+                              );
+                              this.loadDesignations();
+                          } else {
+                              this.snackBar.open(
+                                  response.error?.message ||
+                                      'Failed to update employee designation',
+                                  'Close',
+                                  { duration: 3000 }
+                              );
+                          }
+                      },
+                      error: (error) => {
+                          console.error('Error updating employee designation:', error);
+                          this.snackBar.open(
+                              'Error updating employee designation: ' +
+                                  (error.error?.message || 'Unknown error'),
+                              'Close',
+                              { duration: 3000 }
+                          );
+                      },
+                  });
+              }
+          });
+      }
 }

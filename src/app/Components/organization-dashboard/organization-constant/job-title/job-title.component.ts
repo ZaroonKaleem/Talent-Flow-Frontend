@@ -14,6 +14,15 @@ import { EmployeeJobFieldService } from '../../../../Services/Constants Services
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteJobTitleGialogComponent } from './delete-job-title-gialog/delete-job-title-gialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EditJobTitleDialogComponent } from './edit-job-title-dialog/edit-job-title-dialog.component';
+
+
+interface JobTitle {
+  id: number;
+  name: string;
+  description: string;
+}
+
 
 @Component({
   selector: 'app-job-title',
@@ -145,4 +154,30 @@ export class JobTitleComponent implements OnInit {
       }
     });
   }
+
+    openEditDialog(jobtitle:JobTitle ): void {
+      const dialogRef = this.dialog.open(EditJobTitleDialogComponent, {
+        width: '400px',
+        data: { id: jobtitle.id, name: jobtitle.name, description: jobtitle.description }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.jobTitleService.updateJobTitle(result).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.snackBar.open('Employee jobtitle updated successfully', 'Close', { duration: 3000 });
+                this.loadJobTitles();
+              } else {
+                this.snackBar.open(response.error?.message || 'Failed to update employee jobtitle', 'Close', { duration: 3000 });
+              }
+            },
+            error: (error) => {
+              console.error('Error updating employee jobtitle:', error);
+              this.snackBar.open('Error updating employee jobtitle: ' + (error.error?.message || 'Unknown error'), 'Close', { duration: 3000 });
+            }
+          });
+        }
+      });
+    }
 }

@@ -1,18 +1,26 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { ViewChild, OnInit, Component } from '@angular/core';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { EmployeeAssetTypeService } from '../../../../Services/Constants Services/employee-asset-type.service';
+import { AddNewAssetTypeDialogComponent } from './add-new-asset-type-dialog/add-new-asset-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteAssetTypeDialogComponent } from './delete-asset-type-dialog/delete-asset-type-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EditAssetTypeDialogComponent } from './edit-asset-type-dialog/edit-asset-type-dialog.component';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { EmployeeAssetTypeService } from '../../../../Services/Constants Services/employee-asset-type.service';
-import { AddNewAssetTypeDialogComponent } from './add-new-asset-type-dialog/add-new-asset-type-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { DeleteAssetTypeDialogComponent } from './delete-asset-type-dialog/delete-asset-type-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+
+
+interface AssetType {
+    id: number;
+    name: string;
+}
 
 @Component({
   selector: 'app-asset-type',
@@ -32,9 +40,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './asset-type.component.html',
   styleUrl: './asset-type.component.scss'
 })
+
 export class AssetTypeComponent implements OnInit {
   displayedColumns: string[] = ['sr', 'name', 'actions'];
-  pageSize = 10;
+  pageSize = 5;
   pagedItems: any[] = [];
   assetTypes: any[] = [];
   isLoading = true;
@@ -107,7 +116,7 @@ export class AssetTypeComponent implements OnInit {
     
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            // console.log('New Employee Group:', result);
+            // console.log('New Employee assetType:', result);
             // Handle the result (e.g., send to backend)
             this.loadAssetTypes()
           }
@@ -140,4 +149,47 @@ export class AssetTypeComponent implements OnInit {
       }
     });
   }
+
+          openEditEmployeeassetTypeDialog(assetType: AssetType): void {
+        const dialogRef = this.dialog.open(EditAssetTypeDialogComponent, {
+            width: '400px',
+            data: { id: assetType.id, name: assetType.name },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.assetTypeService.updateAssetType(result).subscribe({
+                    next: (response) => {
+                        if (response.success) {
+                            this.snackBar.open(
+                                'Employee assetType updated successfully',
+                                'Close',
+                                { duration: 3000 }
+                            );
+                            this.loadAssetTypes();
+                        } else {
+                            this.snackBar.open(
+                                response.error?.message ||
+                                    'Failed to update employee assetType',
+                                'Close',
+                                { duration: 3000 }
+                            );
+                        }
+                    },
+                    error: (error) => {
+                        console.error('Error updating employee assetType:', error);
+                        this.snackBar.open(
+                            'Error updating employee assetType: ' +
+                                (error.error?.message || 'Unknown error'),
+                            'Close',
+                            { duration: 3000 }
+                        );
+                    },
+                });
+            }
+        });
+    }
+
+
+
 }

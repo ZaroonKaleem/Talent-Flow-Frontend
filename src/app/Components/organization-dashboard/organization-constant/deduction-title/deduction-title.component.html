@@ -54,8 +54,8 @@
             <i class="material-symbols-outlined">more_vert</i>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="viewDetails(deduction)">
-              <i class="material-symbols-outlined">visibility</i>
+<button mat-menu-item (click)="openEditDeductionTitle(deduction)">
+              <span>Edit</span>
             </button>
           <button mat-menu-item (click)="openDeleteConfirmationDialog(deduction)">
               <span>Delete</span>

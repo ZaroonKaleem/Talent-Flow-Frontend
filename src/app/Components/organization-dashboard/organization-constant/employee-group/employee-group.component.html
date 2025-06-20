@@ -1,8 +1,8 @@
 <div class="mat-container">
- <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
-  <h4>Manage Employee Group</h4>
-  <button mat-flat-button color="primary" (click)="openAddEmployeeGroupDialog()">Add New Employee Group</button>
-</div>
+  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <h4>Manage Employee Group</h4>
+    <button mat-flat-button color="primary" (click)="openAddEmployeeGroupDialog()">Add New Employee Group</button>
+  </div>
 
   <div class="table-container" *ngIf="isTableReady">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mat-table">
@@ -38,12 +38,11 @@
             <i class="material-symbols-outlined">more_vert</i>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="viewDetails(group)">
-              <i class="material-symbols-outlined">visibility</i>
+            <button mat-menu-item (click)="openEditEmployeeGroupDialog(group)">
+              <span>edit</span>
             </button>
-<button mat-menu-item (click)="openDeleteConfirmationDialog(group)">
-              <!-- <i class="material-symbols-outlined">delete</i> -->
-            <span>Delete</span>  
+            <button mat-menu-item (click)="openDeleteConfirmationDialog(group)">
+              <span>Delete</span>
             </button>
           </mat-menu>
         </td>
@@ -56,16 +55,13 @@
 
   <div class="footer-container" *ngIf="isTableReady">
     <div class="records-info">
-      Showing {{ totalCount > 0 ? (pageIndex * pageSize) + 1 : 0 }} - 
-      {{ Math.min((pageIndex + 1) * pageSize, totalCount) }} 
+      Showing {{ totalCount > 0 ? (pageIndex * pageSize) + 1 : 0 }} -
+      {{ Math.min((pageIndex + 1) * pageSize, totalCount) }}
       of {{ totalCount }} records
     </div>
-    
-    <mat-paginator [length]="totalCount"
-                  [pageSize]="pageSize"
-                  [pageSizeOptions]="[5, 10, 25, 100]"
-                  (page)="pageChanged($event)"
-                  aria-label="Select page">
+
+    <mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="pageChanged($event)" aria-label="Select page">
     </mat-paginator>
   </div>
 </div>

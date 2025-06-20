@@ -46,8 +46,8 @@
             <i class="material-symbols-outlined">more_vert</i>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="viewDetails(status)">
-              <i class="material-symbols-outlined">visibility</i>
+           <button mat-menu-item (click)="openEditEmployeeStatusDialog(status)">
+              <span>Edit</span>
             </button>
            <button mat-menu-item (click)="openDeleteConfirmationDialog(status)">
               <span>Delete</span>

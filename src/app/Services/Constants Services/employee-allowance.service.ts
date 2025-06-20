@@ -4,69 +4,96 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.dev';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class EmployeeAllowanceService {
- private apiUrl = `${environment.apiUrl}services/app/Allowance`;
+    private apiUrl = `${environment.apiUrl}services/app/Allowance`;
 
-  constructor(private http: HttpClient) { }
-
-  /**
-   * Get all allowances with optional filtering and pagination
-   * @param params Filter and pagination parameters
-   * @returns Observable of any
-   */
-  getAllAllowances(params?: any): Observable<any> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
-    // Convert params object to HttpParams
-    let httpParams = new HttpParams();
-    if (params) {
-      Object.keys(params).forEach(key => {
-        if (params[key] !== null && params[key] !== undefined) {
-          httpParams = httpParams.append(key, params[key]);
-        }
-      });
-    }
-
-    return this.http.get<any>(`${this.apiUrl}/GetAll`, {
-      headers,
-      params: httpParams
-    });
-  }
+    constructor(private http: HttpClient) {}
 
     /**
-   * Create a new designation
-   * @param designation Data for the new designation
-   * @returns Observable of the created designation
-   */
-  createAllowance(AllowanceTitle: { id: number; name: string; isAmount: boolean }): Observable<any> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+     * Get all allowances with optional filtering and pagination
+     * @param params Filter and pagination parameters
+     * @returns Observable of any
+     */
+    getAllAllowances(params?: any): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
 
-    return this.http.post<any>(`${this.apiUrl}/Create`, AllowanceTitle, { headers });
-  }
+        // Convert params object to HttpParams
+        let httpParams = new HttpParams();
+        if (params) {
+            Object.keys(params).forEach((key) => {
+                if (params[key] !== null && params[key] !== undefined) {
+                    httpParams = httpParams.append(key, params[key]);
+                }
+            });
+        }
 
-  deleteAllowance(id: number): Observable<any> {
-    const token = localStorage.getItem('accessToken');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+        return this.http.get<any>(`${this.apiUrl}/GetAll`, {
+            headers,
+            params: httpParams,
+        });
+    }
 
-    // Create query parameter for the ID
-    const params = new HttpParams().set('Id', id.toString());
+    /**
+     * Create a new designation
+     * @param designation Data for the new designation
+     * @returns Observable of the created designation
+     */
+    createAllowance(AllowanceTitle: {
+        id: number;
+        name: string;
+        isAmount: boolean;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
 
-    return this.http.delete<any>(`${this.apiUrl}/Delete`, {
-      headers,
-      params
-    });
-  }
+        return this.http.post<any>(`${this.apiUrl}/Create`, AllowanceTitle, {
+            headers,
+        });
+    }
+
+    deleteAllowance(id: number): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        // Create query parameter for the ID
+        const params = new HttpParams().set('Id', id.toString());
+
+        return this.http.delete<any>(`${this.apiUrl}/Delete`, {
+            headers,
+            params,
+        });
+    }
+
+ /**
+     * Update an existing employee group
+     * @param employeeGroup Data for the employee group to update
+     * @returns Observable of the updated employee group
+     */
+    updateAllowance(allowance: {
+        id: number;
+        name: string;
+        isAmount: boolean;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.put<any>(`${this.apiUrl}/Update`, allowance, {
+            headers,
+        });
+    }
 }

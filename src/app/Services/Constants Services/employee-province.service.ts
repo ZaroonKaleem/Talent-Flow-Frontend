@@ -68,4 +68,20 @@ deleteProvince(id: number): Observable<any> {
       params
     });
   }
+
+    updateProvince(province: {
+        id: number;
+        name: string;
+        countryId: number;
+    }): Observable<any> {
+        const token = localStorage.getItem('accessToken');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.put<any>(`${this.apiUrl}/Update`, province, {
+            headers,
+        });
+  }
 }
